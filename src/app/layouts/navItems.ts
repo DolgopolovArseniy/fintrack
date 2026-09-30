@@ -8,6 +8,7 @@ import {
   Tags,
   Wallet,
 } from 'lucide-react';
+import { ROUTES } from '@/app/routes';
 
 export type NavKey =
   | 'nav.dashboard'
@@ -31,45 +32,45 @@ export const navItems: NavItem[] = [
     id: 'dashboard',
     labelKey: 'nav.dashboard',
     icon: LayoutDashboard,
-    href: '#dashboard',
+    href: ROUTES.dashboard,
     isPrimaryMobile: true,
   },
   {
     id: 'transactions',
     labelKey: 'nav.transactions',
     icon: ArrowLeftRight,
-    href: '#transactions',
+    href: ROUTES.transactions,
     isPrimaryMobile: true,
   },
   {
     id: 'budgets',
     labelKey: 'nav.budgets',
     icon: PieChart,
-    href: '#budgets',
+    href: ROUTES.budgets,
     isPrimaryMobile: true,
   },
   {
     id: 'accounts',
     labelKey: 'nav.accounts',
     icon: Wallet,
-    href: '#accounts',
+    href: ROUTES.accounts,
   },
   {
     id: 'categories',
     labelKey: 'nav.categories',
     icon: Tags,
-    href: '#categories',
+    href: ROUTES.categories,
   },
   {
     id: 'importExport',
     labelKey: 'nav.importExport',
     icon: ArrowUpDown,
-    href: '#import-export',
+    href: ROUTES.importExport,
   },
   {
     id: 'settings',
     labelKey: 'nav.settings',
     icon: Settings,
-    href: '#settings',
+    href: ROUTES.settings,
   },
 ];
