@@ -1,0 +1,15 @@
+{
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "en": "English",
+    "ru": "Русский",
+    "toggle": "Change language"
+  },
+  "openMenu": "Open menu",
+  "offlineBanner": "You are currently offline. Changes will be synchronized once online."
+}

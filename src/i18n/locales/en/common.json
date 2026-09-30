@@ -1,0 +1,24 @@
+{
+  "appName": "FinTrack",
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "delete": "Delete",
+    "add": "Add",
+    "edit": "Edit",
+    "close": "Close",
+    "reload": "Reload",
+    "primary": "Primary Action",
+    "secondary": "Secondary Action",
+    "outline": "Outline Action",
+    "destructive": "Destructive Action"
+  },
+  "status": {
+    "loading": "Loading...",
+    "offline": "Offline",
+    "online": "Online"
+  },
+  "days_one": "{{count}} day",
+  "days_other": "{{count}} days"
+}
