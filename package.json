@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
     "test:e2e": "playwright test",
     "emulators": "firebase emulators:start --import=./.emulator-data --export-on-exit=./.emulator-data",
     "emulators:exec": "firebase emulators:exec --import=./.emulator-data",
