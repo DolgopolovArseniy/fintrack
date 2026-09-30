@@ -1,0 +1,9 @@
+dist
+node_modules
+.emulator-data
+pnpm-lock.yaml
+coverage
+.husky
+docs
+skills
+AGENTS.md
