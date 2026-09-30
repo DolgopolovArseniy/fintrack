@@ -5,6 +5,7 @@ import {
   MoreHorizontal,
   PieChart,
   Settings,
+  Sparkles,
   Tags,
   Wallet,
 } from 'lucide-react';
@@ -86,17 +87,22 @@ export function AppLayout({ children }: AppLayoutProps) {
   );
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      {/* Desktop Sidebar (>= 768px) */}
-      <aside className="hidden w-64 flex-col border-r border-border bg-sidebar md:flex">
-        <div className="flex h-14 items-center justify-between px-4">
-          <h1 className="text-lg font-bold tracking-tight text-sidebar-primary">
-            FinTrack
-          </h1>
+    <div className="flex min-h-screen bg-background text-foreground selection:bg-primary/20">
+      {/* Desktop Sidebar (>= 768px) - High-density Linear/Stripe styling */}
+      <aside className="hidden w-60 flex-col border-r border-border/80 bg-sidebar md:flex">
+        <div className="flex h-14 items-center justify-between px-3.5">
+          <div className="flex items-center gap-2">
+            <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
+              <Sparkles className="size-4" />
+            </div>
+            <h1 className="text-sm font-semibold tracking-tight text-foreground">
+              FinTrack
+            </h1>
+          </div>
           <ThemeToggle />
         </div>
-        <Separator />
-        <nav className="flex-1 space-y-1 p-2">
+        <Separator className="bg-border/60" />
+        <nav className="flex-1 space-y-0.5 p-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.id;
@@ -109,13 +115,18 @@ export function AppLayout({ children }: AppLayoutProps) {
                   setActiveItem(item.id);
                 }}
                 className={cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-all duration-100',
                   isActive
-                    ? 'bg-sidebar-accent font-semibold text-sidebar-primary'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent/50',
+                    ? 'bg-sidebar-accent font-medium text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground',
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" />
+                <Icon
+                  className={cn(
+                    'size-4 shrink-0',
+                    isActive ? 'text-primary' : 'text-muted-foreground',
+                  )}
+                />
                 <span>{t(item.labelKey)}</span>
               </a>
             );
@@ -126,20 +137,25 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col">
         {/* Mobile Header (< 768px) */}
-        <header className="flex h-14 items-center justify-between border-b border-border px-4 md:hidden">
-          <span className="text-lg font-bold tracking-tight text-primary">
-            FinTrack
-          </span>
+        <header className="flex h-14 items-center justify-between border-b border-border/80 bg-background/80 px-4 backdrop-blur-md md:hidden">
+          <div className="flex items-center gap-2">
+            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-xs">
+              <Sparkles className="size-3.5" />
+            </div>
+            <span className="text-sm font-semibold tracking-tight text-foreground">
+              FinTrack
+            </span>
+          </div>
           <ThemeToggle />
         </header>
 
         {/* Content Body with bottom padding reserved for mobile nav */}
-        <main className="flex-1 p-4 pb-20 md:p-6 md:pb-6">{children}</main>
+        <main className="flex-1 p-4 pb-20 md:p-8 md:pb-8">{children}</main>
 
         {/* Mobile Bottom Navigation Bar (< 768px) */}
         <nav
           aria-label="Mobile Navigation"
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 md:hidden"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
           <div className="flex h-16 items-center justify-around px-2">
@@ -155,13 +171,13 @@ export function AppLayout({ children }: AppLayoutProps) {
                     setActiveItem(item.id);
                   }}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-md px-3 py-1 text-xs transition-colors',
+                    'flex flex-col items-center justify-center gap-1 rounded-md px-3 py-1 text-[11px] transition-colors',
                     isActive
                       ? 'font-medium text-primary'
                       : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="size-4" />
                   <span>{t(item.labelKey)}</span>
                 </a>
               );
@@ -174,21 +190,23 @@ export function AppLayout({ children }: AppLayoutProps) {
                   type="button"
                   aria-label={t('nav.more')}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-md px-3 py-1 text-xs transition-colors',
+                    'flex flex-col items-center justify-center gap-1 rounded-md px-3 py-1 text-[11px] transition-colors',
                     isSecondaryActive
                       ? 'font-medium text-primary'
                       : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  <MoreHorizontal className="h-5 w-5" />
+                  <MoreHorizontal className="size-4" />
                   <span>{t('nav.more')}</span>
                 </button>
               </SheetTrigger>
-              <SheetContent side="bottom" className="rounded-t-xl pb-6">
+              <SheetContent side="bottom" className="rounded-t-2xl pb-6">
                 <SheetHeader className="text-left">
-                  <SheetTitle>{t('nav.more')}</SheetTitle>
+                  <SheetTitle className="text-base font-semibold">
+                    {t('nav.more')}
+                  </SheetTitle>
                 </SheetHeader>
-                <div className="grid grid-cols-1 gap-2 pt-2">
+                <div className="grid grid-cols-1 gap-1.5 pt-2">
                   {secondaryMobileItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = activeItem === item.id;
@@ -202,13 +220,18 @@ export function AppLayout({ children }: AppLayoutProps) {
                           setIsMoreOpen(false);
                         }}
                         className={cn(
-                          'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors',
+                          'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                           isActive
-                            ? 'bg-secondary font-semibold text-primary'
-                            : 'text-foreground hover:bg-muted',
+                            ? 'bg-secondary font-medium text-foreground'
+                            : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
                         )}
                       >
-                        <Icon className="h-5 w-5 shrink-0" />
+                        <Icon
+                          className={cn(
+                            'size-4 shrink-0',
+                            isActive ? 'text-primary' : 'text-muted-foreground',
+                          )}
+                        />
                         <span>{t(item.labelKey)}</span>
                       </a>
                     );
