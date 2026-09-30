@@ -4,7 +4,7 @@
 > - [x] **T1: Базовый каркас проекта** (Vite + React 19 + TypeScript strict + Tailwind v4 + shadcn/ui init) — *Завершено*
 > - [x] **T2: Линтинг и стандарты качества** (ESLint flat config, Prettier, Husky, lint-staged, commitlint) — *Завершено*
 > - [x] **T3: Инфраструктура тестирования** (Vitest, Testing Library, Playwright) — *Завершено*
-> - [ ] **T4: Дизайн-система, темы и базовый лейаут** (Tailwind v4 tokens, ThemeProvider, AppLayout)
+> - [x] **T4: Дизайн-система, темы и базовый лейаут** (Tailwind v4 tokens, ThemeProvider, AppLayout) — *Завершено*
 > - [ ] **T5: Инфраструктура приложения** (Zod env validation, i18next EN/RU, ErrorBoundary)
 > - [ ] **T6: Firebase Modular SDK и локальные эмуляторы** (`lib/firebase.ts`, `firestore.rules`)
 > - [ ] **T7: GitHub Actions CI/CD и финализация verify-скилла**
@@ -96,10 +96,10 @@ pnpm dlx shadcn@latest add button card dropdown-menu separator
 * *Tailwind v4 & shadcn:* В Tailwind v4 директива `@tailwind` заменена на `@import "tailwindcss";`. Все расширения темы объявляются через директиву `@theme` или селекторы `:root`/`.dark`. Не создавать `tailwind.config.js`.
 
 ### 6. Чек-лист верификации
-- [ ] Переключение темы меняет класс на `<html>` и корректно перекрашивает фон/текст.
-- [ ] Тема сохраняется после перезагрузки страницы в браузере.
-- [ ] При ширине экрана `< 768px` отображается нижняя панель навигации, сайдбар скрывается.
-- [ ] `pnpm typecheck && pnpm lint && pnpm test` завершаются без ошибок.
+- [x] Переключение темы меняет класс на `<html>` и корректно перекрашивает фон/текст.
+- [x] Тема сохраняется после перезагрузки страницы в браузере.
+- [x] При ширине экрана `< 768px` отображается нижняя панель навигации, сайдбар скрывается.
+- [x] `pnpm typecheck && pnpm lint && pnpm test` завершаются без ошибок.
 
 ---
 
