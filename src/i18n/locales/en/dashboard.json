@@ -1,0 +1,14 @@
+{
+  "welcome": "Welcome to FinTrack",
+  "description": "Manage your personal finances efficiently",
+  "overview": "Financial Overview",
+  "totalBalance": "Total Net Worth",
+  "monthlyIncome": "Monthly Inflow",
+  "monthlyExpenses": "Monthly Outflow",
+  "savingsRate": "Savings Rate",
+  "recentActivity": "Recent Operations",
+  "quickActions": "Quick Actions",
+  "addTransaction": "New Transaction",
+  "viewAll": "View all",
+  "vsLastMonth": "vs last month"
+}

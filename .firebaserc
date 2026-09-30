@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "fintrack-dev-4fb7e",
+    "dev": "fintrack-dev-4fb7e",
+    "prod": "fintrack-prod"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "comingSoon": {
+    "title": "Coming Soon",
+    "description": "This feature is currently under active development."
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "goHome": "Return to Dashboard"
+  }
+}

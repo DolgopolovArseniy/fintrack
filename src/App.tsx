@@ -8,6 +8,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { ThemeProvider } from '@/app/providers/ThemeProvider';
+import { I18nProvider } from '@/app/providers/I18nProvider';
 import { AppLayout } from '@/app/layouts/AppLayout';
 import {
   Card,
@@ -28,10 +29,10 @@ function AppContent() {
         {/* Top Header */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            <h2 className="text-foreground text-xl font-semibold tracking-tight sm:text-2xl">
               {t('dashboard.overview')}
             </h2>
-            <p className="text-xs text-muted-foreground sm:text-sm">
+            <p className="text-muted-foreground text-xs sm:text-sm">
               {t('dashboard.description')}
             </p>
           </div>
@@ -47,9 +48,9 @@ function AppContent() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {/* Total Net Worth */}
           <Card className="p-5">
-            <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
               <span>{t('dashboard.totalBalance')}</span>
-              <div className="flex size-7 items-center justify-center rounded-md bg-secondary text-foreground">
+              <div className="bg-secondary text-foreground flex size-7 items-center justify-center rounded-md">
                 <CreditCard className="size-3.5" />
               </div>
             </div>
@@ -57,7 +58,7 @@ function AppContent() {
               $24,850.00
             </div>
             <div className="mt-2.5 flex items-center gap-1.5 text-xs">
-              <span className="inline-flex items-center gap-0.5 rounded-md bg-income/10 px-1.5 py-0.5 font-medium text-income">
+              <span className="bg-income/10 text-income inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 font-medium">
                 <ArrowUpRight className="size-3" />
                 +12.4%
               </span>
@@ -69,16 +70,16 @@ function AppContent() {
 
           {/* Monthly Inflow */}
           <Card className="p-5">
-            <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
               <span>{t('dashboard.monthlyIncome')}</span>
-              <div className="flex size-7 items-center justify-center rounded-md bg-income/10 text-income">
+              <div className="bg-income/10 text-income flex size-7 items-center justify-center rounded-md">
                 <TrendingUp className="size-3.5" />
               </div>
             </div>
-            <div className="mt-2 text-2xl font-semibold tracking-tight text-income tabular-nums sm:text-3xl">
+            <div className="text-income mt-2 text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
               +$8,420.00
             </div>
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="text-muted-foreground mt-2.5 flex items-center gap-1.5 text-xs">
               <span>+8.1%</span>
               <span>{t('dashboard.vsLastMonth')}</span>
             </div>
@@ -86,16 +87,16 @@ function AppContent() {
 
           {/* Monthly Outflow */}
           <Card className="p-5 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
               <span>{t('dashboard.monthlyExpenses')}</span>
-              <div className="flex size-7 items-center justify-center rounded-md bg-expense/10 text-expense">
+              <div className="bg-expense/10 text-expense flex size-7 items-center justify-center rounded-md">
                 <ArrowDownRight className="size-3.5" />
               </div>
             </div>
-            <div className="mt-2 text-2xl font-semibold tracking-tight text-foreground tabular-nums sm:text-3xl">
+            <div className="text-foreground mt-2 text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
               -$3,180.00
             </div>
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="text-muted-foreground mt-2.5 flex items-center gap-1.5 text-xs">
               <span className="text-income">-3.4%</span>
               <span>{t('dashboard.vsLastMonth')}</span>
             </div>
@@ -128,29 +129,29 @@ function AppContent() {
             <Button
               variant="ghost"
               size="sm"
-              className="text-xs text-muted-foreground"
+              className="text-muted-foreground text-xs"
             >
               {t('dashboard.viewAll')}
             </Button>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="divide-y divide-border/60">
+            <div className="divide-border/60 divide-y">
               {/* Row 1 */}
               <div className="flex items-center justify-between py-3 text-sm">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-lg">
                     <TrendingUp className="size-4" />
                   </div>
                   <div>
-                    <div className="font-medium text-foreground">
+                    <div className="text-foreground font-medium">
                       Stripe Payout
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-muted-foreground text-xs">
                       Main Checking • 28 Sep
                     </div>
                   </div>
                 </div>
-                <div className="font-medium text-income tabular-nums">
+                <div className="text-income font-medium tabular-nums">
                   +$4,250.00
                 </div>
               </div>
@@ -158,19 +159,19 @@ function AppContent() {
               {/* Row 2 */}
               <div className="flex items-center justify-between py-3 text-sm">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-cat-pink/15 text-cat-pink">
+                  <div className="bg-cat-pink/15 text-cat-pink flex size-8 items-center justify-center rounded-lg">
                     <ShoppingBag className="size-4" />
                   </div>
                   <div>
-                    <div className="font-medium text-foreground">
+                    <div className="text-foreground font-medium">
                       Apple Store
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-muted-foreground text-xs">
                       Credit Card • 26 Sep
                     </div>
                   </div>
                 </div>
-                <div className="font-medium text-foreground tabular-nums">
+                <div className="text-foreground font-medium tabular-nums">
                   -$1,299.00
                 </div>
               </div>
@@ -178,19 +179,19 @@ function AppContent() {
               {/* Row 3 */}
               <div className="flex items-center justify-between py-3 text-sm">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-cat-amber/15 text-cat-amber">
+                  <div className="bg-cat-amber/15 text-cat-amber flex size-8 items-center justify-center rounded-lg">
                     <Coffee className="size-4" />
                   </div>
                   <div>
-                    <div className="font-medium text-foreground">
+                    <div className="text-foreground font-medium">
                       Blue Bottle Coffee
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-muted-foreground text-xs">
                       Daily Debit • 25 Sep
                     </div>
                   </div>
                 </div>
-                <div className="font-medium text-foreground tabular-nums">
+                <div className="text-foreground font-medium tabular-nums">
                   -$6.50
                 </div>
               </div>
@@ -205,7 +206,9 @@ function AppContent() {
 export function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <I18nProvider>
+        <AppContent />
+      </I18nProvider>
     </ThemeProvider>
   );
 }

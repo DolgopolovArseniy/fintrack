@@ -1,0 +1,25 @@
+{
+  "appName": "FinTrack",
+  "actions": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "retry": "Повторить",
+    "delete": "Удалить",
+    "add": "Добавить",
+    "edit": "Редактировать",
+    "close": "Закрыть",
+    "reload": "Перезагрузить",
+    "primary": "Основное действие",
+    "secondary": "Вторичное действие",
+    "outline": "Контурная кнопка",
+    "destructive": "Опасное действие"
+  },
+  "status": {
+    "loading": "Загрузка...",
+    "offline": "Офлайн",
+    "online": "В сети"
+  },
+  "days_one": "{{count}} день",
+  "days_few": "{{count}} дня",
+  "days_many": "{{count}} дней"
+}

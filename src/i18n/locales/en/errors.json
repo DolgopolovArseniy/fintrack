@@ -1,0 +1,9 @@
+{
+  "title": "An error occurred",
+  "permission-denied": "You do not have permission to perform this operation.",
+  "not-found": "The requested resource was not found.",
+  "offline": "You are currently offline. Check your network connection.",
+  "validation": "Validation error. Please verify the entered data.",
+  "unauthenticated": "Authentication required. Please sign in.",
+  "unknown": "An unexpected error occurred. Please try again."
+}

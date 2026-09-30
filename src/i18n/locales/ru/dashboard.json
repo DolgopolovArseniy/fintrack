@@ -1,0 +1,14 @@
+{
+  "welcome": "Добро пожаловать в FinTrack",
+  "description": "Эффективное управление личными финансами",
+  "overview": "Финансовый обзор",
+  "totalBalance": "Чистый капитал",
+  "monthlyIncome": "Доходы за месяц",
+  "monthlyExpenses": "Расходы за месяц",
+  "savingsRate": "Норма сбережений",
+  "recentActivity": "Недавние операции",
+  "quickActions": "Быстрые действия",
+  "addTransaction": "Новая операция",
+  "viewAll": "Смотреть все",
+  "vsLastMonth": "к прошлому месяцу"
+}
