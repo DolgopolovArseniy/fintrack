@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { AlertTriangle, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
+import { ErrorState } from '@/components/common/ErrorState';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/lib/i18n';
 
@@ -17,22 +18,9 @@ function ErrorFallback({ error, onReset }: ErrorFallbackProps) {
   };
 
   return (
-    <div className="border-destructive/30 bg-card flex min-h-[360px] w-full flex-col items-center justify-center rounded-xl border p-6 text-center shadow-xs">
-      <div className="bg-destructive/15 text-destructive flex size-12 items-center justify-center rounded-full">
-        <AlertTriangle className="size-6" aria-hidden="true" />
-      </div>
-      <h2 className="text-foreground mt-4 text-lg font-semibold tracking-tight">
-        {t('errors.title')}
-      </h2>
-      <p className="text-muted-foreground mt-1.5 max-w-md text-sm">
-        {t('errors.unknown')}
-      </p>
-      {error?.message ? (
-        <pre className="bg-muted/60 text-muted-foreground mt-3 max-w-lg overflow-x-auto rounded-md p-3 text-left font-mono text-xs">
-          {error.message}
-        </pre>
-      ) : null}
-      <div className="mt-6">
+    <ErrorState
+      error={error}
+      action={
         <Button
           variant="outline"
           size="sm"
@@ -42,8 +30,8 @@ function ErrorFallback({ error, onReset }: ErrorFallbackProps) {
           <RotateCcw className="size-4" aria-hidden="true" />
           <span>{t('common.actions.reload')}</span>
         </Button>
-      </div>
-    </div>
+      }
+    />
   );
 }
 
