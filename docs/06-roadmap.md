@@ -23,7 +23,7 @@
 | Порядок | ID | Фича | Зависит от | Размер | Статус |
 |---|---|---|---|---|---|
 | 1 | F00 | Foundation (репозиторий, Vite, TS strict, Tailwind, shadcn init, ESLint-границы, Prettier, Husky, Vitest, Playwright, CI, Firebase init и эмуляторы, layout, тема, i18n, ErrorBoundary, env, `components/common` базовые) | P1–P9 | M | todo |
-| 2 | F01 | Domain core (`money`, `dates`, `currencies`, `errors`, Zod-схемы, `createConverter`, `balanceDeltas`, unit-тесты) | F00 | S | todo |
+| 2 | F01 | Domain core (`money`, `dates`, `currencies`, `errors`, Zod-схемы, `createConverter`, `balanceDeltas`, unit-тесты) | F00 | S | done |
 | 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | todo |
 | 4 | F03 | Firestore rules v1 + rules-тесты + `firestore.indexes.json` (пустой) + деплой правил | F01, F02 | M | todo |
 | 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | todo |
@@ -69,9 +69,9 @@
 - [ ] Финализирован скилл `verify` под реальные команды
 
 ### F01 Domain core
-- [ ] `money`, `dates`, `currencies`, `errors`, `aggregations` (основа), `balanceDeltas`
-- [ ] Схемы Zod и `createConverter`
-- [ ] Unit-тесты, покрытие ветвей по стратегии
+- [x] `money`, `dates`, `currencies`, `errors`, `aggregations` (основа), `balanceDeltas`
+- [x] Схемы Zod и `createConverter`
+- [x] Unit-тесты, покрытие ветвей по стратегии
 
 ### F02 Auth
 - [ ] Регистрация, вход email, Google, reset, выход

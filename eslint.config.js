@@ -9,7 +9,13 @@ import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules', '.emulator-data', '**/*.d.ts'],
+    ignores: [
+      'dist',
+      'node_modules',
+      '.emulator-data',
+      'coverage',
+      '**/*.d.ts',
+    ],
   },
   {
     extends: [
@@ -76,7 +82,7 @@ export default tseslint.config(
                 'Forbidden: direct import of firebase/auth is allowed only in features/auth/** and lib/firebase.ts. See AGENTS.md §7.',
             },
             {
-              group: ['@/features/**', '../features/**', './features/**'],
+              group: ['@/features/*/**', '../features/*/**', './features/*/**'],
               message:
                 'Forbidden: features must only be imported through their public index.ts API. See AGENTS.md §7.',
             },
