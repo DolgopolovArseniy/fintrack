@@ -2,8 +2,7 @@ import { z } from 'zod';
 import { MAX_AMOUNT, MIN_AMOUNT } from './limits';
 import { SUPPORTED_CURRENCIES } from './currencies';
 
-export type IsoDate = string;
-export type YearMonth = string;
+export type { IsoDate, YearMonth } from './dates';
 export type TransactionType = 'expense' | 'income';
 
 /**
