@@ -26,9 +26,6 @@ function getFormatter(
 }
 
 function isValidThousandsGrouping(groups: string[]): boolean {
-  if (groups.length < 2) {
-    return false;
-  }
   // First group must be 1 to 3 digits
   if (!/^\d{1,3}$/.test(groups[0]!)) {
     return false;
@@ -87,7 +84,7 @@ export function parseMoneyInput(input: string): number | null {
         return null;
       }
       fracPart = cleaned.slice(lastDot + 1);
-      if (fracPart.length > 2 || fracPart.includes(',')) {
+      if (fracPart.length > 2) {
         return null;
       }
 
@@ -104,7 +101,7 @@ export function parseMoneyInput(input: string): number | null {
         return null;
       }
       fracPart = cleaned.slice(lastComma + 1);
-      if (fracPart.length > 2 || fracPart.includes('.')) {
+      if (fracPart.length > 2) {
         return null;
       }
 

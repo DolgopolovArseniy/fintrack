@@ -21,12 +21,11 @@ export function balanceDeltas(
 ): Map<string, number> {
   const result = new Map<string, number>();
 
-  if (!before && !after) {
-    return result;
-  }
-
-  // Creation: transaction added
-  if (!before && after) {
+  if (!before) {
+    if (!after) {
+      return result;
+    }
+    // Creation: transaction added
     const delta = signedAmount(after.type, after.amount);
     if (delta !== 0) {
       result.set(after.accountId, delta);
@@ -35,7 +34,7 @@ export function balanceDeltas(
   }
 
   // Deletion: transaction removed
-  if (before && !after) {
+  if (!after) {
     const delta = -signedAmount(before.type, before.amount);
     const normalized = delta === 0 ? 0 : delta;
     if (normalized !== 0) {
@@ -45,26 +44,24 @@ export function balanceDeltas(
   }
 
   // Update: transaction modified
-  if (before && after) {
-    const oldSigned = signedAmount(before.type, before.amount);
-    const newSigned = signedAmount(after.type, after.amount);
+  const oldSigned = signedAmount(before.type, before.amount);
+  const newSigned = signedAmount(after.type, after.amount);
 
-    if (before.accountId === after.accountId) {
-      const delta = newSigned - oldSigned;
-      const normalized = delta === 0 ? 0 : delta;
-      if (normalized !== 0) {
-        result.set(before.accountId, normalized);
-      }
-    } else {
-      const oldDelta = -oldSigned === 0 ? 0 : -oldSigned;
-      const newDelta = newSigned === 0 ? 0 : newSigned;
+  if (before.accountId === after.accountId) {
+    const delta = newSigned - oldSigned;
+    const normalized = delta === 0 ? 0 : delta;
+    if (normalized !== 0) {
+      result.set(before.accountId, normalized);
+    }
+  } else {
+    const oldDelta = -oldSigned === 0 ? 0 : -oldSigned;
+    const newDelta = newSigned === 0 ? 0 : newSigned;
 
-      if (oldDelta !== 0) {
-        result.set(before.accountId, oldDelta);
-      }
-      if (newDelta !== 0) {
-        result.set(after.accountId, newDelta);
-      }
+    if (oldDelta !== 0) {
+      result.set(before.accountId, oldDelta);
+    }
+    if (newDelta !== 0) {
+      result.set(after.accountId, newDelta);
     }
   }
 

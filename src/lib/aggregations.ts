@@ -42,7 +42,7 @@ export function sumByType(txs: readonly AggTx[]): {
   for (const tx of txs) {
     if (tx.type === 'income') {
       income += tx.amount;
-    } else if (tx.type === 'expense') {
+    } else {
       expense += tx.amount;
     }
   }
@@ -112,7 +112,7 @@ export function totalsByMonth(
     }
     if (tx.type === 'income') {
       entry.income += tx.amount;
-    } else if (tx.type === 'expense') {
+    } else {
       entry.expense += tx.amount;
     }
   }

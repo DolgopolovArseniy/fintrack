@@ -35,6 +35,8 @@ describe('money', () => {
       // Single separator grouping
       expect(parseMoneyInput('1,000')).toBe(100000);
       expect(parseMoneyInput('1.234')).toBe(123400);
+      expect(parseMoneyInput('1,000,000')).toBe(100000000);
+      expect(parseMoneyInput('1.000.000')).toBe(100000000);
 
       // Dot grouping with comma decimal
       expect(parseMoneyInput('12.345,6')).toBe(1234560);
