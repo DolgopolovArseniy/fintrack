@@ -1,3 +1,10 @@
+export { AuthProvider } from './AuthProvider';
+export { useAuth } from './useAuth';
+export { RequireAuth } from './guards/RequireAuth';
+export { PublicOnly } from './guards/PublicOnly';
+export { RootRedirect } from './guards/RootRedirect';
+export { AuthLoadingScreen } from './components/AuthLoadingScreen';
+
 export {
   localeSchema,
   themeSchema,
