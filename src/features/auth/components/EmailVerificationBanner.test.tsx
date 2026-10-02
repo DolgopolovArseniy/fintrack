@@ -101,7 +101,7 @@ describe('EmailVerificationBanner', () => {
       vi.useRealTimers();
     });
 
-    it('triggers sendVerificationEmail and handles 60-second cooldown', () => {
+    it('triggers sendVerificationEmail and handles 60-second cooldown', async () => {
       vi.mocked(authService.sendVerificationEmail).mockResolvedValueOnce(
         undefined,
       );
@@ -119,8 +119,9 @@ describe('EmailVerificationBanner', () => {
       expect(resendButton).toBeEnabled();
 
       // Trigger send
-      act(() => {
+      await act(async () => {
         resendButton.click();
+        await Promise.resolve();
       });
 
       expect(authService.sendVerificationEmail).toHaveBeenCalledTimes(1);
