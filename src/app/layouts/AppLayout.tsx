@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { EmailVerificationBanner, UserMenu } from '@/features/auth';
 import { cn } from '@/lib/cn';
 import { useTranslation } from '@/lib/i18n';
 import { navItems, type NavItem } from './navItems';
@@ -167,6 +168,9 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Network offline notification */}
       <OfflineBanner />
 
+      {/* Email verification alert for unverified password accounts */}
+      <EmailVerificationBanner />
+
       <div className="flex flex-1">
         {/* Desktop Sidebar (>= 1024px) */}
         <aside className="border-border/80 bg-sidebar hidden w-64 shrink-0 flex-col border-r lg:flex">
@@ -183,6 +187,9 @@ export function AppLayout({ children }: AppLayoutProps) {
               <SidebarNavLink key={item.id} item={item} />
             ))}
           </nav>
+          <div className="border-border/60 border-t p-2">
+            <UserMenu />
+          </div>
         </aside>
 
         {/* Main Content Area */}
@@ -193,6 +200,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <div className="flex shrink-0 items-center gap-1">
               <LanguageToggle />
               <ThemeToggle />
+              <UserMenu variant="compact" />
             </div>
           </header>
 
