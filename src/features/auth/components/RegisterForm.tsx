@@ -21,12 +21,14 @@ import { getAuthErrorKey } from '../authErrors';
 import { registerWithEmail, signInWithGoogle } from '../authService';
 import { registerSchema, type RegisterInput } from '../formSchemas';
 import { resolveReturnTo, RETURN_TO_PARAM } from '../returnTo';
+import { AuthContext } from '../AuthContext';
 import { AuthFormCard } from './AuthFormCard';
 import { GoogleButton } from './GoogleButton';
 
 export function RegisterForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const auth = React.useContext(AuthContext);
   const [searchParams] = useSearchParams();
   const [formError, setFormError] = React.useState<string | null>(null);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
@@ -53,6 +55,7 @@ export function RegisterForm() {
         password: data.password,
         displayName: data.displayName?.trim() || undefined,
       });
+      await auth?.refreshUser();
       void navigate(resolveReturnTo(returnToQuery));
     } catch (err) {
       const errorKey = getAuthErrorKey(err);

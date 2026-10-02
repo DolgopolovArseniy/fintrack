@@ -16,7 +16,7 @@ test.describe('Smoke tests', () => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/login/);
     await expect(
-      page.getByRole('heading', { name: /sign in|вход/i }),
+      page.getByRole('heading', { name: /welcome back|вход/i }),
     ).toBeVisible();
   });
 

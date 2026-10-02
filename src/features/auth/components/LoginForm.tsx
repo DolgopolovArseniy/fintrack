@@ -55,7 +55,9 @@ export function LoginForm() {
         setFormError(t(errorKey));
       }
       form.setValue('password', '');
-      form.setFocus('password');
+      setTimeout(() => {
+        form.setFocus('password');
+      }, 0);
     }
   };
 

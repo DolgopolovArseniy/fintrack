@@ -21,7 +21,7 @@ test.describe('F02 — Authentication E2E flows', () => {
 
     await expect(page).toHaveURL(/\/login\?returnTo=%2Fapp%2Fdashboard/);
     await expect(
-      page.getByRole('heading', { name: /sign in|вход/i }),
+      page.getByRole('heading', { name: /welcome back|вход/i }),
     ).toBeVisible();
 
     // App shell layout must not be rendered to guests
@@ -79,7 +79,7 @@ test.describe('F02 — Authentication E2E flows', () => {
 
     // 1. Submit incorrect password
     await page.getByLabel(/email/i).fill(user.email);
-    const passwordInput = page.getByLabel(/password|пароль/i);
+    const passwordInput = page.locator('input[name="password"]');
     await passwordInput.fill('WrongPassword123!');
     await page.getByRole('button', { name: /sign in|войти/i }).click();
 
@@ -169,7 +169,7 @@ test.describe('F02 — Authentication E2E flows', () => {
 
     // Switch to Russian
     const langToggle = page.getByRole('button', {
-      name: /switch language|сменить язык/i,
+      name: /change language|сменить язык/i,
     });
     await langToggle.click();
 
@@ -183,7 +183,7 @@ test.describe('F02 — Authentication E2E flows', () => {
 
     // Switch back to English
     await page
-      .getByRole('button', { name: /switch language|сменить язык/i })
+      .getByRole('button', { name: /change language|сменить язык/i })
       .click();
     await expect(
       page.getByRole('button', { name: /sign in|войти/i }),
@@ -236,7 +236,7 @@ test.describe('F02 — Authentication E2E flows', () => {
 
     // Confirm inputs and action button are fully visible
     await expect(page.getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByLabel(/password|пароль/i)).toBeVisible();
+    await expect(page.locator('input[name="password"]')).toBeVisible();
     await expect(
       page.getByRole('button', { name: /sign in|войти/i }),
     ).toBeVisible();

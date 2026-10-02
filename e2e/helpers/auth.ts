@@ -79,12 +79,14 @@ export async function registerTestUser(
     await page.getByLabel(/name|имя/i).fill(user.displayName);
   }
   await page.getByLabel(/email/i).fill(user.email);
-  await page.getByLabel(/password|пароль/i).fill(user.password);
+  await page.locator('input[name="password"]').fill(user.password);
   await page
     .getByRole('button', { name: /create account|зарегистрироваться/i })
     .click();
   await page.waitForURL(/\/app\/dashboard/);
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(
+    page.getByRole('navigation', { name: /main navigation/i }),
+  ).toBeVisible();
 }
 
 /**
@@ -98,7 +100,7 @@ export async function loginTestUser(
     await page.goto('/login');
   }
   await page.getByLabel(/email/i).fill(credentials.email);
-  await page.getByLabel(/password|пароль/i).fill(credentials.password);
+  await page.locator('input[name="password"]').fill(credentials.password);
   await page.getByRole('button', { name: /sign in|войти/i }).click();
 }
 

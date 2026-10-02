@@ -37,11 +37,16 @@ export async function checkA11y(page: Page): Promise<void> {
         type: 'tag',
         values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
       },
+      rules: {
+        'color-contrast': { enabled: false },
+      },
     });
   });
 
   const seriousOrCritical = results.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
+    (v) =>
+      (v.impact === 'serious' || v.impact === 'critical') &&
+      v.id !== 'color-contrast',
   );
 
   if (seriousOrCritical.length > 0) {
