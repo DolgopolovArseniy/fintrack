@@ -2,7 +2,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import { App } from '@/App';
 import { validateEnv } from '@/lib/env';
 
 interface ConfigErrorScreenProps {
@@ -97,9 +96,11 @@ if (!envResult.success) {
     </StrictMode>,
   );
 } else {
-  root.render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
+  void import('@/App').then(({ App }) => {
+    root.render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    );
+  });
 }

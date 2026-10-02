@@ -78,10 +78,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --config.ignore-scripts=true
 
+      - name: Setup Java (for Firebase Emulators)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Firebase Emulators
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-firebase-emulators-
+
       - name: Install Playwright Browsers & OS Dependencies
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run Playwright smoke tests
+      - name: Run Playwright e2e tests
         run: pnpm e2e
 
       - name: Upload Playwright test results

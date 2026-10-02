@@ -83,4 +83,21 @@ describe('validateEnv', () => {
       expect(result.data.VITE_APPCHECK_DEBUG_TOKEN).toBe('debug-token-guid');
     }
   });
+
+  it('allows omitting VITE_FIREBASE_STORAGE_BUCKET and VITE_FIREBASE_MESSAGING_SENDER_ID', () => {
+    const {
+      VITE_FIREBASE_STORAGE_BUCKET,
+      VITE_FIREBASE_MESSAGING_SENDER_ID,
+      ...withoutUnused
+    } = validMockEnv;
+    void VITE_FIREBASE_STORAGE_BUCKET;
+    void VITE_FIREBASE_MESSAGING_SENDER_ID;
+
+    const result = validateEnv(withoutUnused);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.VITE_FIREBASE_STORAGE_BUCKET).toBeUndefined();
+      expect(result.data.VITE_FIREBASE_MESSAGING_SENDER_ID).toBeUndefined();
+    }
+  });
 });

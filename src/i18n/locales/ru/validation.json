@@ -1,1 +1,12 @@
-{}
+{
+  "required": "Обязательное поле",
+  "emailInvalid": "Введите корректный email",
+  "passwordTooShort": "Пароль должен содержать минимум {{count}} символов",
+  "passwordTooShort_one": "Пароль должен содержать минимум {{count}} символ",
+  "passwordTooShort_few": "Пароль должен содержать минимум {{count}} символа",
+  "passwordTooShort_many": "Пароль должен содержать минимум {{count}} символов",
+  "tooLong": "Не более {{count}} символов",
+  "tooLong_one": "Не более {{count}} символа",
+  "tooLong_few": "Не более {{count}} символов",
+  "tooLong_many": "Не более {{count}} символов"
+}

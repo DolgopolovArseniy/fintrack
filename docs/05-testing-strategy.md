@@ -75,6 +75,14 @@
 | 12 | Удаление аккаунта с повторной аутентификацией |
 | 13 | a11y (axe) на ключевых экранах |
 
+#### Инфраструктура E2E и эмуляторы (F02)
+- Playwright запускает изолированные сервисы через массив `webServer`:
+  1. Эмулятор Firebase Auth (`firebase emulators:start --only auth --project demo-fintrack`, порт `9099`).
+  2. Dev-сервер Vite на отдельном порту `5174` с флагом `strictPort`, переменными `VITE_USE_EMULATORS=true` и `VITE_FIREBASE_PROJECT_ID=demo-fintrack`, чтобы избежать конфликта с локальным dev-сервером на 5173.
+- Очистка состояния Auth-эмулятора между тестами: REST-эндпоинт `DELETE http://127.0.0.1:9099/emulator/v1/projects/demo-fintrack/accounts`.
+- Проверка служебных писем (верификация email, сброс пароля): чтение REST-эндпоинта `GET http://127.0.0.1:9099/emulator/v1/projects/demo-fintrack/oobCodes`.
+- В CI окружении: автоматическая установка JDK 21 (`actions/setup-java`) и кеширование бинарных файлов эмуляторов Firebase (`~/.cache/firebase/emulators`).
+
 Правила: тесты независимы, данные создаются в начале теста (через эмулятор), никаких `sleep`, ожидания по состоянию (`expect` с auto-retry), один пользователь на тест.
 
 ## 4. Тестовые данные

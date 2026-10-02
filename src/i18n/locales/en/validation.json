@@ -1,1 +1,10 @@
-{}
+{
+  "required": "This field is required",
+  "emailInvalid": "Enter a valid email address",
+  "passwordTooShort": "Password must be at least {{count}} characters long",
+  "passwordTooShort_one": "Password must be at least {{count}} character long",
+  "passwordTooShort_other": "Password must be at least {{count}} characters long",
+  "tooLong": "Maximum {{count}} characters",
+  "tooLong_one": "Maximum {{count}} character",
+  "tooLong_other": "Maximum {{count}} characters"
+}
