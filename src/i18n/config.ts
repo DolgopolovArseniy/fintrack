@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { SUPPORTED_LOCALES, type Locale } from '@/lib/locales';
 import './types';
 
 import commonEn from './locales/en/common.json';
@@ -9,6 +10,7 @@ import validationEn from './locales/en/validation.json';
 import layoutEn from './locales/en/layout.json';
 import placeholderEn from './locales/en/placeholder.json';
 import dashboardEn from './locales/en/dashboard.json';
+import authEn from './locales/en/auth.json';
 
 import commonRu from './locales/ru/common.json';
 import navRu from './locales/ru/nav.json';
@@ -17,6 +19,7 @@ import validationRu from './locales/ru/validation.json';
 import layoutRu from './locales/ru/layout.json';
 import placeholderRu from './locales/ru/placeholder.json';
 import dashboardRu from './locales/ru/dashboard.json';
+import authRu from './locales/ru/auth.json';
 
 export const defaultNS = 'common' as const;
 export const namespaces = [
@@ -27,6 +30,7 @@ export const namespaces = [
   'layout',
   'placeholder',
   'dashboard',
+  'auth',
 ] as const;
 
 export const resources = {
@@ -38,6 +42,7 @@ export const resources = {
     layout: layoutEn,
     placeholder: placeholderEn,
     dashboard: dashboardEn,
+    auth: authEn,
   },
   ru: {
     common: commonRu,
@@ -47,11 +52,12 @@ export const resources = {
     layout: layoutRu,
     placeholder: placeholderRu,
     dashboard: dashboardRu,
+    auth: authRu,
   },
 } as const;
 
 export const STORAGE_LANG_KEY = 'fintrack-lang';
-export type SupportedLanguage = 'en' | 'ru';
+export type SupportedLanguage = Locale;
 
 export function detectInitialLanguage(): SupportedLanguage {
   if (typeof window === 'undefined') {
@@ -60,8 +66,8 @@ export function detectInitialLanguage(): SupportedLanguage {
 
   try {
     const saved = localStorage.getItem(STORAGE_LANG_KEY);
-    if (saved === 'en' || saved === 'ru') {
-      return saved;
+    if (saved && (SUPPORTED_LOCALES as readonly string[]).includes(saved)) {
+      return saved as SupportedLanguage;
     }
   } catch {
     // ignore

@@ -13,17 +13,8 @@ export const envSchema = z.object({
     .string()
     .trim()
     .min(1, 'VITE_FIREBASE_PROJECT_ID is required and cannot be empty'),
-  VITE_FIREBASE_STORAGE_BUCKET: z
-    .string()
-    .trim()
-    .min(1, 'VITE_FIREBASE_STORAGE_BUCKET is required and cannot be empty'),
-  VITE_FIREBASE_MESSAGING_SENDER_ID: z
-    .string()
-    .trim()
-    .min(
-      1,
-      'VITE_FIREBASE_MESSAGING_SENDER_ID is required and cannot be empty',
-    ),
+  VITE_FIREBASE_STORAGE_BUCKET: z.string().trim().min(1).optional(),
+  VITE_FIREBASE_MESSAGING_SENDER_ID: z.string().trim().min(1).optional(),
   VITE_FIREBASE_APP_ID: z
     .string()
     .trim()

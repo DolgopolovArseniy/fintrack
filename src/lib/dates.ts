@@ -4,7 +4,7 @@ import {
   getDaysInMonth,
 } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
-import { Locale } from './money';
+import { type Locale } from './locales';
 
 export type IsoDate = string; // 'YYYY-MM-DD'
 export type YearMonth = string; // 'YYYY-MM'

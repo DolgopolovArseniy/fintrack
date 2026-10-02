@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Link, Outlet } from 'react-router';
 import { LanguageToggle } from '@/app/components/LanguageToggle';
 import { RouteLoadingSkeleton } from '@/app/components/RouteLoadingSkeleton';
 import { ThemeToggle } from '@/app/components/ThemeToggle';
-import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/app/routes';
 import { useTranslation } from '@/lib/i18n';
 
@@ -20,7 +19,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       {/* Top utility bar */}
       <header className="border-border/60 flex h-14 items-center justify-between border-b px-4 sm:px-6">
         <Link
-          to={ROUTES.dashboard}
+          to={ROUTES.root}
           className="text-muted-foreground hover:text-foreground flex items-center gap-2 transition-colors"
         >
           <div className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-lg shadow-xs">
@@ -32,17 +31,6 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-foreground text-xs"
-          >
-            <Link to={ROUTES.dashboard} className="gap-1.5">
-              <ArrowLeft className="size-3.5" aria-hidden="true" />
-              <span>{t('placeholder.notFound.goHome')}</span>
-            </Link>
-          </Button>
           <LanguageToggle />
           <ThemeToggle />
         </div>

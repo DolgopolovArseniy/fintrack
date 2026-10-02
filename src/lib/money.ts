@@ -1,7 +1,8 @@
 import { CurrencyCode } from './currencies';
 import { MAX_AMOUNT } from './limits';
+import { type Locale } from './locales';
 
-export type Locale = 'en' | 'ru';
+export type { Locale };
 export type TransactionType = 'expense' | 'income';
 
 const FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
@@ -228,13 +229,6 @@ export function signedAmount(type: TransactionType, amount: number): number {
     return 0;
   }
   return type === 'income' ? absAmount : -absAmount;
-}
-
-/**
- * Converts major units to minor units (rounding to nearest integer).
- */
-export function toMinorUnits(major: number): number {
-  return Math.round(major * 100);
 }
 
 /**
