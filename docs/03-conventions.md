@@ -105,7 +105,7 @@
 - Ключи списков стабильные (`id`), не индекс.
 - Код переживает StrictMode: эффекты идемпотентны.
 - Состояния данных обрабатываются через `QueryBoundary`: loading, error, empty, success. Нельзя оставить экран без любого из состояний.
-- Формы: React Hook Form + Zod-резолвер. Схема формы выводится из доменной схемы, а не пишется заново.
+- Формы: React Hook Form (`useForm`) + Zod-резолвер (`@hookform/resolvers/zod`, нативная совместимость с Zod 4). Используется компонент `components/ui/form.tsx` (`Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`), обеспечивающий автоматическое связывание `id`, `htmlFor`, `aria-describedby` и `aria-invalid`. Схема формы выводится из доменной схемы или определяется в `formSchemas.ts`. Сообщения схем — ключи i18n, транслируемые хелпером `translateValidationMessage(t, message)`.
 - Доступность: у иконок-кнопок `aria-label` (из i18n), видимый фокус, семантические теги, клавиатурные сценарии.
 - Мемоизация (`memo`, `useCallback`) только при измеренной проблеме.
 

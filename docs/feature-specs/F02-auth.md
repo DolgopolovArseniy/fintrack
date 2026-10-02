@@ -364,8 +364,8 @@ export function clearLocalFirestoreData(): Promise<void>
 
 | Дата | Вопрос или решение | Статус |
 |---|---|---|
-| — | Какой форм-компонент shadcn актуален (`form` или `field`) на момент T2 | open |
-| — | Совместимость `@hookform/resolvers` с Zod 4 (Context7) | open |
+| 2026-10-02 | Использован компонент `form` (`components/ui/form.tsx`) с обёртками RHF (`FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) | resolved |
+| 2026-10-02 | `@hookform/resolvers` 5.9+ нативно поддерживает Zod 4 через trait-проверки (`$ZodError`) | resolved |
 | — | Точный URL очистки аккаунтов и чтения `oobCodes` Auth-эмулятора | open |
 | — | Поведение `email-already-in-use` при включённой защите от перечисления email (проверить на эмуляторе и dev-проекте) | open |
 | — | Расширение `AuthState` до `needsOnboarding` и `ready` после F03 и F04 | planned |
