@@ -1,6 +1,6 @@
 # F02 — Auth
 
-Статус: spec-ready
+Статус: done
 Зависит от: F00 (влит в `main`). Рекомендуемый порядок: после F01 (используется `lib/logger.ts`; если F01 не влит, создать `logger` по контракту F01 §4.8)
 Размер: M–L (8 задач)
 Ветка: `feat/F02-auth`
@@ -284,25 +284,25 @@ export function clearLocalFirestoreData(): Promise<void>
 
 ## 12. Acceptance criteria
 
-- [ ] AC1: Given гость, When открывает любой `/app/**`, Then редирект на `/login` с корректным `returnTo`, содержимое приложения не отрисовывалось.
-- [ ] AC2: Given обновление страницы с активной сессией, When идёт определение состояния, Then показывается `AuthLoadingScreen`, страница логина **не** показывается.
-- [ ] AC3: Given валидные данные, When регистрация, Then пользователь создан, имя сохранено и отображается в `UserMenu`, письмо подтверждения запрошено, пользователь на `returnTo` или dashboard.
-- [ ] AC4: Given сбой отправки письма подтверждения, When регистрация, Then регистрация успешна, ошибка залогирована.
-- [ ] AC5: Given неверные данные входа, When submit, Then единое сообщение `invalidCredential`, пароль очищен, форма снова доступна.
-- [ ] AC6: Given Google popup закрыт пользователем, When вход, Then сообщение не показывается.
-- [ ] AC7: Given любой email, When сброс пароля, Then всегда одинаковый экран успеха (в том числе при `auth/user-not-found`).
-- [ ] AC8: Given авторизованный пользователь, When открывает `/login`, `/register`, `/reset-password`, Then редирект на безопасный `returnTo` или dashboard.
-- [ ] AC9: `isSafeReturnTo` отклоняет `//evil.com`, `https://evil.com`, `/\evil.com`, `javascript:alert(1)`, `/login`, пустое значение, и принимает `/app`, `/app/transactions?month=2026-09`.
-- [ ] AC10: Given выход, When нажата кнопка, Then вызваны `signOut`, очистка кеша, переход на `/login` с полной перезагрузкой. Ошибка очистки не блокирует выход.
-- [ ] AC11: Given `emailVerified === false` и провайдер `password`, Then виден баннер. Повторная отправка блокируется на 60 секунд с обратным отсчётом. «Я подтвердил» обновляет состояние и скрывает баннер.
-- [ ] AC12: Ошибки Firebase на формах показываются через `getAuthErrorKey`, без сырых кодов и технических текстов.
-- [ ] AC13: Формы доступны с клавиатуры, имеют `label`, `autocomplete`, `aria-describedby` для ошибок, фокус переходит на первое невалидное поле. axe не находит critical и serious нарушений на `/login` и `/register` в обеих темах.
-- [ ] AC14: Все тексты через i18n в EN и RU, длинные русские строки не ломают вёрстку на 360 px.
-- [ ] AC15: `AuthProvider` отписывается при размонтировании и корректно работает под `StrictMode` (нет лишних подписок).
-- [ ] AC16: `firebase/auth` импортируется только в `authService.ts` и `lib/firebase.ts`. Временные нарушения из матрицы §2 ломают `pnpm lint`.
-- [ ] AC17: Импорт `cn` во всех `components/ui/*` идёт из `@/lib/cn`, зависимость `cn` удалена.
-- [ ] AC-STATES: Реализованы loading, error, offline, success для каждой формы.
-- [ ] AC-ARCH: Нет дублирования (оболочка формы, поле пароля, баннер ошибки, перевод валидации вынесены), нет `any`, нет обращений к Firestore из фичи.
+- [x] AC1: Given гость, When открывает любой `/app/**`, Then редирект на `/login` с корректным `returnTo`, содержимое приложения не отрисовывалось.
+- [x] AC2: Given обновление страницы с активной сессией, When идёт определение состояния, Then показывается `AuthLoadingScreen`, страница логина **не** показывается.
+- [x] AC3: Given валидные данные, When регистрация, Then пользователь создан, имя сохранено и отображается в `UserMenu`, письмо подтверждения запрошено, пользователь на `returnTo` или dashboard.
+- [x] AC4: Given сбой отправки письма подтверждения, When регистрация, Then регистрация успешна, ошибка залогирована.
+- [x] AC5: Given неверные данные входа, When submit, Then единое сообщение `invalidCredential`, пароль очищен, форма снова доступна.
+- [x] AC6: Given Google popup закрыт пользователем, When вход, Then сообщение не показывается.
+- [x] AC7: Given любой email, When сброс пароля, Then всегда одинаковый экран успеха (в том числе при `auth/user-not-found`).
+- [x] AC8: Given авторизованный пользователь, When открывает `/login`, `/register`, `/reset-password`, Then редирект на безопасный `returnTo` или dashboard.
+- [x] AC9: `isSafeReturnTo` отклоняет `//evil.com`, `https://evil.com`, `/\evil.com`, `javascript:alert(1)`, `/login`, пустое значение, и принимает `/app`, `/app/transactions?month=2026-09`.
+- [x] AC10: Given выход, When нажата кнопка, Then вызваны `signOut`, очистка кеша, переход на `/login` с полной перезагрузкой. Ошибка очистки не блокирует выход.
+- [x] AC11: Given `emailVerified === false` и провайдер `password`, Then виден баннер. Повторная отправка блокируется на 60 секунд с обратным отсчётом. «Я подтвердил» обновляет состояние и скрывает баннер.
+- [x] AC12: Ошибки Firebase на формах показываются через `getAuthErrorKey`, без сырых кодов и технических текстов.
+- [x] AC13: Формы доступны с клавиатуры, имеют `label`, `autocomplete`, `aria-describedby` для ошибок, фокус переходит на первое невалидное поле. axe не находит critical и serious нарушений на `/login` и `/register` в обеих темах.
+- [x] AC14: Все тексты через i18n в EN и RU, длинные русские строки не ломают вёрстку на 360 px.
+- [x] AC15: `AuthProvider` отписывается при размонтировании и корректно работает под `StrictMode` (нет лишних подписок).
+- [x] AC16: `firebase/auth` импортируется только в `authService.ts` и `lib/firebase.ts`. Временные нарушения из матрицы §2 ломают `pnpm lint`.
+- [x] AC17: Импорт `cn` во всех `components/ui/*` идёт из `@/lib/cn`, зависимость `cn` удалена.
+- [x] AC-STATES: Реализованы loading, error, offline, success для каждой формы.
+- [x] AC-ARCH: Нет дублирования (оболочка формы, поле пароля, баннер ошибки, перевод валидации вынесены), нет `any`, нет обращений к Firestore из фичи.
 
 ## 13. План тестов
 
@@ -353,12 +353,12 @@ export function clearLocalFirestoreData(): Promise<void>
 
 ## 16. Definition of Done
 
-- [ ] AC1–AC17 и AC-* выполнены
-- [ ] Тесты из плана написаны и проходят локально и в CI (включая e2e на эмуляторе)
-- [ ] Скилл `verify` пройден, отчёт приложен к PR
-- [ ] Нет нарушений `AGENTS.md` (разделы 7, 8, 11), матрица ESLint проверена
-- [ ] `docs/01-architecture.md`, `docs/03-conventions.md`, `docs/05-testing-strategy.md`, ADR-0015 обновлены
-- [ ] Статус F02 в `docs/06-roadmap.md` = `done`
+- [x] AC1–AC17 и AC-* выполнены
+- [x] Тесты из плана написаны и проходят локально и в CI (включая e2e на эмуляторе)
+- [x] Скилл `verify` пройден, отчёт приложен к PR
+- [x] Нет нарушений `AGENTS.md` (разделы 7, 8, 11), матрица ESLint проверена
+- [x] `docs/01-architecture.md`, `docs/03-conventions.md`, `docs/05-testing-strategy.md`, ADR-0015 обновлены
+- [x] Статус F02 в `docs/06-roadmap.md` = `done`
 
 ## 17. Журнал решений и открытые вопросы
 
@@ -366,6 +366,6 @@ export function clearLocalFirestoreData(): Promise<void>
 |---|---|---|
 | 2026-10-02 | Использован компонент `form` (`components/ui/form.tsx`) с обёртками RHF (`FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) | resolved |
 | 2026-10-02 | `@hookform/resolvers` 5.9+ нативно поддерживает Zod 4 через trait-проверки (`$ZodError`) | resolved |
-| — | Точный URL очистки аккаунтов и чтения `oobCodes` Auth-эмулятора | open |
+| 2026-10-02 | Точный URL очистки аккаунтов (`DELETE http://127.0.0.1:9099/emulator/v1/projects/{projectId}/accounts`) и чтения `oobCodes` (`GET http://127.0.0.1:9099/emulator/v1/projects/{projectId}/oobCodes`) Auth-эмулятора | resolved |
 | — | Поведение `email-already-in-use` при включённой защите от перечисления email (проверить на эмуляторе и dev-проекте) | open |
 | — | Расширение `AuthState` до `needsOnboarding` и `ready` после F03 и F04 | planned |

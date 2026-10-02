@@ -181,14 +181,18 @@ docs/  e2e/  firestore.rules  firestore.indexes.json  firebase.json  AGENTS.md
 
 ### 8.4 Auth и guard'ы
 
-Состояния: `loading` → `unauthenticated` | `authenticated` с подсостоянием `needsOnboarding` | `ready`.
+Состояния: `loading` → `unauthenticated` | `authenticated` (в F02; подсостояния `needsOnboarding` | `ready` расширяются в F04).
 
-- Пока `loading`, показывается экран-скелетон (нет «мигания» страницы логина).
-- `needsOnboarding`: у пользователя нет документа профиля. Создаётся профиль, набор категорий и счёт «Основной» **одним batch** (`02-data-model.md`).
-- Роуты `/app/**` закрыты guard'ом: нет пользователя означает редирект на `/login`. Авторизованного пользователя редиректит с `/login` на `/app/dashboard`.
-- Demo: `signInAnonymously`, затем сид. Конвертация в аккаунт через `linkWithCredential`. Обработать `auth/credential-already-in-use` (предложить войти в существующий аккаунт, сообщив, что демо-данные не перенесутся).
+- Пока `loading`, показывается полноэкранный `AuthLoadingScreen` с доступным `aria-busy` (нет «мигания» страницы логина).
+- Роуты:
+  - `/` маршрутизируется через `<RootRedirect />`: при `loading` показывает `AuthLoadingScreen`, авторизованного отправляет на `/app/dashboard`, гостя — на `/login`.
+  - Защищённая зона `/app/**` обёрнута в `<RequireAuth />`: неавторизованного перенаправляет на `/login?returnTo=...` без отображения защищённого интерфейса.
+  - Гостевая зона (`/login`, `/register`, `/reset-password`) обёрнута в `<PublicOnly />`: авторизованного пользователя перенаправляет на безопасный `returnTo` или `/app/dashboard`.
+- Безопасный `returnTo`: строгая валидация (`isSafeReturnTo` через `new URL`), разрешены только внутренние пути под префиксом `/app`, отклоняются любые внешние origin, схемы, протоколы-относительные ссылки (`//evil.com`) и управляющие символы.
+- Неподтверждённый email: баннер `EmailVerificationBanner` под шапкой (виден при `emailVerified === false` и провайдере `password`), доступ к приложению не блокируется. Поддерживает повторную отправку с обратным отсчётом 60 секунд и кнопку обновления состояния («Я подтвердил»).
+- Выход из аккаунта (`useSignOut`): `signOutUser()`, затем best-effort очистка локального кеша Firestore (`clearLocalFirestoreData()`) и полная перезагрузка страницы (`window.location.assign(ROUTES.login)`) для гарантированного сброса памяти React и синглтонов (ADR-0015).
+- Demo: `signInAnonymously`, затем сид. Конвертация в аккаунт через `linkWithCredential`. Обработать `auth/credential-already-in-use` (предложить войти в существующий аккаунт, сообщив, что демо-данные не перенесутся; F12).
 - Email enumeration protection включена в консоли (проверить при настройке).
-- Неподтверждённый email: баннер с повторной отправкой, доступ не блокируется (решение можно пересмотреть в F02).
 
 ### 8.5 Подписки на данные
 

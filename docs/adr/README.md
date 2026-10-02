@@ -17,3 +17,4 @@
 | [ADR-011](0011-system-keys-default-entities.md) | Использование systemKey для перевода дефолтных счетов и категорий | Accepted | 2026-09-29 |
 | [ADR-012](0012-composite-budget-id.md) | Составной ID бюджета вида {YYYY-MM}_{categoryId} | Accepted | 2026-09-29 |
 | [ADR-013](0013-soft-delete-categories.md) | Мягкое удаление (архивация) категорий вместо физического | Accepted | 2026-09-29 |
+| [ADR-015](0015-firestore-cache-cleanup-on-signout.md) | Очистка локального кеша Firestore и перезагрузка при выходе | Accepted | 2026-10-02 |

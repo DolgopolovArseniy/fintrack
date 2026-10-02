@@ -24,7 +24,7 @@
 |---|---|---|---|---|---|
 | 1 | F00 | Foundation (репозиторий, Vite, TS strict, Tailwind, shadcn init, ESLint-границы, Prettier, Husky, Vitest, Playwright, CI, Firebase init и эмуляторы, layout, тема, i18n, ErrorBoundary, env, `components/common` базовые) | P1–P9 | M | todo |
 | 2 | F01 | Domain core (`money`, `dates`, `currencies`, `errors`, Zod-схемы, `createConverter`, `balanceDeltas`, unit-тесты) | F00 | S | done |
-| 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | todo |
+| 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | done |
 | 4 | F03 | Firestore rules v1 + rules-тесты + `firestore.indexes.json` (пустой) + деплой правил | F01, F02 | M | todo |
 | 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | todo |
 | 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | todo |
@@ -74,10 +74,10 @@
 - [x] Unit-тесты, покрытие ветвей по стратегии
 
 ### F02 Auth
-- [ ] Регистрация, вход email, Google, reset, выход
-- [ ] `AuthProvider` со статусом `loading`, guard'ы, редиректы
-- [ ] Баннер подтверждения email, переведённые ошибки
-- [ ] Тесты (component, e2e 1–2)
+- [x] Регистрация, вход email, Google, reset, выход
+- [x] `AuthProvider` со статусом `loading`, guard'ы, редиректы
+- [x] Баннер подтверждения email, переведённые ошибки
+- [x] Тесты (component, e2e 1–2)
 
 ### F03 Rules
 - [ ] `firestore.rules` из `02-data-model.md`, полный набор rules-тестов
