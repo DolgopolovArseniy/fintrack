@@ -1,11 +1,8 @@
 import { z } from 'zod';
-import { currencySchema } from '@/lib/schemas';
+import { currencySchema, localeSchema, type Locale } from '@/lib/schemas';
 import { DISPLAY_NAME_MAX_LENGTH } from '@/lib/limits';
 
-export const localeSchema = z.enum(['en', 'ru'], {
-  error: () => 'validation.required',
-});
-export type Locale = z.infer<typeof localeSchema>;
+export { localeSchema, type Locale };
 
 export const themeSchema = z.enum(['light', 'dark', 'system'], {
   error: () => 'validation.required',

@@ -7,7 +7,6 @@ import {
   fromMinorUnits,
   parseMoneyInput,
   signedAmount,
-  toMinorUnits,
 } from './money';
 
 describe('money', () => {
@@ -44,6 +43,7 @@ describe('money', () => {
       // Invalid decimal fractions or invalid groupings
       expect(parseMoneyInput('1.2345')).toBeNull();
       expect(parseMoneyInput('1.234,567')).toBeNull();
+      expect(parseMoneyInput('1,234.567')).toBeNull();
       expect(parseMoneyInput('1,23,4')).toBeNull();
 
       // Empty and separator-only inputs
@@ -208,14 +208,7 @@ describe('money', () => {
     });
   });
 
-  describe('toMinorUnits and fromMinorUnits', () => {
-    it('converts major units to minor units with rounding', () => {
-      expect(toMinorUnits(12.5)).toBe(1250);
-      expect(toMinorUnits(0)).toBe(0);
-      expect(toMinorUnits(10.005)).toBe(1001);
-      expect(toMinorUnits(-12.5)).toBe(-1250);
-    });
-
+  describe('fromMinorUnits', () => {
     it('converts minor units to major units', () => {
       expect(fromMinorUnits(1250)).toBe(12.5);
       expect(fromMinorUnits(0)).toBe(0);

@@ -59,6 +59,7 @@ React 19, TypeScript (strict), Vite, Tailwind CSS v4, shadcn/ui (Radix, lucide),
 
 - Слои: UI → Hooks → Repositories → Firebase SDK. Domain (`src/lib`) содержит чистые функции без React и Firebase.
 - `firebase/firestore` импортируется **только** в `features/*/repository.ts`, `lib/firebase.ts` и `lib/firestore/*`.
+- `firebase/auth` импортируется **только** в `features/auth/authService.ts` и `lib/firebase.ts`.
 - Фичи импортируют друг друга **только** через `index.ts` (публичный API фичи). Циклических импортов нет.
 - `lib/` не знает про `features/`. `components/ui` и `components/common` не знают про `features/`.
 - Деньги: целые числа в minor units. Никогда float, никогда `toFixed` в расчётах.

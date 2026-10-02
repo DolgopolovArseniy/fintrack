@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { SUPPORTED_LOCALES, type Locale } from '@/lib/locales';
 import './types';
 
 import commonEn from './locales/en/common.json';
@@ -51,7 +52,7 @@ export const resources = {
 } as const;
 
 export const STORAGE_LANG_KEY = 'fintrack-lang';
-export type SupportedLanguage = 'en' | 'ru';
+export type SupportedLanguage = Locale;
 
 export function detectInitialLanguage(): SupportedLanguage {
   if (typeof window === 'undefined') {
@@ -60,8 +61,8 @@ export function detectInitialLanguage(): SupportedLanguage {
 
   try {
     const saved = localStorage.getItem(STORAGE_LANG_KEY);
-    if (saved === 'en' || saved === 'ru') {
-      return saved;
+    if (saved && (SUPPORTED_LOCALES as readonly string[]).includes(saved)) {
+      return saved as SupportedLanguage;
     }
   } catch {
     // ignore

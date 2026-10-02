@@ -1,16 +1,24 @@
 import { z } from 'zod';
 import { MAX_AMOUNT, MIN_AMOUNT } from './limits';
 import { SUPPORTED_CURRENCIES } from './currencies';
+import { SUPPORTED_LOCALES, type Locale } from './locales';
 
 export type { IsoDate, YearMonth } from './dates';
-export type TransactionType = 'expense' | 'income';
+export type { TransactionType } from './money';
+export type { Locale };
+
+/**
+ * Validates supported locale.
+ */
+export const localeSchema = z.enum(SUPPORTED_LOCALES, {
+  error: 'validation.required',
+});
 
 /**
  * Validates transaction type ('expense' | 'income').
  */
 export const transactionTypeSchema = z.enum(['expense', 'income'], {
-  error: (iss) =>
-    iss.input === undefined ? 'validation.required' : 'validation.required',
+  error: 'validation.required',
 });
 
 /**

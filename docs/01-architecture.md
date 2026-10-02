@@ -140,7 +140,7 @@ docs/  e2e/  firestore.rules  firestore.indexes.json  firebase.json  AGENTS.md
 
 1. Фича импортирует другую фичу **только** через её `index.ts`. Внутренности (`repository`, `components/*`) закрыты.
 2. `firebase/firestore` импортируется только в `features/*/repository.ts`, `features/*/converters.ts`, `lib/firebase.ts`, `lib/firestore/*`.
-3. `firebase/auth` импортируется только в `features/auth/*` и `lib/firebase.ts`.
+3. `firebase/auth` импортируется только в `features/auth/authService.ts` и `lib/firebase.ts`.
 4. `lib/` не импортирует `features/`, `components/`, `app/`.
 5. `components/ui` и `components/common` не импортируют `features/`.
 6. Domain-модули (`money`, `dates`, `aggregations`, `csv`) не импортируют React и Firebase.

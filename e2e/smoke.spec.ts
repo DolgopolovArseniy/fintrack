@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test('loads root page and renders app container', async ({ page }) => {
+test('loads root page, redirects to dashboard, and renders layout', async ({
+  page,
+}) => {
   await page.goto('/');
-  await expect(page.locator('#root')).toBeVisible();
+  await expect(page).toHaveURL(/\/app\/dashboard/);
+  await expect(
+    page.getByRole('navigation', { name: /main navigation/i }),
+  ).toBeVisible();
 });
