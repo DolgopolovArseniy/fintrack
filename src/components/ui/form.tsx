@@ -13,6 +13,8 @@ import {
 } from 'react-hook-form';
 
 import { Label } from '@/components/ui/label';
+import { useTranslation } from '@/lib/i18n';
+import { translateValidationMessage } from '@/lib/validation';
 
 const Form = FormProvider;
 
@@ -136,7 +138,10 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
 
 function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message ?? '') : props.children;
+  const { t } = useTranslation();
+  const body = error
+    ? translateValidationMessage(t, error?.message)
+    : props.children;
 
   if (!body) {
     return null;

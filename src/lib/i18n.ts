@@ -14,3 +14,4 @@ export function useTranslation(ns?: AppNamespace | AppNamespace[]) {
 }
 
 export { i18n, changeAppLanguage, detectInitialLanguage };
+export { translateValidationMessage } from './validation';

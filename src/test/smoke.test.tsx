@@ -7,8 +7,9 @@ describe('App smoke test', () => {
     render(<App />);
     const brandElements = await screen.findAllByText(/fintrack/i);
     expect(brandElements.length).toBeGreaterThan(0);
-    expect(
-      await screen.findByText(/coming soon|welcome back|sign in/i),
-    ).toBeInTheDocument();
+    const authElements = await screen.findAllByText(
+      /coming soon|welcome back|sign in/i,
+    );
+    expect(authElements.length).toBeGreaterThan(0);
   });
 });

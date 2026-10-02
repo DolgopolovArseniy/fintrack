@@ -4,6 +4,9 @@ export { RequireAuth } from './guards/RequireAuth';
 export { PublicOnly } from './guards/PublicOnly';
 export { RootRedirect } from './guards/RootRedirect';
 export { AuthLoadingScreen } from './components/AuthLoadingScreen';
+export { LoginForm } from './components/LoginForm';
+export { RegisterForm } from './components/RegisterForm';
+export { ResetPasswordForm } from './components/ResetPasswordForm';
 
 export {
   localeSchema,
