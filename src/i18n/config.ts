@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { SUPPORTED_LOCALES, type Locale } from '@/lib/locales';
+import { SUPPORTED_LOCALES, type Locale, DEFAULT_LOCALE } from '@/lib/locales';
 import './types';
 
 import commonEn from './locales/en/common.json';
@@ -61,7 +61,7 @@ export type SupportedLanguage = Locale;
 
 export function detectInitialLanguage(): SupportedLanguage {
   if (typeof window === 'undefined') {
-    return 'en';
+    return DEFAULT_LOCALE;
   }
 
   try {
@@ -78,7 +78,7 @@ export function detectInitialLanguage(): SupportedLanguage {
     return 'ru';
   }
 
-  return 'en';
+  return DEFAULT_LOCALE;
 }
 
 export function setStoredLanguage(lang: SupportedLanguage): void {
@@ -99,7 +99,7 @@ export async function changeAppLanguage(
 void i18n.use(initReactI18next).init({
   resources,
   lng: detectInitialLanguage(),
-  fallbackLng: 'en',
+  fallbackLng: DEFAULT_LOCALE,
   defaultNS,
   fallbackNS: [...namespaces],
   ns: [...namespaces],

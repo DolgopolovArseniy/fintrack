@@ -45,8 +45,15 @@
 
 ### 3.3 Rules
 
-- Полный набор из `02-data-model.md` §13. Обязательны «негативные» тесты: чужой пользователь, аноним, лишние поля, неверные типы, неверные даты, подмена `createdAt`.
-- Запускаются в CI. Изменение `firestore.rules` без изменения тестов в том же PR запрещено.
+- Полный набор из `02-data-model.md` §13 и спеки `F03-firestore-rules.md`. Обязательны «негативные» тесты: чужой пользователь, аноним, лишние поля, неверные типы, неверные даты, подмена `createdAt`, границы чисел и длин.
+- Архитектура тестовой инфраструктуры:
+  - Раннер: Vitest в окружении `node`, отдельный конфиг `vitest.rules.config.ts`, последовательный запуск файлов (`fileParallelism: false`) против общего эмулятора.
+  - Каталог: `rules-tests/` в корне проекта (изолирован от основного прогона `pnpm test`).
+  - Эмулятор: Firestore emulator в проекте `demo-fintrack-rules`, запускается через `firebase emulators:exec --only firestore ...` по скрипту `pnpm test:rules`.
+  - Хелперы: `rules-tests/helpers/env.ts` (`initializeTestEnvironment`, контексты `ownerDb`, `otherDb`, `anonOwnerDb`, `guestDb`), `rules-tests/helpers/docs.ts` (билдеры валидных сырых документов с маркером `DELETE_FIELD`), `rules-tests/helpers/seed.ts` (запись исходных документов в обход правил через `withSecurityRulesDisabled`).
+  - Очистка: `clearFirestore()` (`testEnv.clearFirestore()`) перед каждым тестом (`beforeEach`).
+  - Статические и Sync-тесты: `rules-tests/sync.test.ts` (без обращения к эмулятору) проверяет синхронизацию белых списков валют/локалей, числовых границ из `lib/limits.ts`, запрет вызовов `exists()`/`get()` (ADR-0016), версию правил и совпадение текста правил в `02-data-model.md` с `firestore.rules`.
+- Запускаются в CI в отдельном джобе `rules` с JDK 21. Изменение `firestore.rules` без изменения тестов в том же PR запрещено.
 
 ### 3.4 Component
 
@@ -127,6 +134,6 @@
 
 | Вопрос | Когда |
 |---|---|
-| Порог покрытия для domain (предложение 100% ветвей) и общий индикатор | F01 |
-| Способ очистки эмулятора между тестами (REST-эндпоинт эмулятора или `clearFirestoreData`) | F03 |
+| Порог покрытия для domain (предложение 100% ветвей) и общий индикатор | F01 (принято: 100% ветвей для critical domain) |
+| Способ очистки эмулятора между тестами (REST-эндпоинт эмулятора или `clearFirestoreData`) | Решено в F03: `testEnv.clearFirestore()` из `@firebase/rules-unit-testing` перед каждым тестом |
 | Запуск e2e в нескольких браузерах (предложение: Chromium в PR, все при релизе) | F13 |

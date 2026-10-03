@@ -59,6 +59,42 @@ jobs:
       - name: Build production bundle
         run: pnpm build
 
+  rules:
+    name: Security Rules Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --config.ignore-scripts=true
+
+      - name: Setup Java (for Firebase Emulators)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Firebase Emulators
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-firebase-emulators-
+
+      - name: Run Firestore Security Rules tests
+        run: pnpm test:rules
+
   e2e:
     name: End-to-End Tests
     runs-on: ubuntu-latest

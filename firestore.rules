@@ -1,8 +1,149 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+
+    // ---------- Общие функции ----------
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Только перечисленные поля: все обязательные и, возможно, необязательные.
+    function hasExactKeys(required, optional) {
+      let keys = incoming().keys();
+      return keys.hasAll(required) && keys.hasOnly(required.concat(optional));
+    }
+
+    function isText(value, minLen, maxLen) {
+      return value is string && value.size() >= minLen && value.size() <= maxLen;
+    }
+
+    function isIntBetween(value, minValue, maxValue) {
+      return value is int && value >= minValue && value <= maxValue;
+    }
+
+    function isOptionalText(field, minLen, maxLen) {
+      return !(field in incoming()) || isText(incoming()[field], minLen, maxLen);
+    }
+
+    // createdAt и updatedAt обязаны быть серверным временем запроса.
+    function createStamps() {
+      return incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+    }
+
+    // createdAt неизменяем, updatedAt обновляется сервером.
+    function updateStamps() {
+      return incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time;
+    }
+
+    // ---------- Валидаторы документов ----------
+    function validProfile() {
+      let d = incoming();
+      return hasExactKeys(
+               ['baseCurrency', 'locale', 'theme', 'schemaVersion', 'createdAt', 'updatedAt'],
+               ['displayName'])
+        && d.baseCurrency in ['USD', 'EUR', 'GBP', 'UAH', 'PLN', 'CZK', 'CHF', 'CAD', 'AUD']
+        && d.locale in ['en', 'ru']
+        && d.theme in ['light', 'dark', 'system']
+        && isIntBetween(d.schemaVersion, 1, 1000)
+        && isOptionalText('displayName', 0, 60);
+    }
+
+    function validAccount() {
+      let d = incoming();
+      return hasExactKeys(
+               ['type', 'balance', 'initialBalance', 'archived', 'createdAt', 'updatedAt'],
+               ['name', 'systemKey'])
+        && ('name' in d || 'systemKey' in d)
+        && d.type in ['cash', 'card', 'bank']
+        && isIntBetween(d.balance, -1000000000000, 1000000000000)
+        && isIntBetween(d.initialBalance, -1000000000000, 1000000000000)
+        && d.archived is bool
+        && isOptionalText('name', 1, 40)
+        && isOptionalText('systemKey', 1, 30);
+    }
+
+    function validCategory() {
+      let d = incoming();
+      return hasExactKeys(
+               ['type', 'icon', 'color', 'archived', 'createdAt', 'updatedAt'],
+               ['name', 'systemKey'])
+        && ('name' in d || 'systemKey' in d)
+        && d.type in ['expense', 'income']
+        && isText(d.icon, 1, 40)
+        && isText(d.color, 1, 20)
+        && d.archived is bool
+        && isOptionalText('name', 1, 40)
+        && isOptionalText('systemKey', 1, 30);
+    }
+
+    function validTransaction() {
+      let d = incoming();
+      return hasExactKeys(
+               ['type', 'amount', 'accountId', 'categoryId', 'date', 'createdAt', 'updatedAt'],
+               ['note', 'tags'])
+        && d.type in ['expense', 'income']
+        && isIntBetween(d.amount, 1, 100000000000)
+        && isText(d.accountId, 1, 64)
+        && isText(d.categoryId, 1, 64)
+        && d.date is string
+        && d.date.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
+        && isOptionalText('note', 0, 200)
+        && (!('tags' in d) || (d.tags is list && d.tags.size() <= 10));
+    }
+
+    function validBudget(budgetId) {
+      let d = incoming();
+      return hasExactKeys(
+               ['categoryId', 'month', 'limit', 'createdAt', 'updatedAt'],
+               [])
+        && isText(d.categoryId, 1, 64)
+        && d.month is string
+        && d.month.matches('^[0-9]{4}-(0[1-9]|1[0-2])$')
+        && budgetId == d.month + '_' + d.categoryId
+        && isIntBetween(d.limit, 1, 100000000000);
+    }
+
+    // ---------- Пути ----------
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && validProfile() && createStamps();
+      allow update: if isOwner(uid) && validProfile() && updateStamps();
+      allow delete: if isOwner(uid);
+
+      match /accounts/{accountId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validAccount() && createStamps();
+        allow update: if isOwner(uid) && validAccount() && updateStamps();
+        allow delete: if isOwner(uid);
+      }
+
+      match /categories/{categoryId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validCategory() && createStamps();
+        allow update: if isOwner(uid) && validCategory() && updateStamps()
+                      && incoming().type == existing().type;
+        allow delete: if isOwner(uid);
+      }
+
+      match /transactions/{txId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validTransaction() && createStamps();
+        allow update: if isOwner(uid) && validTransaction() && updateStamps();
+        allow delete: if isOwner(uid);
+      }
+
+      match /budgets/{budgetId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && validBudget(budgetId) && createStamps();
+        allow update: if isOwner(uid) && validBudget(budgetId) && updateStamps();
+        allow delete: if isOwner(uid);
+      }
     }
   }
 }
