@@ -196,6 +196,22 @@ export default tseslint.config(
     },
   },
   {
+    // Allow direct firebase/firestore imports in rules tests
+    files: ['rules-tests/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [...RESTRICTED_AUTH_PATHS],
+          patterns: [
+            ...RESTRICTED_AUTH_PATTERNS,
+            ...RESTRICTED_FEATURE_INTERNALS,
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Auth service is allowed to import firebase/auth, but forbidden to import firebase/firestore, other features, or app
     files: ['src/features/auth/authService.ts'],
     rules: {

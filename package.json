@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-fintrack-rules \"vitest run --config vitest.rules.config.ts\"",
     "e2e": "playwright test",
     "emulators": "firebase emulators:start --import=./.emulator-data --export-on-exit=./.emulator-data",
     "prepare": "husky"
@@ -48,6 +49,7 @@
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
+    "@firebase/rules-unit-testing": "^5.0.2",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.1.0",
     "@testing-library/jest-dom": "^7.0.1",
