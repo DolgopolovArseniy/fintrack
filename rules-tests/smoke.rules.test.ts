@@ -7,12 +7,11 @@ import {
   clearFirestore,
   docRef,
   OWNER_UID,
-  OTHER_UID,
   type RulesTestContexts,
 } from './helpers/env';
-import { seedDocument, realTimestamp } from './helpers/seed';
+import { validProfile } from './helpers/docs';
 
-describe('Firestore Rules Smoke Test (Closed Rules v0)', () => {
+describe('Firestore Rules Smoke Test (Rules v1)', () => {
   let ctx: RulesTestContexts;
 
   beforeAll(async () => {
@@ -27,38 +26,18 @@ describe('Firestore Rules Smoke Test (Closed Rules v0)', () => {
     await clearFirestore();
   });
 
-  it('rejects read by owner when rules are closed', async () => {
-    const ref = docRef(ctx.ownerDb, `users/${OWNER_UID}/accounts/acc1`);
-    await assertFails(getDoc(ref));
+  it('allows owner to create a valid profile', async () => {
+    const ref = docRef(ctx.ownerDb, `users/${OWNER_UID}`);
+    await assertSucceeds(setDoc(ref, validProfile()));
   });
 
-  it('rejects write by owner when rules are closed', async () => {
-    const ref = docRef(ctx.ownerDb, `users/${OWNER_UID}/accounts/acc1`);
-    await assertFails(setDoc(ref, { name: 'Cash', balance: 100 }));
-  });
-
-  it('rejects write by other user when rules are closed', async () => {
-    const ref = docRef(ctx.otherDb, `users/${OTHER_UID}/accounts/acc1`);
-    await assertFails(setDoc(ref, { name: 'Cash', balance: 100 }));
-  });
-
-  it('rejects read by unauthenticated guest when rules are closed', async () => {
+  it('rejects read by unauthenticated guest', async () => {
     const ref = docRef(ctx.guestDb, `users/${OWNER_UID}`);
     await assertFails(getDoc(ref));
   });
 
-  it('allows seeding documents with security rules disabled, while read through rules still fails', async () => {
-    const path = `users/${OWNER_UID}/accounts/acc-seeded`;
-    await assertSucceeds(
-      seedDocument(path, {
-        name: 'Seeded Account',
-        balance: 5000,
-        createdAt: realTimestamp(),
-        updatedAt: realTimestamp(),
-      }),
-    );
-
-    const ref = docRef(ctx.ownerDb, path);
-    await assertFails(getDoc(ref));
+  it('rejects write by another user to owner profile', async () => {
+    const ref = docRef(ctx.otherDb, `users/${OWNER_UID}`);
+    await assertFails(setDoc(ref, validProfile()));
   });
 });

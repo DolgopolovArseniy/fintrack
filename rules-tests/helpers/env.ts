@@ -6,6 +6,7 @@ import {
   type RulesTestContext,
 } from '@firebase/rules-unit-testing';
 import {
+  collection,
   doc,
   type DocumentReference,
   type Firestore,
@@ -52,6 +53,15 @@ export type TestFirestore = ReturnType<RulesTestContext['firestore']>;
  */
 export function docRef(db: TestFirestore, docPath: string): DocumentReference {
   return doc(db as unknown as Firestore, docPath);
+}
+
+/**
+ * Unified colRef helper to build CollectionReferences from TestFirestore.
+ * Justification for cast: @firebase/rules-unit-testing exports compat Firestore instance,
+ * which is fully compatible at runtime with modular collection() function.
+ */
+export function colRef(db: TestFirestore, colPath: string) {
+  return collection(db as unknown as Firestore, colPath);
 }
 
 export async function getOwnerDb(): Promise<TestFirestore> {
