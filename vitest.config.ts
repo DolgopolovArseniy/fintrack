@@ -12,7 +12,7 @@ export default defineConfig({
   test: {
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    exclude: ['**/node_modules/**', '**/e2e/**'],
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/rules-tests/**'],
     env: {
       VITE_FIREBASE_API_KEY: 'mock-api-key',
       VITE_FIREBASE_AUTH_DOMAIN: 'mock-project.firebaseapp.com',
@@ -51,6 +51,7 @@ export default defineConfig({
             'src/lib/dates.timezone.test.ts',
             '**/node_modules/**',
             '**/e2e/**',
+            '**/rules-tests/**',
           ],
         },
       },
