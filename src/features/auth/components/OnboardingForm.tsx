@@ -49,6 +49,12 @@ export function OnboardingForm({ onSuccess, className }: OnboardingFormProps) {
     },
   });
 
+  React.useEffect(() => {
+    if (user?.displayName && !form.getValues('displayName')) {
+      form.setValue('displayName', user.displayName);
+    }
+  }, [user?.displayName, form]);
+
   const onSubmit = async (data: OnboardingFormInput) => {
     if (!user) {
       setFormError(t('categories.errors.unauthorized'));

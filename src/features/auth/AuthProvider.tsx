@@ -38,21 +38,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
           unsubscribeProfile = subscribeUserProfile(
             user.uid,
             (profile) => {
-              setState({
+              setState((prev) => ({
                 status: 'authenticated',
-                user,
+                user: prev.status === 'authenticated' ? prev.user : user,
                 profileStatus: profile ? 'ready' : 'needsOnboarding',
                 profile,
-              });
+              }));
             },
             (error) => {
               logger.error('User profile subscription error', error);
-              setState({
+              setState((prev) => ({
                 status: 'authenticated',
-                user,
+                user: prev.status === 'authenticated' ? prev.user : user,
                 profileStatus: 'needsOnboarding',
                 profile: null,
-              });
+              }));
             },
           );
         } else {
