@@ -59,5 +59,5 @@ export const categorySchema = baseCategoryDocSchema.refine(hasNameOrSystemKey, {
   path: ['name'],
 });
 
-export type CategoryInput = z.infer<typeof categoryInputSchema>;
+export type CategoryInput = z.input<typeof categoryInputSchema>;
 export type Category = z.infer<typeof categorySchema>;

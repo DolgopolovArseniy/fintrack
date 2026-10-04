@@ -5,18 +5,25 @@ import { useAuth } from '../useAuth';
 
 /**
  * Handles the root (/) path redirection:
- * - Shows loading screen while auth is resolving
- * - Redirects authenticated users to dashboard
+ * - Shows loading screen while auth/profile is resolving
+ * - Redirects authenticated users needing onboarding to onboarding
+ * - Redirects authenticated ready users to dashboard
  * - Redirects guests to login
  */
 export function RootRedirect() {
-  const { status } = useAuth();
+  const { status, profileStatus } = useAuth();
 
-  if (status === 'loading') {
+  if (
+    status === 'loading' ||
+    (status === 'authenticated' && profileStatus === 'loading')
+  ) {
     return <AuthLoadingScreen />;
   }
 
   if (status === 'authenticated') {
+    if (profileStatus === 'needsOnboarding') {
+      return <Navigate to={ROUTES.onboarding} replace />;
+    }
     return <Navigate to={ROUTES.dashboard} replace />;
   }
 

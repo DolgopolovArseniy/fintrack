@@ -35,14 +35,27 @@ const unverifiedPasswordUser: AuthUser = {
 };
 
 describe('EmailVerificationBanner', () => {
+  function mockAuthState(
+    overrides: Partial<import('../types').AuthContextValue> &
+      Pick<import('../types').AuthContextValue, 'status'>,
+  ) {
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      profileStatus: overrides.status === 'loading' ? 'loading' : 'ready',
+      profile: null,
+      refreshUser: vi.fn(),
+      refreshProfile: vi.fn(),
+      ...overrides,
+    } as import('../types').AuthContextValue);
+  }
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('does not render when unauthenticated', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'unauthenticated',
-      refreshUser: vi.fn(),
     });
 
     const { container } = render(<EmailVerificationBanner />);
@@ -50,10 +63,9 @@ describe('EmailVerificationBanner', () => {
   });
 
   it('does not render when user email is already verified', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: { ...unverifiedPasswordUser, emailVerified: true },
-      refreshUser: vi.fn(),
     });
 
     const { container } = render(<EmailVerificationBanner />);
@@ -61,13 +73,12 @@ describe('EmailVerificationBanner', () => {
   });
 
   it('does not render when user logged in via google only (no password provider)', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: {
         ...unverifiedPasswordUser,
         providerIds: ['google.com'],
       },
-      refreshUser: vi.fn(),
     });
 
     const { container } = render(<EmailVerificationBanner />);
@@ -75,10 +86,9 @@ describe('EmailVerificationBanner', () => {
   });
 
   it('renders when user has password provider and email is unverified', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: unverifiedPasswordUser,
-      refreshUser: vi.fn(),
     });
 
     render(<EmailVerificationBanner />);
@@ -105,10 +115,9 @@ describe('EmailVerificationBanner', () => {
       vi.mocked(authService.sendVerificationEmail).mockResolvedValueOnce(
         undefined,
       );
-      vi.mocked(useAuth).mockReturnValue({
+      mockAuthState({
         status: 'authenticated',
         user: unverifiedPasswordUser,
-        refreshUser: vi.fn(),
       });
 
       render(<EmailVerificationBanner />);
@@ -156,7 +165,7 @@ describe('EmailVerificationBanner', () => {
       unverifiedPasswordUser,
     );
 
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: unverifiedPasswordUser,
       refreshUser: refreshUserMock,

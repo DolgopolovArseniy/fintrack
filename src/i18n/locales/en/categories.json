@@ -1,0 +1,99 @@
+{
+  "title": "Categories",
+  "description": "Manage your expense and income categories",
+  "showArchived": "Show archived",
+  "archivedBadge": "Archived",
+  "actions": {
+    "add": "Add category",
+    "edit": "Edit",
+    "archive": "Archive",
+    "unarchive": "Restore"
+  },
+  "tabs": {
+    "expenses": "Expenses",
+    "incomes": "Income"
+  },
+  "empty": {
+    "expenses": "No expense categories",
+    "incomes": "No income categories"
+  },
+  "system": {
+    "food": "Food & Groceries",
+    "transport": "Transportation",
+    "housing": "Housing",
+    "utilities": "Utilities",
+    "health": "Healthcare",
+    "entertainment": "Entertainment",
+    "shopping": "Shopping",
+    "other_expense": "Other Expenses",
+    "salary": "Salary",
+    "gift": "Gifts",
+    "other_income": "Other Income"
+  },
+  "onboarding": {
+    "title": "Welcome to FinTrack!",
+    "description": "Choose your base currency to get started",
+    "submit": "Get Started",
+    "currencyLabel": "Base currency",
+    "currencyPlaceholder": "Select currency",
+    "displayNameLabel": "Display name (optional)",
+    "displayNamePlaceholder": "Your name",
+    "failed": "Failed to complete setup. Please try again."
+  },
+  "dialog": {
+    "archiveTitle": "Archive category",
+    "archiveDescription": "Are you sure you want to archive this category? It will be hidden from new transactions.",
+    "archiveConfirm": "Archive"
+  },
+  "notifications": {
+    "created": "Category created",
+    "updated": "Category updated",
+    "archived": "Category archived",
+    "unarchived": "Category restored"
+  },
+  "errors": {
+    "saveFailed": "Failed to save category. Please try again.",
+    "notFound": "Category not found",
+    "unauthorized": "User not authenticated"
+  },
+  "form": {
+    "createTitle": "New Category",
+    "editTitle": "Edit Category",
+    "type": "Type",
+    "name": "Name",
+    "namePlaceholder": "e.g. Books, Coffee",
+    "icon": "Icon",
+    "color": "Color",
+    "typeLocked": "Category type cannot be changed after creation",
+    "selectIcon": "Select icon",
+    "searchIcon": "Search icons...",
+    "noIconsFound": "No icons found",
+    "iconCategories": {
+      "all": "All",
+      "general": "General",
+      "food": "Food",
+      "transport": "Transport",
+      "home": "Home",
+      "leisure": "Leisure",
+      "finance": "Finance"
+    }
+  },
+  "validation": {
+    "duplicateName": "A category with this name already exists",
+    "typeLocked": "Category type cannot be changed after creation"
+  },
+  "colors": {
+    "slate": "Slate",
+    "red": "Red",
+    "orange": "Orange",
+    "amber": "Amber",
+    "lime": "Lime",
+    "emerald": "Emerald",
+    "teal": "Teal",
+    "sky": "Sky",
+    "indigo": "Indigo",
+    "violet": "Violet",
+    "pink": "Pink",
+    "stone": "Stone"
+  }
+}

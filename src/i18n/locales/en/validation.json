@@ -6,5 +6,9 @@
   "passwordTooShort_other": "Password must be at least {{count}} characters long",
   "tooLong": "Maximum {{count}} characters",
   "tooLong_one": "Maximum {{count}} character",
-  "tooLong_other": "Maximum {{count}} characters"
+  "tooLong_other": "Maximum {{count}} characters",
+  "currencyUnsupported": "Currency is not supported",
+  "amountPositive": "Amount must be greater than zero",
+  "amountTooLarge": "Amount exceeds the maximum limit",
+  "dateInvalid": "Enter a valid date"
 }
