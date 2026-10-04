@@ -67,8 +67,29 @@ export function createUniqueTestUser(prefix = 'user'): {
   };
 }
 
+export const FIRESTORE_EMULATOR_HOST = 'http://127.0.0.1:8080';
+
+/**
+ * Flushes all documents in the Cloud Firestore Emulator.
+ */
+export async function clearFirestoreEmulator(
+  projectId: string = EMULATOR_PROJECT_ID,
+): Promise<void> {
+  const url = `${FIRESTORE_EMULATOR_HOST}/emulator/v1/projects/${projectId}/databases/(default)/documents`;
+  const response = await fetch(url, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to clear Firestore emulator: ${response.status} ${response.statusText}`,
+    );
+  }
+}
+
 /**
  * Helper to register a test user through the UI and wait for dashboard redirect.
+ * Handles onboarding completion if required.
  */
 export async function registerTestUser(
   page: Page,
@@ -83,7 +104,11 @@ export async function registerTestUser(
   await page
     .getByRole('button', { name: /create account|зарегистрироваться/i })
     .click();
-  await page.waitForURL(/\/app\/dashboard/);
+  await page.waitForURL(/\/(app\/dashboard|onboarding)/);
+  if (page.url().includes('/onboarding')) {
+    await page.getByTestId('onboarding-submit-button').click();
+    await page.waitForURL(/\/app\/dashboard/);
+  }
   await expect(
     page.getByRole('navigation', { name: /main navigation/i }),
   ).toBeVisible();

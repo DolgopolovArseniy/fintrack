@@ -23,7 +23,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `pnpm exec firebase emulators:start --only auth --project ${FIREBASE_PROJECT_ID}`,
+      command: `pnpm exec firebase emulators:start --only auth,firestore --project ${FIREBASE_PROJECT_ID}`,
       url: `http://127.0.0.1:${AUTH_EMULATOR_PORT}`,
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
