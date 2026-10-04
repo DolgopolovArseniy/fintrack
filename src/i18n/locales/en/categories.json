@@ -33,7 +33,12 @@
   "onboarding": {
     "title": "Welcome to FinTrack!",
     "description": "Choose your base currency to get started",
-    "submit": "Get Started"
+    "submit": "Get Started",
+    "currencyLabel": "Base currency",
+    "currencyPlaceholder": "Select currency",
+    "displayNameLabel": "Display name (optional)",
+    "displayNamePlaceholder": "Your name",
+    "failed": "Failed to complete setup. Please try again."
   },
   "dialog": {
     "archiveTitle": "Archive category",

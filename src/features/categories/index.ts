@@ -45,6 +45,12 @@ export type { IconPickerProps } from './components/IconPicker';
 export { CategoryForm } from './components/CategoryForm';
 export type { CategoryFormProps } from './components/CategoryForm';
 
+export { CategoryItem } from './components/CategoryItem';
+export type { CategoryItemProps } from './components/CategoryItem';
+
+export { CategoryList } from './components/CategoryList';
+export type { CategoryListProps } from './components/CategoryList';
+
 export { CATEGORY_ICONS, getCategoryIconComponent } from './icons';
 export type { CategoryIconItem, IconCategoryKey } from './icons';
 

@@ -33,7 +33,12 @@
   "onboarding": {
     "title": "Добро пожаловать в FinTrack!",
     "description": "Выберите базовую валюту для ведения учета",
-    "submit": "Начать работу"
+    "submit": "Начать работу",
+    "currencyLabel": "Базовая валюта",
+    "currencyPlaceholder": "Выберите валюту",
+    "displayNameLabel": "Отображаемое имя (необязательно)",
+    "displayNamePlaceholder": "Ваше имя",
+    "failed": "Не удалось завершить настройку. Попробуйте еще раз."
   },
   "dialog": {
     "archiveTitle": "Архивация категории",
