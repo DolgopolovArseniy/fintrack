@@ -4,8 +4,14 @@ import { AppError } from '@/lib/errors';
 import { AuthProvider } from './AuthProvider';
 import { useAuth } from './useAuth';
 import type { AuthUser } from './types';
+import type { UserProfile } from './schemas';
 
-const { mockSubscribeToAuthState, mockReloadCurrentUser } = vi.hoisted(() => ({
+const {
+  mockSubscribeToAuthState,
+  mockReloadCurrentUser,
+  mockSubscribeUserProfile,
+  mockGetUserProfile,
+} = vi.hoisted(() => ({
   mockSubscribeToAuthState:
     vi.fn<
       (
@@ -14,11 +20,25 @@ const { mockSubscribeToAuthState, mockReloadCurrentUser } = vi.hoisted(() => ({
       ) => () => void
     >(),
   mockReloadCurrentUser: vi.fn<() => Promise<AuthUser | null>>(),
+  mockSubscribeUserProfile:
+    vi.fn<
+      (
+        uid: string,
+        onData: (profile: UserProfile | null) => void,
+        onError: (error: AppError) => void,
+      ) => () => void
+    >(),
+  mockGetUserProfile: vi.fn<(uid: string) => Promise<UserProfile | null>>(),
 }));
 
 vi.mock('./authService', () => ({
   subscribeToAuthState: mockSubscribeToAuthState,
   reloadCurrentUser: mockReloadCurrentUser,
+}));
+
+vi.mock('./repository', () => ({
+  subscribeUserProfile: mockSubscribeUserProfile,
+  getUserProfile: mockGetUserProfile,
 }));
 
 const mockUser: AuthUser = {
@@ -36,8 +56,12 @@ function TestConsumer() {
   return (
     <div>
       <span data-testid="status">{auth.status}</span>
+      <span data-testid="profile-status">{auth.profileStatus}</span>
       {auth.status === 'authenticated' && (
         <span data-testid="uid">{auth.user.uid}</span>
+      )}
+      {auth.profile && (
+        <span data-testid="currency">{auth.profile.baseCurrency}</span>
       )}
       <button
         type="button"
@@ -46,6 +70,14 @@ function TestConsumer() {
         }}
       >
         Refresh
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          void auth.refreshProfile();
+        }}
+      >
+        Refresh Profile
       </button>
     </div>
   );
@@ -183,5 +215,99 @@ describe('AuthProvider & useAuth', () => {
     });
 
     expect(mockReloadCurrentUser).toHaveBeenCalledTimes(1);
+  });
+
+  it('transitions to needsOnboarding when authenticated but user profile does not exist', () => {
+    let profileCallback: ((profile: UserProfile | null) => void) | null = null;
+    mockSubscribeUserProfile.mockImplementation((_uid, onData) => {
+      profileCallback = onData;
+      return () => {};
+    });
+    mockSubscribeToAuthState.mockImplementation((onUser) => {
+      onUser(mockUser);
+      return () => {};
+    });
+
+    render(
+      <AuthProvider>
+        <TestConsumer />
+      </AuthProvider>,
+    );
+
+    expect(screen.getByTestId('status')).toHaveTextContent('authenticated');
+    expect(screen.getByTestId('profile-status')).toHaveTextContent('loading');
+
+    act(() => {
+      profileCallback!(null);
+    });
+
+    expect(screen.getByTestId('profile-status')).toHaveTextContent(
+      'needsOnboarding',
+    );
+  });
+
+  it('transitions to ready when user profile is received', () => {
+    let profileCallback: ((profile: UserProfile | null) => void) | null = null;
+    mockSubscribeUserProfile.mockImplementation((_uid, onData) => {
+      profileCallback = onData;
+      return () => {};
+    });
+    mockSubscribeToAuthState.mockImplementation((onUser) => {
+      onUser(mockUser);
+      return () => {};
+    });
+
+    render(
+      <AuthProvider>
+        <TestConsumer />
+      </AuthProvider>,
+    );
+
+    act(() => {
+      profileCallback!({
+        id: mockUser.uid,
+        baseCurrency: 'EUR',
+        locale: 'en',
+        theme: 'system',
+        schemaVersion: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    });
+
+    expect(screen.getByTestId('profile-status')).toHaveTextContent('ready');
+    expect(screen.getByTestId('currency')).toHaveTextContent('EUR');
+  });
+
+  it('correctly refreshes profile via refreshProfile', async () => {
+    mockSubscribeToAuthState.mockImplementation((onUser) => {
+      onUser(mockUser);
+      return () => {};
+    });
+    mockSubscribeUserProfile.mockReturnValue(() => {});
+
+    mockGetUserProfile.mockResolvedValue({
+      id: mockUser.uid,
+      baseCurrency: 'USD',
+      locale: 'ru',
+      theme: 'dark',
+      schemaVersion: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    render(
+      <AuthProvider>
+        <TestConsumer />
+      </AuthProvider>,
+    );
+
+    await act(async () => {
+      screen.getByText('Refresh Profile').click();
+      await Promise.resolve();
+    });
+
+    expect(mockGetUserProfile).toHaveBeenCalledWith(mockUser.uid);
+    expect(screen.getByTestId('currency')).toHaveTextContent('USD');
   });
 });

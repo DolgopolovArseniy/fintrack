@@ -12,6 +12,9 @@ export { UserMenu } from './components/UserMenu';
 export { EmailVerificationBanner } from './components/EmailVerificationBanner';
 export { getInitials } from './getInitials';
 
+export { executeOnboardingBatch, checkProfileExists } from './onboarding';
+export type { OnboardingInput } from './onboarding';
+
 export {
   localeSchema,
   themeSchema,
@@ -21,4 +24,9 @@ export {
 } from './schemas';
 
 export type { Locale, Theme, UserProfileInput, UserProfile } from './schemas';
-export type { AuthUser, AuthState, AuthContextValue } from './types';
+export type {
+  AuthUser,
+  AuthState,
+  AuthContextValue,
+  ProfileStatus,
+} from './types';

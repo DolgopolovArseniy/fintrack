@@ -13,6 +13,19 @@ export const router = createBrowserRouter([
     element: <RequireAuth />,
     children: [
       {
+        element: <AuthLayout />,
+        children: [
+          {
+            path: ROUTES.onboarding,
+            lazy: async () => {
+              const { OnboardingPage } =
+                await import('@/app/pages/OnboardingPage');
+              return { Component: OnboardingPage };
+            },
+          },
+        ],
+      },
+      {
         path: ROUTES.app,
         element: <Navigate to={ROUTES.dashboard} replace />,
       },
