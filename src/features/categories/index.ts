@@ -31,3 +31,22 @@ export {
 } from './repository';
 
 export type { CategoryUpdateInput, Unsubscribe } from './repository';
+
+export { useCategories } from './hooks/useCategories';
+export { useCategoryMutations } from './hooks/useCategoryMutations';
+export type { UseCategoryMutationsResult } from './hooks/useCategoryMutations';
+
+export { ColorPicker } from './components/ColorPicker';
+export type { ColorPickerProps } from './components/ColorPicker';
+
+export { IconPicker } from './components/IconPicker';
+export type { IconPickerProps } from './components/IconPicker';
+
+export { CategoryForm } from './components/CategoryForm';
+export type { CategoryFormProps } from './components/CategoryForm';
+
+export { CATEGORY_ICONS, getCategoryIconComponent } from './icons';
+export type { CategoryIconItem, IconCategoryKey } from './icons';
+
+export { getCategoryDisplayName } from './utils';
+export type { TranslateFunction } from './utils';
