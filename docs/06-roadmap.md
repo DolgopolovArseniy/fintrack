@@ -26,7 +26,7 @@
 | 2 | F01 | Domain core (`money`, `dates`, `currencies`, `errors`, Zod-схемы, `createConverter`, `balanceDeltas`, unit-тесты) | F00 | S | done |
 | 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | done |
 | 4 | F03 | Firestore rules v1 + rules-тесты + `firestore.indexes.json` (пустой) + деплой правил | F01, F02 | M | done |
-| 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | todo |
+| 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | done |
 | 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | todo |
 | 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | todo |
 | 8 | F12 | Demo-режим (anonymous auth, сид, конвертация в аккаунт) | F02, F04, F05, F06 | M | todo |
@@ -85,9 +85,9 @@
 - [x] Проверка синтаксиса на эмуляторе, правки документа по факту
 
 ### F04 Categories
-- [ ] Онбординг-batch, дефолтные категории и счёт
-- [ ] CRUD и архивация, `CategoryBadge`, пикер иконки и цвета
-- [ ] Образец для остальных фич (структура, тесты, паттерны)
+- [x] Онбординг-batch, дефолтные категории и счёт
+- [x] CRUD и архивация, `CategoryBadge`, пикер иконки и цвета
+- [x] Образец для остальных фич (структура, тесты, паттерны)
 
 ### F05 Transactions
 - [ ] Repository, converters, `balanceDeltas`, batch с балансом
