@@ -12,12 +12,14 @@
     "primary": "Primary Action",
     "secondary": "Secondary Action",
     "outline": "Outline Action",
-    "destructive": "Destructive Action"
+    "destructive": "Destructive Action",
+    "confirm": "Confirm"
   },
   "status": {
     "loading": "Loading...",
     "offline": "Offline",
-    "online": "Online"
+    "online": "Online",
+    "archived": "Archived"
   },
   "days_one": "{{count}} day",
   "days_other": "{{count}} days"

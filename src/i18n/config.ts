@@ -11,6 +11,7 @@ import layoutEn from './locales/en/layout.json';
 import placeholderEn from './locales/en/placeholder.json';
 import dashboardEn from './locales/en/dashboard.json';
 import authEn from './locales/en/auth.json';
+import categoriesEn from './locales/en/categories.json';
 
 import commonRu from './locales/ru/common.json';
 import navRu from './locales/ru/nav.json';
@@ -20,6 +21,7 @@ import layoutRu from './locales/ru/layout.json';
 import placeholderRu from './locales/ru/placeholder.json';
 import dashboardRu from './locales/ru/dashboard.json';
 import authRu from './locales/ru/auth.json';
+import categoriesRu from './locales/ru/categories.json';
 
 export const defaultNS = 'common' as const;
 export const namespaces = [
@@ -31,6 +33,7 @@ export const namespaces = [
   'placeholder',
   'dashboard',
   'auth',
+  'categories',
 ] as const;
 
 export const resources = {
@@ -43,6 +46,7 @@ export const resources = {
     placeholder: placeholderEn,
     dashboard: dashboardEn,
     auth: authEn,
+    categories: categoriesEn,
   },
   ru: {
     common: commonRu,
@@ -53,6 +57,7 @@ export const resources = {
     placeholder: placeholderRu,
     dashboard: dashboardRu,
     auth: authRu,
+    categories: categoriesRu,
   },
 } as const;
 

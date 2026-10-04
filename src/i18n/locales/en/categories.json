@@ -1,0 +1,43 @@
+{
+  "title": "Categories",
+  "description": "Manage your expense and income categories",
+  "showArchived": "Show archived",
+  "archivedBadge": "Archived",
+  "actions": {
+    "add": "Add category",
+    "edit": "Edit",
+    "archive": "Archive",
+    "unarchive": "Restore"
+  },
+  "tabs": {
+    "expenses": "Expenses",
+    "incomes": "Income"
+  },
+  "empty": {
+    "expenses": "No expense categories",
+    "incomes": "No income categories"
+  },
+  "system": {
+    "food": "Food & Groceries",
+    "transport": "Transportation",
+    "housing": "Housing",
+    "utilities": "Utilities",
+    "health": "Healthcare",
+    "entertainment": "Entertainment",
+    "shopping": "Shopping",
+    "other_expense": "Other Expenses",
+    "salary": "Salary",
+    "gift": "Gifts",
+    "other_income": "Other Income"
+  },
+  "onboarding": {
+    "title": "Welcome to FinTrack!",
+    "description": "Choose your base currency to get started",
+    "submit": "Get Started"
+  },
+  "dialog": {
+    "archiveTitle": "Archive category",
+    "archiveDescription": "Are you sure you want to archive this category? It will be hidden from new transactions.",
+    "archiveConfirm": "Archive"
+  }
+}
