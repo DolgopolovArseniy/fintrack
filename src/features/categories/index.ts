@@ -54,5 +54,5 @@ export type { CategoryListProps } from './components/CategoryList';
 export { CATEGORY_ICONS, getCategoryIconComponent } from './icons';
 export type { CategoryIconItem, IconCategoryKey } from './icons';
 
-export { getCategoryDisplayName } from './utils';
+export { getCategoryDisplayName, sortCategories } from './utils';
 export type { TranslateFunction } from './utils';

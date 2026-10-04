@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   CategoryForm,
   CategoryList,
+  sortCategories,
   useCategories,
   useCategoryMutations,
   type Category,
@@ -116,10 +117,11 @@ export function CategoriesPage() {
         }
       >
         {(categories) => {
-          const expenseCategories = categories.filter(
+          const sortedCategories = sortCategories(categories);
+          const expenseCategories = sortedCategories.filter(
             (cat) => cat.type === 'expense' && (showArchived || !cat.archived),
           );
-          const incomeCategories = categories.filter(
+          const incomeCategories = sortedCategories.filter(
             (cat) => cat.type === 'income' && (showArchived || !cat.archived),
           );
 
