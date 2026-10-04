@@ -227,3 +227,24 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Interactive cursor affordance across the app */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+[role='tab']:not([aria-disabled='true']),
+[role='menuitem']:not([data-disabled]),
+[role='option']:not([data-disabled]),
+[role='switch']:not([aria-disabled='true']):not(:disabled),
+a[href],
+label[for],
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'],
+[role='tab'][aria-disabled='true'],
+[role='switch'][aria-disabled='true'],
+[role='switch']:disabled {
+  cursor: not-allowed;
+}
