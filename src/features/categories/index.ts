@@ -19,3 +19,15 @@ export {
 } from './schemas';
 
 export type { CategoryInput, Category } from './schemas';
+
+export { categoryConverter, categoriesCollectionRef } from './converters';
+
+export {
+  subscribeCategories,
+  createCategory,
+  updateCategory,
+  archiveCategory,
+  unarchiveCategory,
+} from './repository';
+
+export type { CategoryUpdateInput, Unsubscribe } from './repository';
