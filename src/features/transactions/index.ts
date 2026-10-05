@@ -27,3 +27,12 @@ export {
   type DayGroup,
   type UseGroupedTransactionsResult,
 } from './hooks/useGroupedTransactions';
+
+export { TransactionForm } from './components/TransactionForm';
+export type { TransactionFormProps } from './components/TransactionForm';
+
+export { TransactionItem } from './components/TransactionItem';
+export type { TransactionItemProps } from './components/TransactionItem';
+
+export { TransactionDayGroup } from './components/TransactionDayGroup';
+export type { TransactionDayGroupProps } from './components/TransactionDayGroup';
