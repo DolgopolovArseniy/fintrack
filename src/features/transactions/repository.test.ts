@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   createTransaction,
+  subscribeTransactionsByDateRange,
   subscribeTransactionsByMonth,
   updateTransaction,
 } from './repository';
@@ -84,6 +85,63 @@ describe('transactions repository unit tests', () => {
       const reportedError = onError.mock.calls[0]?.[0] as
         { message?: string } | undefined;
       expect(reportedError?.message).toContain('Invalid month');
+      expect(typeof unsubscribe).toBe('function');
+    });
+
+    it('calls onError in subscribeTransactionsByDateRange when startDate format is invalid', () => {
+      const onData = vi.fn();
+      const onError = vi.fn();
+
+      const unsubscribe = subscribeTransactionsByDateRange(
+        uid,
+        'invalid-date',
+        '2026-05-31',
+        onData,
+        onError,
+      );
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      const reportedError = onError.mock.calls[0]?.[0] as
+        { message?: string } | undefined;
+      expect(reportedError?.message).toContain('Invalid startDate');
+      expect(typeof unsubscribe).toBe('function');
+    });
+
+    it('calls onError in subscribeTransactionsByDateRange when endDate format is invalid', () => {
+      const onData = vi.fn();
+      const onError = vi.fn();
+
+      const unsubscribe = subscribeTransactionsByDateRange(
+        uid,
+        '2026-05-01',
+        'invalid-date',
+        onData,
+        onError,
+      );
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      const reportedError = onError.mock.calls[0]?.[0] as
+        { message?: string } | undefined;
+      expect(reportedError?.message).toContain('Invalid endDate');
+      expect(typeof unsubscribe).toBe('function');
+    });
+
+    it('calls onError in subscribeTransactionsByDateRange when startDate > endDate', () => {
+      const onData = vi.fn();
+      const onError = vi.fn();
+
+      const unsubscribe = subscribeTransactionsByDateRange(
+        uid,
+        '2026-06-01',
+        '2026-05-01',
+        onData,
+        onError,
+      );
+
+      expect(onError).toHaveBeenCalledTimes(1);
+      const reportedError = onError.mock.calls[0]?.[0] as
+        { message?: string } | undefined;
+      expect(reportedError?.message).toContain('Invalid date range');
       expect(typeof unsubscribe).toBe('function');
     });
   });

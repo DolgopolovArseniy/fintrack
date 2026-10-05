@@ -22,6 +22,7 @@ import {
   compareIsoDates,
   isValidYearMonth,
   monthRange,
+  type IsoDate,
   type YearMonth,
 } from '@/lib/dates';
 import {
@@ -50,28 +51,40 @@ export interface TransactionUpdateInput {
  */
 const restoredCreatedAtMap = new Map<string, Date>();
 
+const ISO_DATE_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
 /**
- * Subscribes to the user's transactions within a specific calendar month in real time.
- * Results are ordered chronologically descending (newest dates and newest creations first).
+ * Subscribes to the user's transactions within an arbitrary ISO date range [startDate, endDate] inclusive.
+ * Ordered by date descending, then createdAt descending.
  * Corrupt documents are skipped with a warning via parseSnapshotDocs.
  */
-export function subscribeTransactionsByMonth(
+export function subscribeTransactionsByDateRange(
   uid: string,
-  month: YearMonth,
+  startDate: IsoDate,
+  endDate: IsoDate,
   onData: (transactions: Transaction[]) => void,
   onError: (error: AppError) => void,
 ): Unsubscribe {
   try {
-    if (!isValidYearMonth(month)) {
-      throw new Error(`Invalid month: expected YYYY-MM, got "${month}"`);
+    if (!ISO_DATE_PATTERN.test(startDate)) {
+      throw new Error(
+        `Invalid startDate: expected YYYY-MM-DD, got "${startDate}"`,
+      );
+    }
+    if (!ISO_DATE_PATTERN.test(endDate)) {
+      throw new Error(`Invalid endDate: expected YYYY-MM-DD, got "${endDate}"`);
+    }
+    if (compareIsoDates(startDate, endDate) > 0) {
+      throw new Error(
+        `Invalid date range: startDate "${startDate}" must be <= endDate "${endDate}"`,
+      );
     }
 
-    const { start, end } = monthRange(month);
     const colRef = transactionsCol(uid);
     const q = query(
       colRef,
-      where('date', '>=', start),
-      where('date', '<=', end),
+      where('date', '>=', startDate),
+      where('date', '<=', endDate),
       orderBy('date', 'desc'),
     );
 
@@ -107,6 +120,28 @@ export function subscribeTransactionsByMonth(
     onError(toAppError(error));
     return () => {};
   }
+}
+
+/**
+ * Subscribes to the user's transactions within a specific calendar month in real time.
+ * Results are ordered chronologically descending (newest dates and newest creations first).
+ * Corrupt documents are skipped with a warning via parseSnapshotDocs.
+ */
+export function subscribeTransactionsByMonth(
+  uid: string,
+  month: YearMonth,
+  onData: (transactions: Transaction[]) => void,
+  onError: (error: AppError) => void,
+): Unsubscribe {
+  if (!isValidYearMonth(month)) {
+    onError(
+      toAppError(new Error(`Invalid month: expected YYYY-MM, got "${month}"`)),
+    );
+    return () => {};
+  }
+
+  const { start, end } = monthRange(month);
+  return subscribeTransactionsByDateRange(uid, start, end, onData, onError);
 }
 
 /**
