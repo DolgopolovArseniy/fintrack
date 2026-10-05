@@ -1,6 +1,6 @@
 # F05 — Transactions (Операции и баланс)
 
-Статус: spec-ready
+Статус: done
 Зависит от: F01 (доменные типы, деньги, даты, balanceDeltas), F02 (аутентификация), F03 (Security Rules v1), F04 (категории, онбординг, CategoryBadge, ResponsiveDialog, ConfirmDialog)
 Размер: L (7 задач: T1–T7)
 Ветка: `feat/F05-transactions`
