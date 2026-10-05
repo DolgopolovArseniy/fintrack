@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Account } from '@/features/accounts';
-import type { Category } from '@/features/categories';
+import { sortCategories, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
 import { todayIso } from '@/lib/dates';
 import { useTranslation } from '@/lib/i18n';
@@ -57,6 +57,15 @@ export function TransactionForm({
   className,
 }: TransactionFormProps) {
   const { t } = useTranslation();
+
+  const translate = React.useCallback(
+    (key: string, options?: Record<string, unknown>) => {
+      const defaultValue =
+        typeof options?.defaultValue === 'string' ? options.defaultValue : key;
+      return t(key as `categories.system.${string}`, defaultValue);
+    },
+    [t],
+  );
 
   const formSchema = React.useMemo(() => {
     return z.object({
@@ -127,15 +136,16 @@ export function TransactionForm({
     }
   };
 
-  // Filter categories matching current type
+  // Filter categories matching current type, sorted deterministically
   const filteredCategories = React.useMemo(() => {
-    return categories.filter((cat) => {
+    const list = categories.filter((cat) => {
       if (cat.type !== currentType) return false;
       // Allow current category even if archived
       if (cat.id === initialData?.categoryId) return true;
       return !cat.archived;
     });
-  }, [categories, currentType, initialData]);
+    return sortCategories(list, translate);
+  }, [categories, currentType, initialData, translate]);
 
   // Filter accounts
   const filteredAccounts = React.useMemo(() => {
@@ -235,7 +245,7 @@ export function TransactionForm({
                   placeholder={t('transactions.form.selectCategory')}
                 />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {filteredCategories.map((cat) => {
                   const isArchived = cat.archived;
                   return (
@@ -298,7 +308,7 @@ export function TransactionForm({
                   placeholder={t('transactions.form.selectAccount')}
                 />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {filteredAccounts.map((acc) => {
                   const accountName =
                     acc.name?.trim() ||

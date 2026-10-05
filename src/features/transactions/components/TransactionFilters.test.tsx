@@ -33,6 +33,16 @@ const mockCategories: Category[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    id: 'cat-housing',
+    type: 'expense',
+    systemKey: 'housing',
+    icon: 'home',
+    color: 'sky',
+    archived: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ];
 
 const mockAccounts: Account[] = [
@@ -166,5 +176,31 @@ describe('TransactionFilters', () => {
     const badge = screen.getByTestId('active-filters-badge');
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveTextContent('2');
+  });
+
+  it('renders display names for system categories without blank text', async () => {
+    const user = userEvent.setup();
+    render(
+      <TransactionFilters
+        filters={defaultFilters}
+        onTypeChange={vi.fn()}
+        onCategoryChange={vi.fn()}
+        onAccountChange={vi.fn()}
+        onSearchChange={vi.fn()}
+        onReset={vi.fn()}
+        hasActiveFilters={false}
+        categories={mockCategories}
+        accounts={mockAccounts}
+      />,
+    );
+
+    const trigger = screen.getByTestId('filter-category-select');
+    await user.click(trigger);
+
+    const systemCategoryOption = screen.getByTestId(
+      'filter-category-option-cat-housing',
+    );
+    expect(systemCategoryOption).toBeInTheDocument();
+    expect(systemCategoryOption.textContent?.trim().length).toBeGreaterThan(0);
   });
 });

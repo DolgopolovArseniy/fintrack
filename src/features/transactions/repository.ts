@@ -44,6 +44,13 @@ export interface TransactionUpdateInput {
 }
 
 /**
+ * In-memory map preserving original creation timestamps for restored transactions (Undo action).
+ * Firestore rules require serverTimestamp() on document creation, but the client preserves
+ * the original position in the list by mapping the restored ID to its original createdAt date.
+ */
+const restoredCreatedAtMap = new Map<string, Date>();
+
+/**
  * Subscribes to the user's transactions within a specific calendar month in real time.
  * Results are ordered chronologically descending (newest dates and newest creations first).
  * Corrupt documents are skipped with a warning via parseSnapshotDocs.
@@ -71,7 +78,15 @@ export function subscribeTransactionsByMonth(
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const transactions = parseSnapshotDocs(snapshot, transactionSchema);
+        const parsedTxs = parseSnapshotDocs(snapshot, transactionSchema);
+        const transactions = parsedTxs.map((t) => {
+          const originalCreatedAt = restoredCreatedAtMap.get(t.id);
+          if (originalCreatedAt) {
+            return { ...t, createdAt: originalCreatedAt };
+          }
+          return t;
+        });
+
         // Secondary sort within the same date by creation time descending
         transactions.sort((a, b) => {
           const dateComp = compareIsoDates(b.date, a.date);
@@ -265,6 +280,10 @@ export async function restoreTransaction(
     const deltas = balanceDeltas(null, tx);
     const batch = writeBatch(db);
     const txRef = transactionDoc(uid, tx.id);
+
+    if (tx.createdAt instanceof Date) {
+      restoredCreatedAtMap.set(tx.id, tx.createdAt);
+    }
 
     const data: Record<string, unknown> = {
       type: tx.type,

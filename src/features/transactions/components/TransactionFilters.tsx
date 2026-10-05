@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
+import { CategoryBadge } from '@/components/common/CategoryBadge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +20,7 @@ import {
 } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Account } from '@/features/accounts';
-import type { Category } from '@/features/categories';
+import { sortCategories, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
 import { useTranslation } from '@/lib/i18n';
 import type { TransactionFilterState } from '../hooks/useTransactionFilters';
@@ -52,6 +53,15 @@ export function TransactionFilters({
   const { t } = useTranslation();
   const [isMobileSheetOpen, setIsMobileSheetOpen] = React.useState(false);
 
+  const translate = React.useCallback(
+    (key: string, options?: Record<string, unknown>) => {
+      const defaultValue =
+        typeof options?.defaultValue === 'string' ? options.defaultValue : key;
+      return t(key as `categories.system.${string}`, defaultValue);
+    },
+    [t],
+  );
+
   // Active filter count
   const activeFiltersCount = React.useMemo(() => {
     let count = 0;
@@ -62,14 +72,15 @@ export function TransactionFilters({
     return count;
   }, [filters]);
 
-  // Categories filtered by currently selected type (if not 'all')
+  // Categories filtered by currently selected type (if not 'all'), sorted deterministically
   const availableCategories = React.useMemo(() => {
-    return categories.filter((cat) => {
+    const filtered = categories.filter((cat) => {
       if (cat.archived) return false;
       if (filters.type === 'all') return true;
       return cat.type === filters.type;
     });
-  }, [categories, filters.type]);
+    return sortCategories(filtered, translate);
+  }, [categories, filters.type, translate]);
 
   // Active accounts
   const availableAccounts = React.useMemo(() => {
@@ -181,13 +192,20 @@ export function TransactionFilters({
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectItem value="all">
                       {t('transactions.filters.allCategories')}
                     </SelectItem>
                     {availableCategories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
+                        <CategoryBadge
+                          name={cat.name}
+                          systemKey={cat.systemKey}
+                          icon={cat.icon}
+                          color={cat.color}
+                          size="sm"
+                          showArchivedBadge={false}
+                        />
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -204,7 +222,7 @@ export function TransactionFilters({
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectItem value="all">
                       {t('transactions.filters.allAccounts')}
                     </SelectItem>
@@ -262,13 +280,13 @@ export function TransactionFilters({
         <Select value={filters.categoryId} onValueChange={onCategoryChange}>
           <SelectTrigger
             data-testid="filter-category-select"
-            className="w-[180px]"
+            className="w-[210px]"
           >
             <SelectValue
               placeholder={t('transactions.filters.allCategories')}
             />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="all" data-testid="filter-category-option-all">
               {t('transactions.filters.allCategories')}
             </SelectItem>
@@ -278,7 +296,14 @@ export function TransactionFilters({
                 value={cat.id}
                 data-testid={`filter-category-option-${cat.id}`}
               >
-                {cat.name}
+                <CategoryBadge
+                  name={cat.name}
+                  systemKey={cat.systemKey}
+                  icon={cat.icon}
+                  color={cat.color}
+                  size="sm"
+                  showArchivedBadge={false}
+                />
               </SelectItem>
             ))}
           </SelectContent>
@@ -292,7 +317,7 @@ export function TransactionFilters({
           >
             <SelectValue placeholder={t('transactions.filters.allAccounts')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="all" data-testid="filter-account-option-all">
               {t('transactions.filters.allAccounts')}
             </SelectItem>
