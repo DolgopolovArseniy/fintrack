@@ -23,5 +23,10 @@
   },
   "days_one": "{{count}} день",
   "days_few": "{{count}} дня",
-  "days_many": "{{count}} дней"
+  "days_many": "{{count}} дней",
+  "monthNavigator": {
+    "prevMonth": "Предыдущий месяц",
+    "nextMonth": "Следующий месяц",
+    "currentMonth": "Текущий месяц"
+  }
 }
