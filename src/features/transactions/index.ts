@@ -36,3 +36,12 @@ export type { TransactionItemProps } from './components/TransactionItem';
 
 export { TransactionDayGroup } from './components/TransactionDayGroup';
 export type { TransactionDayGroupProps } from './components/TransactionDayGroup';
+
+export { TransactionFilters } from './components/TransactionFilters';
+export type { TransactionFiltersProps } from './components/TransactionFilters';
+
+export { TransactionList } from './components/TransactionList';
+export type { TransactionListProps } from './components/TransactionList';
+
+export { TransactionSummaryBar } from './components/TransactionSummaryBar';
+export type { TransactionSummaryBarProps } from './components/TransactionSummaryBar';
