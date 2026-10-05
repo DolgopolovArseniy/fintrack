@@ -127,8 +127,9 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
     await expect(expenseItem.getByText(/1[ ,.]?250/)).toBeVisible();
 
     // Monthly summary bar reflects expense
-    const summaryBar = page.getByTestId('transaction-summary-bar');
-    await expect(summaryBar.getByText(/1[ ,.]?250/)).toBeVisible();
+    await expect(
+      page.getByTestId('summary-expense').getByText(/1[ ,.]?250/),
+    ).toBeVisible();
 
     // Check account balance in Firestore emulator (should be -125000 minor units)
     if (uid) {
@@ -306,39 +307,39 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
     await page.getByTestId('transaction-submit-button').click();
     await expect(page.getByText('Morning Coffee')).toBeVisible();
 
-    // Add Income 1: Freelance design
+    // Add Income 1: Consulting bonus
     await page.getByTestId('add-transaction-button').click();
     await page.getByTestId('transaction-type-income').click();
     await page.getByTestId('transaction-amount-input').fill('5000');
     await page.getByTestId('transaction-category-select').click();
-    await page.getByRole('option', { name: /freelance/i }).click();
-    await page.getByTestId('transaction-note-input').fill('Freelance Design');
+    await page.getByRole('option', { name: /salary/i }).click();
+    await page.getByTestId('transaction-note-input').fill('Consulting Bonus');
     await page.getByTestId('transaction-submit-button').click();
-    await expect(page.getByText('Freelance Design')).toBeVisible();
+    await expect(page.getByText('Consulting Bonus')).toBeVisible();
 
     // 1. Filter by Expense type
     await page.getByTestId('filter-type-expense').click();
     await expect(page).toHaveURL(/type=expense/);
     await expect(page.getByText('Morning Coffee')).toBeVisible();
-    await expect(page.getByText('Freelance Design')).toHaveCount(0);
+    await expect(page.getByText('Consulting Bonus')).toHaveCount(0);
 
     // 2. Filter by Income type
     await page.getByTestId('filter-type-income').click();
     await expect(page).toHaveURL(/type=income/);
-    await expect(page.getByText('Freelance Design')).toBeVisible();
+    await expect(page.getByText('Consulting Bonus')).toBeVisible();
     await expect(page.getByText('Morning Coffee')).toHaveCount(0);
 
     // 3. Switch back to All types
     await page.getByTestId('filter-type-all').click();
     await expect(page.getByText('Morning Coffee')).toBeVisible();
-    await expect(page.getByText('Freelance Design')).toBeVisible();
+    await expect(page.getByText('Consulting Bonus')).toBeVisible();
 
     // 4. Search filter by note
     const searchInput = page.getByTestId('filter-search-input');
     await searchInput.fill('Coffee');
     await expect(page).toHaveURL(/search=Coffee/);
     await expect(page.getByText('Morning Coffee')).toBeVisible();
-    await expect(page.getByText('Freelance Design')).toHaveCount(0);
+    await expect(page.getByText('Consulting Bonus')).toHaveCount(0);
 
     // 5. Search non-matching query triggers empty filter state
     await searchInput.fill('NonExistentKeyword');
@@ -347,7 +348,7 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
     // 6. Click reset filters button
     await page.getByTestId('filter-reset-button').click();
     await expect(page.getByText('Morning Coffee')).toBeVisible();
-    await expect(page.getByText('Freelance Design')).toBeVisible();
+    await expect(page.getByText('Consulting Bonus')).toBeVisible();
     await expect(page).not.toHaveURL(/search=/);
   });
 

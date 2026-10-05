@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Account } from '@/features/accounts';
 import { sortCategories, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
@@ -115,6 +115,7 @@ export function TransactionFilters({
             value={filters.search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t('transactions.filters.searchPlaceholder')}
+            aria-label={t('transactions.filters.searchPlaceholder')}
             data-testid="mobile-search-input"
             className="pr-8 pl-9"
           />
@@ -137,6 +138,9 @@ export function TransactionFilters({
               size="default"
               data-testid="mobile-filters-trigger"
               className="relative shrink-0 gap-1.5"
+              aria-label={t('transactions.filters.activeFiltersCount', {
+                count: activeFiltersCount,
+              })}
             >
               <SlidersHorizontal className="size-4" />
               {activeFiltersCount > 0 && (
@@ -179,6 +183,17 @@ export function TransactionFilters({
                       {t('transactions.filters.incomesOnly')}
                     </TabsTrigger>
                   </TabsList>
+                  <TabsContent value="all" className="hidden" tabIndex={-1} />
+                  <TabsContent
+                    value="expense"
+                    className="hidden"
+                    tabIndex={-1}
+                  />
+                  <TabsContent
+                    value="income"
+                    className="hidden"
+                    tabIndex={-1}
+                  />
                 </Tabs>
               </div>
 
@@ -189,7 +204,10 @@ export function TransactionFilters({
                   value={filters.categoryId}
                   onValueChange={onCategoryChange}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    className="w-full"
+                    aria-label={t('transactions.filters.allCategories')}
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent position="popper">
@@ -219,7 +237,10 @@ export function TransactionFilters({
                   value={filters.accountId}
                   onValueChange={onAccountChange}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    className="w-full"
+                    aria-label={t('transactions.filters.allAccounts')}
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent position="popper">
@@ -274,6 +295,9 @@ export function TransactionFilters({
               {t('transactions.filters.incomesOnly')}
             </TabsTrigger>
           </TabsList>
+          <TabsContent value="all" className="hidden" tabIndex={-1} />
+          <TabsContent value="expense" className="hidden" tabIndex={-1} />
+          <TabsContent value="income" className="hidden" tabIndex={-1} />
         </Tabs>
 
         {/* Category Select */}
@@ -281,6 +305,7 @@ export function TransactionFilters({
           <SelectTrigger
             data-testid="filter-category-select"
             className="w-[210px]"
+            aria-label={t('transactions.filters.allCategories')}
           >
             <SelectValue
               placeholder={t('transactions.filters.allCategories')}
@@ -314,6 +339,7 @@ export function TransactionFilters({
           <SelectTrigger
             data-testid="filter-account-select"
             className="w-[180px]"
+            aria-label={t('transactions.filters.allAccounts')}
           >
             <SelectValue placeholder={t('transactions.filters.allAccounts')} />
           </SelectTrigger>
@@ -340,6 +366,7 @@ export function TransactionFilters({
             value={filters.search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t('transactions.filters.searchPlaceholder')}
+            aria-label={t('transactions.filters.searchPlaceholder')}
             data-testid="filter-search-input"
             className="pr-8 pl-9"
           />

@@ -70,7 +70,7 @@ export function TransactionDayGroup({
       </div>
 
       {/* Transactions list for the day */}
-      <div className="space-y-1.5" role="list">
+      <div className="space-y-1.5">
         {group.transactions.map((tx) => (
           <TransactionItem
             key={tx.id}
