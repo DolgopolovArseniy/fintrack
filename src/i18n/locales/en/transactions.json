@@ -1,0 +1,59 @@
+{
+  "title": "Transactions",
+  "description": "Manage your daily expenses and income",
+  "actions": {
+    "add": "Add transaction",
+    "edit": "Edit",
+    "delete": "Delete",
+    "undo": "Undo",
+    "resetFilters": "Reset filters"
+  },
+  "summary": {
+    "income": "Income",
+    "expense": "Expenses",
+    "net": "Net"
+  },
+  "filters": {
+    "allTypes": "All types",
+    "expensesOnly": "Expenses",
+    "incomesOnly": "Income",
+    "allCategories": "All categories",
+    "allAccounts": "All accounts",
+    "searchPlaceholder": "Search by note...",
+    "activeFiltersCount": "{{count}} active filter",
+    "activeFiltersCount_plural": "{{count}} active filters"
+  },
+  "form": {
+    "createTitle": "New transaction",
+    "editTitle": "Edit transaction",
+    "typeLabel": "Type",
+    "amountLabel": "Amount",
+    "categoryLabel": "Category",
+    "accountLabel": "Account",
+    "dateLabel": "Date",
+    "noteLabel": "Note (optional)",
+    "notePlaceholder": "e.g. Supermarket, Coffee with friends...",
+    "selectCategory": "Select category",
+    "selectAccount": "Select account",
+    "archivedSuffix": "(archived)"
+  },
+  "empty": {
+    "monthTitle": "No transactions for this month",
+    "monthDescription": "Start tracking by adding your first expense or income.",
+    "filteredTitle": "No matching transactions",
+    "filteredDescription": "Try changing your search terms or clearing active filters."
+  },
+  "notifications": {
+    "created": "Transaction added",
+    "updated": "Transaction updated",
+    "deleted": "Transaction deleted",
+    "restored": "Transaction restored",
+    "deleteFailed": "Failed to delete transaction",
+    "saveFailed": "Failed to save transaction"
+  },
+  "errors": {
+    "saveFailed": "Failed to save transaction. Please try again.",
+    "deleteFailed": "Failed to delete transaction. Please try again.",
+    "unauthorized": "User not authenticated"
+  }
+}

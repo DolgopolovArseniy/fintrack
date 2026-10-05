@@ -27,7 +27,7 @@
 | 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | done |
 | 4 | F03 | Firestore rules v1 + rules-тесты + `firestore.indexes.json` (пустой) + деплой правил | F01, F02 | M | done |
 | 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | done |
-| 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | todo |
+| 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | done |
 | 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | todo |
 | 8 | F12 | Demo-режим (anonymous auth, сид, конвертация в аккаунт) | F02, F04, F05, F06 | M | todo |
 | 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | todo |
@@ -90,10 +90,10 @@
 - [x] Образец для остальных фич (структура, тесты, паттерны)
 
 ### F05 Transactions
-- [ ] Repository, converters, `balanceDeltas`, batch с балансом
-- [ ] Хуки, форма (`ResponsiveDialog`, `AmountInput`), список по дням
-- [ ] `MonthNavigator`, фильтры в URL, edit, delete с undo
-- [ ] Все 5 состояний, mobile, i18n, тесты (unit, integration, component, e2e 4–5, 11)
+- [x] Repository, converters, `balanceDeltas`, batch с балансом
+- [x] Хуки, форма (`ResponsiveDialog`, `AmountInput`), список по дням
+- [x] `MonthNavigator`, фильтры в URL, edit, delete с undo
+- [x] Все 5 состояний, mobile, i18n, тесты (unit, integration, component, e2e 4–5, 11)
 
 ### F06 Dashboard
 - [ ] KPI, donut, столбцы по месяцам, последние операции
