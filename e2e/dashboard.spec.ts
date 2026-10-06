@@ -75,7 +75,9 @@ test.describe('F06 — Dashboard & Analytics E2E flows', () => {
     const createDialog = page.getByRole('dialog');
     await expect(createDialog).toBeVisible();
     await expect(
-      page.getByText(/new transaction|новая операция/i),
+      createDialog.getByRole('heading', {
+        name: /new transaction|новая операция/i,
+      }),
     ).toBeVisible();
 
     // Amount: 45.00
@@ -207,7 +209,11 @@ test.describe('F06 — Dashboard & Analytics E2E flows', () => {
 
     const dialog = page.locator('[role="dialog"]');
     await expect(dialog).toBeVisible();
-    await expect(page.getByText(/new transaction/i)).toBeVisible();
+    await expect(
+      dialog.getByRole('heading', {
+        name: /new transaction|новая операция/i,
+      }),
+    ).toBeVisible();
 
     // Fill and submit form on mobile
     await page.getByTestId('transaction-amount-input').fill('30');
