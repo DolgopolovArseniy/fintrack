@@ -1,124 +1,226 @@
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  CreditCard,
-  Plus,
-  TrendingUp,
-} from 'lucide-react';
+import * as React from 'react';
+import { Plus } from 'lucide-react';
+import { useSearchParams } from 'react-router';
+import { EmptyState } from '@/components/common/EmptyState';
+import { LoadingSkeleton } from '@/components/common/LoadingSkeleton';
+import { MonthNavigator } from '@/components/common/MonthNavigator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { QueryBoundary } from '@/components/common/QueryBoundary';
+import { ResponsiveDialog } from '@/components/common/ResponsiveDialog';
 import { Button } from '@/components/ui/button';
+import { useAccounts } from '@/features/accounts';
+import { useAuth } from '@/features/auth';
+import { useCategories } from '@/features/categories';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  DashboardCharts,
+  DashboardKpiGrid,
+  RecentTransactionsCard,
+  useDashboardData,
+} from '@/features/dashboard';
+import {
+  TransactionForm,
+  useTransactionMutations,
+  type Transaction,
+  type TransactionInput,
+} from '@/features/transactions';
+import {
+  currentYearMonth,
+  isValidYearMonth,
+  type YearMonth,
+} from '@/lib/dates';
 import { useTranslation } from '@/lib/i18n';
-
-const MOCK_TOTAL_BALANCE = '$24,850.00';
-const MOCK_TOTAL_CHANGE = '+12.4%';
-const MOCK_INCOME_TOTAL = '+$8,420.00';
-const MOCK_INCOME_CHANGE = '+8.1%';
-const MOCK_EXPENSE_TOTAL = '-$3,180.00';
-const MOCK_EXPENSE_CHANGE = '-3.4%';
 
 export function DashboardPage() {
   const { t } = useTranslation();
+  const { profile } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const monthParam = searchParams.get('month');
+  const selectedMonth: YearMonth =
+    monthParam && isValidYearMonth(monthParam)
+      ? monthParam
+      : currentYearMonth();
+
+  const handleMonthChange = React.useCallback(
+    (newMonth: YearMonth) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (newMonth === currentYearMonth()) {
+            next.delete('month');
+          } else {
+            next.set('month', newMonth);
+          }
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
+
+  const dashboardState = useDashboardData(selectedMonth);
+  const accountsState = useAccounts();
+  const categoriesState = useCategories();
+
+  const accounts = React.useMemo(
+    () => (accountsState.status === 'success' ? accountsState.data : []),
+    [accountsState],
+  );
+  const categories = React.useMemo(
+    () => (categoriesState.status === 'success' ? categoriesState.data : []),
+    [categoriesState],
+  );
+  const activeAccounts = React.useMemo(
+    () => accounts.filter((a) => !a.archived),
+    [accounts],
+  );
+
+  const { create, update, remove, isSubmitting } = useTransactionMutations();
+
+  const [isCreateOpen, setIsCreateOpen] = React.useState(false);
+  const [editingTx, setEditingTx] = React.useState<Transaction | null>(null);
+
+  const handleCreate = async (values: TransactionInput) => {
+    await create(values);
+    setIsCreateOpen(false);
+  };
+
+  const handleUpdate = async (values: TransactionInput) => {
+    if (!editingTx) return;
+    await update(editingTx.id, editingTx, values);
+    setEditingTx(null);
+  };
+
+  const dashboardSkeleton = (
+    <div className="space-y-6">
+      <LoadingSkeleton
+        variant="card"
+        count={4}
+        className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+      />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <LoadingSkeleton variant="chart" />
+        <LoadingSkeleton variant="chart" />
+      </div>
+      <LoadingSkeleton variant="list" count={5} />
+    </div>
+  );
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      {/* Top Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-foreground text-xl font-semibold tracking-tight sm:text-2xl">
-            {t('dashboard.overview')}
-          </h2>
-          <p className="text-muted-foreground text-xs sm:text-sm">
-            {t('dashboard.description')}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button size="sm" className="gap-1.5 shadow-xs">
-            <Plus className="size-4" aria-hidden="true" />
-            <span>{t('dashboard.addTransaction')}</span>
-          </Button>
-        </div>
-      </div>
+    <div data-testid="dashboard-page" className="space-y-6">
+      {/* 1. Header with Month Navigator and Add Transaction Button */}
+      <PageHeader
+        title={t('dashboard.title')}
+        description={t('dashboard.description')}
+        actions={
+          <div className="flex flex-wrap items-center gap-3">
+            <MonthNavigator
+              value={selectedMonth}
+              onChange={handleMonthChange}
+            />
+            <Button
+              onClick={() => setIsCreateOpen(true)}
+              data-testid="add-transaction-button"
+              className="hidden sm:inline-flex"
+            >
+              <Plus className="mr-2 size-4" />
+              {t('dashboard.addTransaction')}
+            </Button>
+          </div>
+        }
+      />
 
-      {/* KPI Financial Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Total Net Worth */}
-        <Card className="p-5">
-          <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
-            <span>{t('dashboard.totalBalance')}</span>
-            <div className="bg-secondary text-foreground flex size-7 items-center justify-center rounded-md">
-              <CreditCard className="size-3.5" aria-hidden="true" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
-            {MOCK_TOTAL_BALANCE}
-          </div>
-          <div className="mt-2.5 flex items-center gap-1.5 text-xs">
-            <span className="bg-income/10 text-income inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 font-medium">
-              <ArrowUpRight className="size-3" aria-hidden="true" />
-              <span>{MOCK_TOTAL_CHANGE}</span>
-            </span>
-            <span className="text-muted-foreground">
-              {t('dashboard.vsLastMonth')}
-            </span>
-          </div>
-        </Card>
+      {/* 2. Main Dashboard Content inside QueryBoundary */}
+      <QueryBoundary
+        state={dashboardState}
+        skeleton={dashboardSkeleton}
+        empty={
+          <EmptyState
+            title={t('dashboard.recentTransactions.empty')}
+            action={
+              <Button onClick={() => setIsCreateOpen(true)}>
+                <Plus className="mr-2 size-4" />
+                {t('dashboard.addTransaction')}
+              </Button>
+            }
+          />
+        }
+      >
+        {(data) => (
+          <div className="space-y-6">
+            {/* 2.1 KPI Grid */}
+            <DashboardKpiGrid
+              metrics={data.metrics}
+              activeAccountsCount={activeAccounts.length}
+              currency={profile?.baseCurrency}
+            />
 
-        {/* Monthly Inflow */}
-        <Card className="p-5">
-          <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
-            <span>{t('dashboard.monthlyIncome')}</span>
-            <div className="bg-income/10 text-income flex size-7 items-center justify-center rounded-md">
-              <TrendingUp className="size-3.5" aria-hidden="true" />
-            </div>
-          </div>
-          <div className="text-income mt-2 text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
-            {MOCK_INCOME_TOTAL}
-          </div>
-          <div className="text-muted-foreground mt-2.5 flex items-center gap-1.5 text-xs">
-            <span>{MOCK_INCOME_CHANGE}</span>
-            <span>{t('dashboard.vsLastMonth')}</span>
-          </div>
-        </Card>
+            {/* 2.2 Charts Section */}
+            <DashboardCharts
+              categoryExpenses={data.categoryExpenses}
+              monthlyHistory={data.monthlyHistory}
+              categories={categories}
+              currency={profile?.baseCurrency}
+            />
 
-        {/* Monthly Outflow */}
-        <Card className="p-5 sm:col-span-2 lg:col-span-1">
-          <div className="text-muted-foreground flex items-center justify-between text-xs font-medium">
-            <span>{t('dashboard.monthlyExpenses')}</span>
-            <div className="bg-expense/10 text-expense flex size-7 items-center justify-center rounded-md">
-              <ArrowDownRight className="size-3.5" aria-hidden="true" />
-            </div>
+            {/* 2.3 Recent Transactions Card */}
+            <RecentTransactionsCard
+              transactions={data.recentTransactions}
+              categories={categories}
+              accounts={accounts}
+              selectedMonth={selectedMonth}
+              onAddTransaction={() => setIsCreateOpen(true)}
+              onEditTransaction={(tx) => setEditingTx(tx)}
+              onDeleteTransaction={(tx) => void remove(tx)}
+            />
           </div>
-          <div className="text-foreground mt-2 text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
-            {MOCK_EXPENSE_TOTAL}
-          </div>
-          <div className="text-muted-foreground mt-2.5 flex items-center gap-1.5 text-xs">
-            <span className="text-income">{MOCK_EXPENSE_CHANGE}</span>
-            <span>{t('dashboard.vsLastMonth')}</span>
-          </div>
-        </Card>
-      </div>
+        )}
+      </QueryBoundary>
 
-      {/* Buttons Showcase */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>{t('dashboard.quickActions')}</CardTitle>
-          <CardDescription>{t('dashboard.welcome')}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-wrap items-center gap-2.5 pt-0">
-          <Button variant="default">{t('common.actions.primary')}</Button>
-          <Button variant="secondary">{t('common.actions.secondary')}</Button>
-          <Button variant="outline">{t('common.actions.outline')}</Button>
-          <Button variant="destructive">
-            {t('common.actions.destructive')}
-          </Button>
-        </CardContent>
-      </Card>
+      {/* 3. Mobile Floating Action Button (FAB) */}
+      <Button
+        size="icon"
+        className="fixed right-4 bottom-20 z-30 size-14 rounded-full shadow-lg lg:hidden"
+        onClick={() => setIsCreateOpen(true)}
+        aria-label={t('dashboard.addTransaction')}
+        data-testid="mobile-add-fab"
+      >
+        <Plus className="size-6" />
+      </Button>
+
+      {/* 4. Create Transaction Dialog */}
+      <ResponsiveDialog
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        title={t('transactions.form.createTitle')}
+      >
+        <TransactionForm
+          categories={categories}
+          accounts={accounts}
+          onSubmit={handleCreate}
+          onCancel={() => setIsCreateOpen(false)}
+          isSubmitting={isSubmitting}
+        />
+      </ResponsiveDialog>
+
+      {/* 5. Edit Transaction Dialog */}
+      <ResponsiveDialog
+        open={!!editingTx}
+        onOpenChange={(open) => !open && setEditingTx(null)}
+        title={t('transactions.form.editTitle')}
+      >
+        {editingTx && (
+          <TransactionForm
+            initialData={editingTx}
+            categories={categories}
+            accounts={accounts}
+            onSubmit={handleUpdate}
+            onCancel={() => setEditingTx(null)}
+            isSubmitting={isSubmitting}
+          />
+        )}
+      </ResponsiveDialog>
     </div>
   );
 }

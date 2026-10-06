@@ -9,9 +9,7 @@ export type { RecentTransactionsCardProps } from './components/RecentTransaction
 
 export { DashboardCharts } from './components/charts/DashboardCharts';
 export type { DashboardChartsProps } from './components/charts/DashboardCharts';
-export { ExpenseDonutChart } from './components/charts/ExpenseDonutChart';
 export type { ExpenseDonutChartProps } from './components/charts/ExpenseDonutChart';
-export { MonthlyBarChart } from './components/charts/MonthlyBarChart';
 export type { MonthlyBarChartProps } from './components/charts/MonthlyBarChart';
 
 export {

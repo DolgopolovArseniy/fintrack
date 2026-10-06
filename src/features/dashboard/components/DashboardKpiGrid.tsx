@@ -85,6 +85,7 @@ export function DashboardKpiGrid({
   return (
     <div
       data-slot="dashboard-kpi-grid"
+      data-testid="dashboard-kpi-grid"
       className={cn(
         'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4',
         className,
