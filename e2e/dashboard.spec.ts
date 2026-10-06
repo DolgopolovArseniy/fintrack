@@ -109,7 +109,11 @@ test.describe('F06 — Dashboard & Analytics E2E flows', () => {
       name: /expenses by category/i,
     });
     await expect(donutRegion).toBeVisible();
-    await expect(donutRegion.getByText(/food & groceries/i)).toBeVisible();
+    await expect(
+      donutRegion
+        .getByTestId('category-badge')
+        .filter({ hasText: /food & groceries/i }),
+    ).toBeVisible();
 
     // 6. Add Income transaction from Dashboard
     await page.getByTestId('add-transaction-button').click();
