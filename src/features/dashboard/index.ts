@@ -4,6 +4,9 @@ export type { DashboardData } from './hooks/useDashboardData';
 export { DashboardKpiGrid } from './components/DashboardKpiGrid';
 export type { DashboardKpiGridProps } from './components/DashboardKpiGrid';
 
+export { RecentTransactionsCard } from './components/RecentTransactionsCard';
+export type { RecentTransactionsCardProps } from './components/RecentTransactionsCard';
+
 export { DashboardCharts } from './components/charts/DashboardCharts';
 export type { DashboardChartsProps } from './components/charts/DashboardCharts';
 export { ExpenseDonutChart } from './components/charts/ExpenseDonutChart';
