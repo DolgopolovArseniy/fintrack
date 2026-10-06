@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Category } from '@/features/categories';
 import { ExpenseDonutChart } from './ExpenseDonutChart';
@@ -124,5 +124,41 @@ describe('ExpenseDonutChart', () => {
     );
     expect(screen.getAllByText('Other').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('$400.00').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('updates center label when hovering over a category item in the legend', () => {
+    const expenses = [
+      { categoryId: 'cat-food', total: 30000, percentage: 75 },
+      { categoryId: '__other__', total: 10000, percentage: 25 },
+    ];
+
+    render(
+      <ExpenseDonutChart
+        categoryExpenses={expenses}
+        categories={mockCategories}
+        currency="USD"
+      />,
+    );
+
+    // Initially shows Total expenses
+    expect(screen.getByText(/Total expenses/i)).toBeInTheDocument();
+    expect(screen.getByText('$400.00')).toBeInTheDocument();
+
+    // Hover over Food & Dining legend item
+    const foodMatches = screen.getAllByText('Food & Dining');
+    const foodLegend = foodMatches[foodMatches.length - 1]?.closest('div');
+    if (foodLegend) {
+      fireEvent.mouseEnter(foodLegend);
+      // Center now shows Food & Dining, amount, and percentage
+      expect(
+        screen.getAllByText('Food & Dining').length,
+      ).toBeGreaterThanOrEqual(2);
+      expect(screen.getAllByText('$300.00').length).toBeGreaterThanOrEqual(2);
+
+      fireEvent.mouseLeave(foodLegend);
+      // Reverts back to Total expenses
+      expect(screen.getByText(/Total expenses/i)).toBeInTheDocument();
+      expect(screen.getAllByText('$400.00').length).toBeGreaterThanOrEqual(1);
+    }
   });
 });

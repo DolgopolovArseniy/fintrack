@@ -5,11 +5,7 @@ import { CategoryBadge } from '@/components/common/CategoryBadge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MoneyText } from '@/components/common/MoneyText';
 import { Card } from '@/components/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  type ChartConfig,
-} from '@/components/ui/chart';
+import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { getCategoryDisplayName, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
 import { DEFAULT_CURRENCY, type CurrencyCode } from '@/lib/currencies';
@@ -26,49 +22,6 @@ export interface ExpenseDonutChartProps {
   categories?: readonly Category[];
   currency?: CurrencyCode;
   className?: string;
-}
-
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: ReadonlyArray<{
-    payload?: {
-      name: string;
-      total: number;
-      percentage: number;
-      fill: string;
-    };
-  }>;
-  currency: CurrencyCode;
-  locale: Locale;
-}
-
-function CustomDonutTooltip({
-  active,
-  payload,
-  currency,
-  locale,
-}: CustomTooltipProps) {
-  if (!active || !payload?.length || !payload[0]?.payload) {
-    return null;
-  }
-
-  const data = payload[0].payload;
-  const formatted = formatMoney(data.total, { locale, currency });
-
-  return (
-    <div className="border-border/50 bg-background flex min-w-[9rem] items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl">
-      <div
-        className="size-2.5 shrink-0 rounded-[2px]"
-        style={{ backgroundColor: data.fill }}
-      />
-      <div className="flex flex-1 justify-between gap-3 leading-none">
-        <span className="text-muted-foreground">{data.name}</span>
-        <span className="text-foreground font-mono font-medium tabular-nums">
-          {formatted} ({data.percentage}%)
-        </span>
-      </div>
-    </div>
-  );
 }
 
 export function ExpenseDonutChart({
@@ -134,6 +87,13 @@ export function ExpenseDonutChart({
     return config;
   }, [chartData]);
 
+  const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
+
+  const activeItem =
+    activeIndex !== null && activeIndex >= 0 && activeIndex < chartData.length
+      ? chartData[activeIndex]
+      : null;
+
   const hasExpenses = categoryExpenses.length > 0 && totalExpense > 0;
 
   return (
@@ -194,22 +154,13 @@ export function ExpenseDonutChart({
             </tbody>
           </table>
 
-          {/* Visual Donut Chart with center label */}
+          {/* Visual Donut Chart with interactive center label */}
           <div className="relative mx-auto flex aspect-square max-h-[240px] w-full items-center justify-center">
             <ChartContainer
               config={chartConfig}
               className="aspect-square max-h-[240px] w-full"
             >
               <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={
-                    <CustomDonutTooltip
-                      currency={currentCurrency}
-                      locale={currentLocale}
-                    />
-                  }
-                />
                 <Pie
                   data={chartData}
                   dataKey="total"
@@ -219,33 +170,69 @@ export function ExpenseDonutChart({
                   paddingAngle={3}
                   strokeWidth={0}
                 >
-                  {chartData.map((entry) => (
-                    <Cell key={entry.id} fill={entry.fill} />
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={entry.id}
+                      fill={entry.fill}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onMouseLeave={() => setActiveIndex(null)}
+                      className={cn(
+                        'cursor-pointer transition-opacity duration-200',
+                        activeIndex !== null &&
+                          activeIndex !== index &&
+                          'opacity-60',
+                      )}
+                    />
                   ))}
                 </Pie>
               </PieChart>
             </ChartContainer>
 
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-muted-foreground text-xs font-medium">
-                {t('dashboard.charts.totalExpense')}
-              </span>
-              <MoneyText
-                amount={totalExpense}
-                currency={currentCurrency}
-                type="expense"
-                size="lg"
-                className="mt-0.5 font-bold"
-              />
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
+              {activeItem ? (
+                <>
+                  <span className="text-muted-foreground max-w-[130px] truncate text-xs font-medium">
+                    {activeItem.name}
+                  </span>
+                  <MoneyText
+                    amount={activeItem.total}
+                    currency={currentCurrency}
+                    type="expense"
+                    size="lg"
+                    className="mt-0.5 font-bold"
+                  />
+                  <span className="text-muted-foreground font-mono text-[11px] font-medium">
+                    {activeItem.percentage}%
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-muted-foreground text-xs font-medium">
+                    {t('dashboard.charts.totalExpense')}
+                  </span>
+                  <MoneyText
+                    amount={totalExpense}
+                    currency={currentCurrency}
+                    type="expense"
+                    size="lg"
+                    className="mt-0.5 font-bold"
+                  />
+                </>
+              )}
             </div>
           </div>
 
           {/* Legend */}
           <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {chartData.map((item) => (
+            {chartData.map((item, index) => (
               <div
                 key={item.id}
-                className="bg-secondary/40 flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs"
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                className={cn(
+                  'bg-secondary/40 flex cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs transition-colors',
+                  activeIndex === index && 'bg-secondary ring-border ring-1',
+                )}
               >
                 <div className="flex min-w-0 items-center gap-1.5">
                   {item.isOther ? (
