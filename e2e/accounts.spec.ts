@@ -150,7 +150,7 @@ test.describe('F07 — Accounts & Balances E2E flows', () => {
       .locator('[data-testid^="account-card-"]')
       .filter({ hasText: 'Tinkoff Black Card' });
     await expect(cardItem).toBeVisible();
-    await expect(cardItem.getByText(/50[ ,.]?000/)).toBeVisible();
+    await expect(cardItem.getByText(/50[ ,.]?000/).first()).toBeVisible();
 
     // Verify summary totals: 2 active accounts, cards subtotal 50,000, total balance 50,000
     await expect(page.getByTestId('active-accounts-badge')).toContainText(/2/);
@@ -200,7 +200,7 @@ test.describe('F07 — Accounts & Balances E2E flows', () => {
     await expect(editDialog).toHaveCount(0);
 
     // Balance is atomically shifted to 75,000 and total balance becomes 85,000 (75k + 10k)
-    await expect(cardItem.getByText(/75[ ,.]?000/)).toBeVisible();
+    await expect(cardItem.getByText(/75[ ,.]?000/).first()).toBeVisible();
     await expect(
       page.getByTestId('summary-subtotal-card').getByText(/75[ ,.]?000/),
     ).toBeVisible();

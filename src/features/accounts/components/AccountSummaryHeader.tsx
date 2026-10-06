@@ -52,6 +52,7 @@ export function AccountSummaryHeader({
             </span>
             <span
               data-slot="active-accounts-badge"
+              data-testid="active-accounts-badge"
               className="bg-secondary text-secondary-foreground inline-flex items-center rounded-md px-2 py-0.5 text-xs font-normal select-none"
             >
               {activeAccountsText}
