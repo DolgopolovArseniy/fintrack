@@ -1,6 +1,7 @@
 {
+  "title": "Дашборд",
   "welcome": "Добро пожаловать в FinTrack",
-  "description": "Эффективное управление личными финансами",
+  "description": "Финансовый обзор и ключевые показатели",
   "overview": "Финансовый обзор",
   "totalBalance": "Чистый капитал",
   "monthlyIncome": "Доходы за месяц",
@@ -10,5 +11,46 @@
   "quickActions": "Быстрые действия",
   "addTransaction": "Новая операция",
   "viewAll": "Смотреть все",
-  "vsLastMonth": "к прошлому месяцу"
+  "vsLastMonth": "к прошлому месяцу",
+  "kpi": {
+    "totalBalance": "Общий баланс",
+    "totalBalanceHint_zero": "Нет активных счетов",
+    "totalBalanceHint_one": "{{count}} активный счет",
+    "totalBalanceHint_few": "{{count}} активных счета",
+    "totalBalanceHint_many": "{{count}} активных счетов",
+    "totalBalanceHint_other": "{{count}} активных счетов",
+    "totalBalanceHint": "{{count}} активный счет",
+    "monthlyIncome": "Доходы за месяц",
+    "monthlyExpenses": "Расходы за месяц",
+    "netSavings": "Чистый итог",
+    "savingsRate": "Норма сбережений: {{rate}}%",
+    "vsLastMonth": "к прошлому месяцу",
+    "newPeriod": "Новый период",
+    "noChange": "Без изменений"
+  },
+  "charts": {
+    "expensesByCategory": "Расходы по категориям",
+    "expensesByCategoryDesc": "Топ-5 категорий и другие за выбранный месяц",
+    "incomeVsExpense": "Динамика доходов и расходов",
+    "incomeVsExpenseDesc": "Финансовый тренд за 6 месяцев",
+    "totalExpense": "Всего расходов",
+    "otherCategory": "Другие",
+    "emptyExpenses": "В этом месяце еще нет расходов",
+    "emptyHistory": "Недостаточно данных для построения графика",
+    "table": {
+      "category": "Категория",
+      "amount": "Сумма",
+      "share": "Доля",
+      "month": "Месяц",
+      "income": "Доход",
+      "expense": "Расход",
+      "net": "Сальдо"
+    }
+  },
+  "recentTransactions": {
+    "title": "Недавние операции",
+    "viewAll": "Смотреть все операции",
+    "empty": "В этом месяце еще нет операций",
+    "addFirst": "Добавить первую операцию"
+  }
 }

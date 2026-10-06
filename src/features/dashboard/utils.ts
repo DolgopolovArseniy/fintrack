@@ -1,6 +1,10 @@
+import { format } from 'date-fns';
+import { enUS, ru } from 'date-fns/locale';
 import type { Account } from '@/features/accounts';
 import type { Transaction } from '@/features/transactions';
 import { sumByType } from '@/lib/aggregations';
+import type { YearMonth } from '@/lib/dates';
+import type { Locale } from '@/lib/locales';
 
 export interface PercentageChangeResult {
   percent: number; // Absolute rounded percentage value (e.g. 15)
@@ -130,4 +134,22 @@ export function computeDashboardMetrics(params: {
     incomeChange,
     expenseChange,
   };
+}
+
+/**
+ * Formats YearMonth ('YYYY-MM') into short capitalized localized month label ('Jan', 'Окт').
+ */
+export function formatMonthShortLabel(
+  month: YearMonth,
+  locale: Locale,
+): string {
+  const [yStr, mStr] = month.split('-');
+  const year = Number(yStr);
+  const monthNum = Number(mStr);
+  const noonDate = new Date(year, monthNum - 1, 1, 12, 0, 0);
+  const formatted = format(noonDate, 'LLL', {
+    locale: locale === 'ru' ? ru : enUS,
+  });
+  const cleaned = formatted.replace('.', '');
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 }
