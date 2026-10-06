@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { AmountInput } from '@/components/common/AmountInput';
 import { CategoryBadge } from '@/components/common/CategoryBadge';
+import { AccountBadge } from '@/components/common/AccountBadge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Account } from '@/features/accounts';
+import { sortAccounts, type Account } from '@/features/accounts';
 import { sortCategories, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
 import { DEFAULT_CURRENCY, type CurrencyCode } from '@/lib/currencies';
@@ -65,7 +66,7 @@ export function TransactionForm({
     (key: string, options?: Record<string, unknown>) => {
       const defaultValue =
         typeof options?.defaultValue === 'string' ? options.defaultValue : key;
-      return t(key as `categories.system.${string}`, defaultValue);
+      return t(key as never, { defaultValue, ...options });
     },
     [t],
   );
@@ -152,11 +153,12 @@ export function TransactionForm({
 
   // Filter accounts
   const filteredAccounts = React.useMemo(() => {
-    return accounts.filter((acc) => {
+    const list = accounts.filter((acc) => {
       if (acc.id === initialData?.accountId) return true;
       return !acc.archived;
     });
-  }, [accounts, initialData]);
+    return sortAccounts(list, translate);
+  }, [accounts, initialData, translate]);
 
   const onFormSubmit = async (values: FormValues) => {
     const trimmedNote = values.note?.trim();
@@ -314,25 +316,28 @@ export function TransactionForm({
               </SelectTrigger>
               <SelectContent position="popper">
                 {filteredAccounts.map((acc) => {
-                  const accountName =
-                    acc.name?.trim() ||
-                    (acc.systemKey === 'main'
-                      ? 'Main account'
-                      : acc.systemKey || acc.id);
+                  const isArchived = acc.archived;
                   return (
                     <SelectItem
                       key={acc.id}
                       value={acc.id}
                       data-testid={`account-option-${acc.id}`}
                     >
-                      <span className="flex items-center gap-2">
-                        <span>{accountName}</span>
-                        {acc.archived && (
+                      <div className="flex items-center gap-2">
+                        <AccountBadge
+                          name={acc.name}
+                          systemKey={acc.systemKey}
+                          type={acc.type}
+                          archived={isArchived}
+                          size="sm"
+                          showArchivedBadge={false}
+                        />
+                        {isArchived && (
                           <span className="text-muted-foreground text-xs italic">
                             {t('transactions.form.archivedSuffix')}
                           </span>
                         )}
-                      </span>
+                      </div>
                     </SelectItem>
                   );
                 })}
