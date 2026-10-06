@@ -11,6 +11,7 @@ import {
 import type { Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
+import type { CurrencyCode } from '@/lib/currencies';
 import { useTranslation } from '@/lib/i18n';
 import type { Transaction } from '../schemas';
 
@@ -18,6 +19,7 @@ export interface TransactionItemProps {
   transaction: Transaction;
   category?: Category;
   account?: Account;
+  currency?: CurrencyCode;
   onEdit?: (transaction: Transaction) => void;
   onDelete?: (transaction: Transaction) => void;
   className?: string;
@@ -27,6 +29,7 @@ export function TransactionItem({
   transaction,
   category,
   account,
+  currency,
   onEdit,
   onDelete,
   className,
@@ -83,6 +86,7 @@ export function TransactionItem({
         <MoneyText
           amount={transaction.amount}
           type={transaction.type}
+          currency={currency}
           showSign={true}
           size="sm"
           className="font-semibold"

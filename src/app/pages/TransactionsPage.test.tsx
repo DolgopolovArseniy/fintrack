@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAccounts, type Account } from '@/features/accounts';
+import { useAuth } from '@/features/auth';
 import { useCategories, type Category } from '@/features/categories';
 import {
   useTransactionMutations,
@@ -34,6 +35,14 @@ vi.mock('@/features/accounts', async () => {
   return {
     ...actual,
     useAccounts: vi.fn(),
+  };
+});
+
+vi.mock('@/features/auth', async () => {
+  const actual = await vi.importActual('@/features/auth');
+  return {
+    ...actual,
+    useAuth: vi.fn(),
   };
 });
 
@@ -121,6 +130,32 @@ describe('TransactionsPage', () => {
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }));
+
+    vi.mocked(useAuth).mockReturnValue({
+      status: 'authenticated',
+      user: {
+        uid: 'test-user-id',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerIds: ['password'],
+      },
+      profileStatus: 'ready',
+      profile: {
+        id: 'test-user-id',
+        displayName: 'Test User',
+        baseCurrency: 'USD',
+        locale: 'en',
+        theme: 'system',
+        schemaVersion: 1,
+        createdAt: new Date('2026-01-01'),
+        updatedAt: new Date('2026-01-01'),
+      },
+      refreshUser: vi.fn(),
+      refreshProfile: vi.fn(),
+    });
 
     vi.mocked(useCategories).mockReturnValue({
       status: 'success',

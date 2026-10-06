@@ -19,6 +19,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Account } from '@/features/accounts';
 import { sortCategories, type Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
+import { DEFAULT_CURRENCY, type CurrencyCode } from '@/lib/currencies';
 import { todayIso } from '@/lib/dates';
 import { useTranslation } from '@/lib/i18n';
 import { NOTE_MAX_LENGTH } from '@/lib/limits';
@@ -31,6 +32,7 @@ export interface TransactionFormProps {
   defaultType?: 'expense' | 'income';
   categories?: Category[];
   accounts?: Account[];
+  currency?: CurrencyCode;
   onSubmit: (values: TransactionInput) => Promise<void> | void;
   onCancel?: () => void;
   isSubmitting?: boolean;
@@ -51,6 +53,7 @@ export function TransactionForm({
   defaultType = 'expense',
   categories = [],
   accounts = [],
+  currency = DEFAULT_CURRENCY,
   onSubmit,
   onCancel,
   isSubmitting = false,
@@ -209,6 +212,7 @@ export function TransactionForm({
               id="transaction-amount"
               value={field.value}
               onChange={field.onChange}
+              currency={currency}
               data-testid="transaction-amount-input"
               aria-invalid={!!errors.amount}
             />

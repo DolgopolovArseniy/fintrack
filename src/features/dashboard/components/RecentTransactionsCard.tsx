@@ -8,6 +8,7 @@ import type { Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { TransactionItem, type Transaction } from '@/features/transactions';
 import { cn } from '@/lib/cn';
+import type { CurrencyCode } from '@/lib/currencies';
 import type { YearMonth } from '@/lib/dates';
 import { useTranslation } from '@/lib/i18n';
 
@@ -15,6 +16,7 @@ export interface RecentTransactionsCardProps {
   transactions: Transaction[];
   categories?: readonly Category[];
   accounts?: readonly Account[];
+  currency?: CurrencyCode;
   selectedMonth?: YearMonth;
   onAddTransaction?: () => void;
   onEditTransaction?: (transaction: Transaction) => void;
@@ -26,6 +28,7 @@ export function RecentTransactionsCard({
   transactions,
   categories = [],
   accounts = [],
+  currency,
   selectedMonth,
   onAddTransaction,
   onEditTransaction,
@@ -106,6 +109,7 @@ export function RecentTransactionsCard({
               transaction={tx}
               category={categoryMap.get(tx.categoryId)}
               account={accountMap.get(tx.accountId)}
+              currency={currency}
               onEdit={onEditTransaction}
               onDelete={onDeleteTransaction}
             />

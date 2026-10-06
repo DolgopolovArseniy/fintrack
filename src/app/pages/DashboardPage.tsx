@@ -169,6 +169,7 @@ export function DashboardPage() {
               transactions={data.recentTransactions}
               categories={categories}
               accounts={accounts}
+              currency={profile?.baseCurrency}
               selectedMonth={selectedMonth}
               onAddTransaction={() => setIsCreateOpen(true)}
               onEditTransaction={(tx) => setEditingTx(tx)}
@@ -198,6 +199,7 @@ export function DashboardPage() {
         <TransactionForm
           categories={categories}
           accounts={accounts}
+          currency={profile?.baseCurrency}
           onSubmit={handleCreate}
           onCancel={() => setIsCreateOpen(false)}
           isSubmitting={isSubmitting}
@@ -215,6 +217,7 @@ export function DashboardPage() {
             initialData={editingTx}
             categories={categories}
             accounts={accounts}
+            currency={profile?.baseCurrency}
             onSubmit={handleUpdate}
             onCancel={() => setEditingTx(null)}
             isSubmitting={isSubmitting}

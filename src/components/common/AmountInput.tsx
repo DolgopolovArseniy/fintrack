@@ -15,6 +15,7 @@ export interface AmountInputProps extends Omit<
   currency?: CurrencyCode;
   locale?: Locale;
   currencyPosition?: 'start' | 'end';
+  currencyDisplay?: 'code' | 'symbol';
 }
 
 function getCurrencySymbol(currency: CurrencyCode, locale: Locale): string {
@@ -36,6 +37,7 @@ export function AmountInput({
   currency,
   locale,
   currencyPosition = 'end',
+  currencyDisplay = 'code',
   placeholder,
   className,
   onFocus,
@@ -48,7 +50,10 @@ export function AmountInput({
   const currentLocale: Locale =
     locale ?? (i18n.language?.startsWith('ru') ? 'ru' : DEFAULT_LOCALE);
   const currentCurrency: CurrencyCode = currency ?? DEFAULT_CURRENCY;
-  const currencySymbol = getCurrencySymbol(currentCurrency, currentLocale);
+  const currencyLabel =
+    currencyDisplay === 'code'
+      ? currentCurrency
+      : getCurrencySymbol(currentCurrency, currentLocale);
 
   const [isFocused, setIsFocused] = React.useState(false);
   const [prevValue, setPrevValue] = React.useState(value);
@@ -144,10 +149,10 @@ export function AmountInput({
       {currencyPosition === 'start' && (
         <span
           data-slot="amount-currency"
-          className="text-muted-foreground pointer-events-none absolute left-3 text-sm font-medium select-none"
+          className="text-muted-foreground pointer-events-none absolute left-3 text-xs font-semibold tracking-wider uppercase select-none"
           aria-hidden="true"
         >
-          {currencySymbol}
+          {currencyLabel}
         </span>
       )}
       <Input
@@ -163,7 +168,7 @@ export function AmountInput({
         placeholder={placeholder ?? defaultPlaceholder}
         className={cn(
           'w-full tabular-nums',
-          currencyPosition === 'start' ? 'pl-8' : 'pr-9',
+          currencyPosition === 'start' ? 'pl-14' : 'pr-14',
           className,
         )}
         {...props}
@@ -171,10 +176,10 @@ export function AmountInput({
       {currencyPosition === 'end' && (
         <span
           data-slot="amount-currency"
-          className="text-muted-foreground pointer-events-none absolute right-3 text-sm font-medium select-none"
+          className="text-muted-foreground pointer-events-none absolute right-3 text-xs font-semibold tracking-wider uppercase select-none"
           aria-hidden="true"
         >
-          {currencySymbol}
+          {currencyLabel}
         </span>
       )}
     </div>

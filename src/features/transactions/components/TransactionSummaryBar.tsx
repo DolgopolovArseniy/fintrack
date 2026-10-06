@@ -2,12 +2,14 @@ import { ArrowDownLeft, ArrowUpRight, Scale } from 'lucide-react';
 import { MoneyText } from '@/components/common/MoneyText';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/cn';
+import type { CurrencyCode } from '@/lib/currencies';
 import { useTranslation } from '@/lib/i18n';
 
 export interface TransactionSummaryBarProps {
   totalIncome: number;
   totalExpense: number;
   net: number;
+  currency?: CurrencyCode;
   className?: string;
 }
 
@@ -15,6 +17,7 @@ export function TransactionSummaryBar({
   totalIncome,
   totalExpense,
   net,
+  currency,
   className,
 }: TransactionSummaryBarProps) {
   const { t } = useTranslation();
@@ -44,6 +47,7 @@ export function TransactionSummaryBar({
         </div>
         <MoneyText
           amount={totalIncome}
+          currency={currency}
           type="income"
           showSign={true}
           size="sm"
@@ -67,6 +71,7 @@ export function TransactionSummaryBar({
         </div>
         <MoneyText
           amount={totalExpense}
+          currency={currency}
           type="expense"
           showSign={true}
           size="sm"
@@ -90,6 +95,7 @@ export function TransactionSummaryBar({
         </div>
         <MoneyText
           amount={net}
+          currency={currency}
           showSign={true}
           size="sm"
           className="font-bold sm:text-base"

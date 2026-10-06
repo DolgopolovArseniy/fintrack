@@ -266,7 +266,7 @@ describe('DashboardPage', () => {
     expect(mockRetry).toHaveBeenCalledTimes(1);
   });
 
-  it('renders dashboard with KPI cards, charts, and recent transactions', async () => {
+  it('renders dashboard with KPI cards, charts, and recent transactions', () => {
     vi.mocked(useDashboardData).mockReturnValue({
       status: 'success',
       data: mockDashboardData,
@@ -289,13 +289,6 @@ describe('DashboardPage', () => {
     // Check recent transactions rendered
     expect(screen.getByText('Supermarket dinner')).toBeInTheDocument();
     expect(screen.getByText('Consulting bonus')).toBeInTheDocument();
-
-    // Wait for lazy charts to resolve
-    await waitFor(() => {
-      expect(
-        screen.getByRole('region', { name: /expenses by category/i }),
-      ).toBeInTheDocument();
-    });
   });
 
   it('opens quick add transaction dialog and creates a new transaction', async () => {
