@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Account } from '@/features/accounts';
+import { getAccountDisplayName, type Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
 import type { CurrencyCode } from '@/lib/currencies';
@@ -36,9 +36,9 @@ export function TransactionItem({
 }: TransactionItemProps) {
   const { t } = useTranslation();
 
-  const accountName =
-    account?.name?.trim() ||
-    (account?.systemKey === 'main' ? 'Main account' : account?.systemKey);
+  const accountName = account
+    ? getAccountDisplayName(account, (k, o) => t(k as never, o))
+    : undefined;
 
   return (
     <div

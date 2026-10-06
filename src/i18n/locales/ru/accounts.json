@@ -1,0 +1,72 @@
+{
+  "title": "Счета",
+  "description": "Управление кошельками, картами, банковскими счетами и контроль остатков",
+  "showArchived": "Показывать архивные",
+  "system": {
+    "main": "Основной счёт"
+  },
+  "types": {
+    "cash": "Наличные",
+    "card": "Банковская карта",
+    "bank": "Банковский счёт"
+  },
+  "summary": {
+    "totalBalance": "Общий баланс",
+    "activeAccountsCount_one": "{{count}} активный счёт",
+    "activeAccountsCount_few": "{{count}} активных счёта",
+    "activeAccountsCount_many": "{{count}} активных счетов",
+    "activeAccountsCount_other": "{{count}} активных счетов",
+    "cashSubtotal": "Наличные",
+    "cardSubtotal": "Карты",
+    "bankSubtotal": "Счета в банке"
+  },
+  "card": {
+    "currentBalance": "Текущий баланс",
+    "initialBalance": "Начальный",
+    "archivedBadge": "Архив",
+    "recalculating": "Пересчёт..."
+  },
+  "actions": {
+    "add": "Добавить счёт",
+    "edit": "Редактировать",
+    "archive": "Архивировать",
+    "unarchive": "Восстановить",
+    "recalculate": "Пересчитать баланс"
+  },
+  "form": {
+    "createTitle": "Новый счёт",
+    "createDescription": "Добавьте счёт для раздельного учёта средств",
+    "editTitle": "Редактирование счёта",
+    "editDescription": "Измените параметры счёта и начальный остаток",
+    "nameLabel": "Название счёта",
+    "namePlaceholder": "Например: Зарплатная карта, Наличные, Вклад",
+    "typeLabel": "Тип счёта",
+    "initialBalanceLabel": "Начальный баланс",
+    "initialBalanceHint": "Остаток средств на счёте на момент начала учёта"
+  },
+  "notifications": {
+    "created": "Счёт успешно создан",
+    "updated": "Счёт успешно обновлён",
+    "archived": "Счёт архивирован",
+    "unarchived": "Счёт восстановлен",
+    "recalculateSuccess": "Баланс счёта актуален (обработано операций: {{count}})",
+    "recalculateAdjusted": "Баланс скорректирован: с {{oldBalance}} на {{newBalance}} (операций: {{count}})"
+  },
+  "confirm": {
+    "archiveTitle": "Архивация счёта",
+    "archiveDescription": "Вы уверены, что хотите архивировать счёт «{{name}}»? Он будет скрыт из выбора в операциях, но вся история транзакций сохранится.",
+    "archiveConfirm": "Архивировать",
+    "lastAccountWarning": "Нельзя архивировать единственный активный счёт. В системе должен оставаться хотя бы один счёт для записи операций."
+  },
+  "empty": {
+    "title": "Нет активных счетов",
+    "description": "Все счета заархивированы или ещё не созданы.",
+    "action": "Создать счёт"
+  },
+  "errors": {
+    "unauthorized": "Необходимо войти в систему для выполнения этого действия",
+    "saveFailed": "Не удалось сохранить счёт. Попробуйте снова.",
+    "recalculateFailed": "Не удалось выполнить пересчёт баланса",
+    "lastAccountRestriction": "Нельзя архивировать единственный активный счёт"
+  }
+}

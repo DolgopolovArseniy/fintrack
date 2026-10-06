@@ -2,7 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 const DEV_SERVER_PORT = 5180;
 const AUTH_EMULATOR_PORT = 9099;
-const FIREBASE_PROJECT_ID = 'demo-fintrack';
+const FIREBASE_PROJECT_ID =
+  process.env.VITE_FIREBASE_PROJECT_ID || 'fintrack-dev-4fb7e';
 
 export default defineConfig({
   testDir: './e2e',

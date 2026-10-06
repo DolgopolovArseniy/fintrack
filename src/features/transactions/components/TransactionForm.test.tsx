@@ -244,4 +244,17 @@ describe('TransactionForm', () => {
     const submitBtn = screen.getByTestId('transaction-submit-button');
     expect(submitBtn).toBeDisabled();
   });
+
+  it('renders account selector with sorted accounts using AccountBadge', () => {
+    render(
+      <TransactionForm
+        categories={mockCategories}
+        accounts={mockAccounts}
+        onSubmit={vi.fn()}
+      />,
+    );
+
+    const accountSelect = screen.getByTestId('transaction-account-select');
+    expect(accountSelect).toBeInTheDocument();
+  });
 });

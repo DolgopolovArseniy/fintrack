@@ -75,5 +75,16 @@ export const accountSchema = baseAccountDocSchema.refine(hasNameOrSystemKey, {
   path: ['name'],
 });
 
-export type AccountInput = z.infer<typeof accountInputSchema>;
+export const accountUpdateInputSchema = z.object({
+  name: z
+    .string()
+    .max(NAME_MAX_LENGTH, { error: 'validation.tooLong' })
+    .optional(),
+  type: accountTypeSchema.optional(),
+  initialBalance: accountBalanceSchema.optional(),
+  archived: z.boolean().optional(),
+});
+
+export type AccountInput = z.input<typeof accountInputSchema>;
+export type AccountUpdateInput = z.infer<typeof accountUpdateInputSchema>;
 export type Account = z.infer<typeof accountSchema>;

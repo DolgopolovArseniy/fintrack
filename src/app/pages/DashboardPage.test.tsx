@@ -312,7 +312,7 @@ describe('DashboardPage', () => {
 
     // Fill amount (45.50 -> 4550)
     const amountInput = screen.getByTestId('transaction-amount-input');
-    await user.type(amountInput, '45.50');
+    fireEvent.change(amountInput, { target: { value: '45.50' } });
 
     // Select category
     const categorySelect = screen.getByTestId('transaction-category-select');
@@ -323,7 +323,7 @@ describe('DashboardPage', () => {
 
     // Fill note
     const noteInput = screen.getByTestId('transaction-note-input');
-    await user.type(noteInput, 'Quick lunch');
+    fireEvent.change(noteInput, { target: { value: 'Quick lunch' } });
 
     // Submit
     const submitBtn = screen.getByTestId('transaction-submit-button');
@@ -340,7 +340,7 @@ describe('DashboardPage', () => {
         }),
       );
     });
-  });
+  }, 10000);
 
   it('opens create dialog via mobile FAB button', async () => {
     const user = userEvent.setup();

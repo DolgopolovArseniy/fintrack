@@ -1,7 +1,8 @@
 import { expect, type Page } from '@playwright/test';
 
 export const AUTH_EMULATOR_HOST = 'http://127.0.0.1:9099';
-export const EMULATOR_PROJECT_ID = 'demo-fintrack';
+export const EMULATOR_PROJECT_ID =
+  process.env.VITE_FIREBASE_PROJECT_ID || 'fintrack-dev-4fb7e';
 
 export interface EmulatorOobCode {
   email: string;
