@@ -225,16 +225,17 @@ export function AccountForm({
                   <Button
                     key={type}
                     type="button"
-                    variant={isSelected ? 'default' : 'outline'}
+                    variant="outline"
                     size="sm"
                     disabled={isSubmitting}
                     onClick={() =>
                       setValue('type', type, { shouldValidate: true })
                     }
                     className={cn(
-                      'flex h-auto flex-col items-center gap-1.5 px-2 py-2.5 text-xs font-medium',
-                      isSelected &&
-                        'bg-primary text-primary-foreground shadow-xs',
+                      'flex h-auto flex-col items-center gap-1.5 px-2 py-2.5 text-xs font-medium shadow-none transition-colors',
+                      isSelected
+                        ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
+                        : 'bg-background text-muted-foreground border-border/60 hover:bg-muted/60 hover:text-foreground',
                     )}
                     data-testid={`account-type-${type}`}
                   >
