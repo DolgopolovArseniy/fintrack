@@ -85,6 +85,6 @@ export const accountUpdateInputSchema = z.object({
   archived: z.boolean().optional(),
 });
 
-export type AccountInput = z.infer<typeof accountInputSchema>;
+export type AccountInput = z.input<typeof accountInputSchema>;
 export type AccountUpdateInput = z.infer<typeof accountUpdateInputSchema>;
 export type Account = z.infer<typeof accountSchema>;
