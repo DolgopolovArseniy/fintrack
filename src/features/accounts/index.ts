@@ -22,6 +22,13 @@ export {
 } from './repository';
 export type { Unsubscribe, RecalculateBalanceResult } from './repository';
 export { useAccounts } from './hooks/useAccounts';
+export { useAccountMutations } from './hooks/useAccountMutations';
+export type { UseAccountMutationsResult } from './hooks/useAccountMutations';
+export {
+  useAccountTotals,
+  calculateAccountTotals,
+} from './hooks/useAccountTotals';
+export type { AccountTotalsResult } from './hooks/useAccountTotals';
 
 export {
   getAccountDisplayName,
