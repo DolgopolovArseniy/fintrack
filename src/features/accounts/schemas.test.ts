@@ -6,6 +6,7 @@ import {
   accountInputSchema,
   accountSchema,
   accountTypeSchema,
+  accountUpdateInputSchema,
 } from './schemas';
 
 describe('accounts schemas', () => {
@@ -134,6 +135,58 @@ describe('accounts schemas', () => {
       if (!result.success) {
         expect(result.error.issues[0]?.message).toBe('validation.tooLong');
       }
+    });
+  });
+
+  describe('accountUpdateInputSchema', () => {
+    it('accepts partial updates with valid fields', () => {
+      const update1 = { name: 'Updated Name' };
+      expect(accountUpdateInputSchema.parse(update1)).toEqual({
+        name: 'Updated Name',
+      });
+
+      const update2 = { type: 'bank' as const, initialBalance: 20000 };
+      expect(accountUpdateInputSchema.parse(update2)).toEqual({
+        type: 'bank',
+        initialBalance: 20000,
+      });
+
+      const update3 = { archived: true };
+      expect(accountUpdateInputSchema.parse(update3)).toEqual({
+        archived: true,
+      });
+
+      const updateEmpty = {};
+      expect(accountUpdateInputSchema.parse(updateEmpty)).toEqual({});
+    });
+
+    it('rejects name longer than NAME_MAX_LENGTH', () => {
+      const result = accountUpdateInputSchema.safeParse({
+        name: 'a'.repeat(41),
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0]?.message).toBe('validation.tooLong');
+      }
+    });
+
+    it('rejects invalid initialBalance exceeding limits', () => {
+      const result = accountUpdateInputSchema.safeParse({
+        initialBalance: MAX_BALANCE + 1,
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0]?.message).toBe(
+          'validation.amountTooLarge',
+        );
+      }
+    });
+
+    it('rejects invalid type', () => {
+      const result = accountUpdateInputSchema.safeParse({
+        type: 'crypto',
+      });
+      expect(result.success).toBe(false);
     });
   });
 

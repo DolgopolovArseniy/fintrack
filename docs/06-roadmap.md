@@ -30,7 +30,7 @@
 | 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | done |
 | 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | done |
 | 8 | F12 | Demo-режим (anonymous auth, сид, конвертация в аккаунт) | F02, F04, F05, F06 | M | todo |
-| 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | todo |
+| 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | spec-ready |
 | 10 | F08 | Budgets | F05 | M | todo |
 | 11 | F09 | CSV export | F05 | S | todo |
 | 12 | F10 | CSV import с превью | F07, F09 | L | todo |
