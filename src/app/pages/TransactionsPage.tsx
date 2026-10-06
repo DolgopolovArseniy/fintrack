@@ -7,6 +7,7 @@ import { QueryBoundary } from '@/components/common/QueryBoundary';
 import { ResponsiveDialog } from '@/components/common/ResponsiveDialog';
 import { Button } from '@/components/ui/button';
 import { useAccounts } from '@/features/accounts';
+import { useAuth } from '@/features/auth';
 import { useCategories } from '@/features/categories';
 import {
   TransactionFilters,
@@ -24,6 +25,7 @@ import { useTranslation } from '@/lib/i18n';
 
 export function TransactionsPage() {
   const { t } = useTranslation();
+  const { profile } = useAuth();
 
   const {
     filters,
@@ -95,6 +97,7 @@ export function TransactionsPage() {
         totalIncome={totalIncome}
         totalExpense={totalExpense}
         net={net}
+        currency={profile?.baseCurrency}
       />
 
       {/* 3. Filters Toolbar */}
@@ -146,6 +149,7 @@ export function TransactionsPage() {
               groups={groups}
               categories={categories}
               accounts={accounts}
+              currency={profile?.baseCurrency}
               onEdit={(tx) => setEditingTx(tx)}
               onDelete={handleDelete}
             />
@@ -173,6 +177,7 @@ export function TransactionsPage() {
         <TransactionForm
           categories={categories}
           accounts={accounts}
+          currency={profile?.baseCurrency}
           onSubmit={handleCreate}
           onCancel={() => setIsCreateOpen(false)}
           isSubmitting={isSubmitting}
@@ -190,6 +195,7 @@ export function TransactionsPage() {
             initialData={editingTx}
             categories={categories}
             accounts={accounts}
+            currency={profile?.baseCurrency}
             onSubmit={handleUpdate}
             onCancel={() => setEditingTx(null)}
             isSubmitting={isSubmitting}

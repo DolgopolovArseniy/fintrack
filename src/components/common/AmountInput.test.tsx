@@ -72,19 +72,31 @@ describe('AmountInput', () => {
     expect(input).toHaveValue('25,50');
   });
 
-  it('renders currency symbol according to currency and position prop', () => {
+  it('renders ISO currency code by default according to currency and position prop', () => {
     const { container, rerender } = render(
       <AmountInput currency="USD" currencyPosition="end" locale="en" />,
     );
     expect(
       container.querySelector('[data-slot="amount-currency"]'),
-    ).toHaveTextContent('$');
+    ).toHaveTextContent('USD');
 
     rerender(
-      <AmountInput currency="EUR" currencyPosition="start" locale="en" />,
+      <AmountInput currency="UAH" currencyPosition="start" locale="en" />,
     );
     const currencyEl = container.querySelector('[data-slot="amount-currency"]');
-    expect(currencyEl).toHaveTextContent('€');
+    expect(currencyEl).toHaveTextContent('UAH');
+
+    rerender(
+      <AmountInput
+        currency="EUR"
+        currencyDisplay="symbol"
+        currencyPosition="start"
+        locale="en"
+      />,
+    );
+    expect(
+      container.querySelector('[data-slot="amount-currency"]'),
+    ).toHaveTextContent('€');
   });
 
   it('syncs display value when external value changes and input is not focused', () => {

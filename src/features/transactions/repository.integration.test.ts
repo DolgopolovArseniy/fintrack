@@ -4,6 +4,7 @@ import {
   createTransaction,
   deleteTransaction,
   restoreTransaction,
+  subscribeTransactionsByDateRange,
   subscribeTransactionsByMonth,
   updateTransaction,
 } from './repository';
@@ -236,6 +237,80 @@ describe.skipIf(!isEmulatorRunning)(
       expect(restoredTx?.id).toBe(expenseId);
       expect(restoredTx?.amount).toBe(2500);
       expect(restoredTx?.accountId).toBe(accountBId);
+    });
+
+    it('subscribes to transactions within an arbitrary date range in descending order', async () => {
+      const accountId = await createAccount(uid, {
+        type: 'card',
+        name: 'Date Range Account',
+        initialBalance: 100000,
+        balance: 100000,
+        archived: false,
+      });
+
+      // Create transactions: one before range, two inside, one after
+      const txBeforeId = await createTransaction(uid, {
+        type: 'expense',
+        amount: 100,
+        accountId,
+        categoryId: 'cat-1',
+        date: '2026-01-15',
+      });
+      const txInside1Id = await createTransaction(uid, {
+        type: 'expense',
+        amount: 200,
+        accountId,
+        categoryId: 'cat-1',
+        date: '2026-03-10',
+      });
+      const txInside2Id = await createTransaction(uid, {
+        type: 'income',
+        amount: 500,
+        accountId,
+        categoryId: 'cat-2',
+        date: '2026-04-25',
+      });
+      const txAfterId = await createTransaction(uid, {
+        type: 'expense',
+        amount: 300,
+        accountId,
+        categoryId: 'cat-1',
+        date: '2026-06-01',
+      });
+
+      const rangeResult = await new Promise<Transaction[]>(
+        (resolve, reject) => {
+          const timer = setTimeout(() => {
+            unsub();
+            reject(new Error('Timed out waiting for date range transactions'));
+          }, 5000);
+
+          const unsub = subscribeTransactionsByDateRange(
+            uid,
+            '2026-02-01',
+            '2026-05-31',
+            (txs) => {
+              if (
+                txs.some((t) => t.id === txInside2Id) &&
+                txs.some((t) => t.id === txInside1Id)
+              ) {
+                clearTimeout(timer);
+                unsub();
+                resolve(txs);
+              }
+            },
+            (err) => {
+              clearTimeout(timer);
+              reject(err);
+            },
+          );
+        },
+      );
+
+      expect(rangeResult.some((t) => t.id === txBeforeId)).toBe(false);
+      expect(rangeResult.some((t) => t.id === txAfterId)).toBe(false);
+      const ids = rangeResult.map((t) => t.id);
+      expect(ids.indexOf(txInside2Id)).toBeLessThan(ids.indexOf(txInside1Id));
     });
   },
 );

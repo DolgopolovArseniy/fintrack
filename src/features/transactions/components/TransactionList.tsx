@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
+import type { CurrencyCode } from '@/lib/currencies';
 import type { DayGroup } from '../hooks/useGroupedTransactions';
 import type { Transaction } from '../schemas';
 import { TransactionDayGroup } from './TransactionDayGroup';
@@ -10,6 +11,7 @@ export interface TransactionListProps {
   groups: DayGroup[];
   categories?: Category[];
   accounts?: Account[];
+  currency?: CurrencyCode;
   onEdit?: (transaction: Transaction) => void;
   onDelete?: (transaction: Transaction) => void;
   className?: string;
@@ -19,6 +21,7 @@ export function TransactionList({
   groups,
   categories = [],
   accounts = [],
+  currency,
   onEdit,
   onDelete,
   className,
@@ -43,6 +46,7 @@ export function TransactionList({
           group={group}
           categoriesMap={categoriesMap}
           accountsMap={accountsMap}
+          currency={currency}
           onEdit={onEdit}
           onDelete={onDelete}
         />

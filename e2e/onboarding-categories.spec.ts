@@ -135,7 +135,11 @@ test.describe('F04 — Onboarding & Categories E2E flows', () => {
     await page.getByTestId('add-category-button').click();
     const createDialog = page.getByRole('dialog');
     await expect(createDialog).toBeVisible();
-    await expect(page.getByText(/new category|новая категория/i)).toBeVisible();
+    await expect(
+      createDialog.getByRole('heading', {
+        name: /new category|новая категория/i,
+      }),
+    ).toBeVisible();
 
     // 2. Duplicate validation (AC6)
     const nameInput = page.locator('#category-name-input');

@@ -97,7 +97,9 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
     const createDialog = page.getByRole('dialog');
     await expect(createDialog).toBeVisible();
     await expect(
-      page.getByText(/new transaction|новая операция/i),
+      createDialog.getByRole('heading', {
+        name: /new transaction|новая операция/i,
+      }),
     ).toBeVisible();
 
     // Fill amount 1250
@@ -177,7 +179,11 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
 
     const editDialog = page.getByRole('dialog');
     await expect(editDialog).toBeVisible();
-    await expect(page.getByText(/edit transaction/i)).toBeVisible();
+    await expect(
+      editDialog.getByRole('heading', {
+        name: /edit transaction|редактировать операцию/i,
+      }),
+    ).toBeVisible();
 
     // Change note and amount
     await page
@@ -436,7 +442,11 @@ test.describe('F05 — Transactions & Balance E2E flows', () => {
 
     const dialog = page.locator('[role="dialog"]');
     await expect(dialog).toBeVisible();
-    await expect(page.getByText(/new transaction/i)).toBeVisible();
+    await expect(
+      dialog.getByRole('heading', {
+        name: /new transaction|новая операция/i,
+      }),
+    ).toBeVisible();
 
     // Fill form on mobile
     await page.getByTestId('transaction-amount-input').fill('250');

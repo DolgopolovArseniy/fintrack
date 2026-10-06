@@ -3,6 +3,7 @@ import { MoneyText } from '@/components/common/MoneyText';
 import type { Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { cn } from '@/lib/cn';
+import type { CurrencyCode } from '@/lib/currencies';
 import { formatIsoDate, isValidIsoDate } from '@/lib/dates';
 import { useTranslation } from '@/lib/i18n';
 import { DEFAULT_LOCALE, type Locale } from '@/lib/locales';
@@ -14,6 +15,7 @@ export interface TransactionDayGroupProps {
   group: DayGroup;
   categoriesMap?: Map<string, Category>;
   accountsMap?: Map<string, Account>;
+  currency?: CurrencyCode;
   onEdit?: (transaction: Transaction) => void;
   onDelete?: (transaction: Transaction) => void;
   className?: string;
@@ -23,6 +25,7 @@ export function TransactionDayGroup({
   group,
   categoriesMap,
   accountsMap,
+  currency,
   onEdit,
   onDelete,
   className,
@@ -60,6 +63,7 @@ export function TransactionDayGroup({
           </span>
           <MoneyText
             amount={Math.abs(group.net)}
+            currency={currency}
             type={
               group.net > 0 ? 'income' : group.net < 0 ? 'expense' : 'neutral'
             }
@@ -77,6 +81,7 @@ export function TransactionDayGroup({
             transaction={tx}
             category={categoriesMap?.get(tx.categoryId)}
             account={accountsMap?.get(tx.accountId)}
+            currency={currency}
             onEdit={onEdit}
             onDelete={onDelete}
           />

@@ -5,20 +5,26 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAccounts, type Account } from '@/features/accounts';
 import { useAuth } from '@/features/auth';
 import { useCategories, type Category } from '@/features/categories';
+import { useDashboardData, type DashboardData } from '@/features/dashboard';
 import {
   useTransactionMutations,
-  useTransactions,
   type Transaction,
 } from '@/features/transactions';
 import { AppError } from '@/lib/errors';
-import { TransactionsPage } from './TransactionsPage';
+import { DashboardPage } from './DashboardPage';
 
-vi.mock('@/features/transactions', async () => {
-  const actual = await vi.importActual('@/features/transactions');
+// Mock Recharts / ResizeObserver
+window.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
+vi.mock('@/features/dashboard', async () => {
+  const actual = await vi.importActual('@/features/dashboard');
   return {
     ...actual,
-    useTransactions: vi.fn(),
-    useTransactionMutations: vi.fn(),
+    useDashboardData: vi.fn(),
   };
 });
 
@@ -43,6 +49,14 @@ vi.mock('@/features/auth', async () => {
   return {
     ...actual,
     useAuth: vi.fn(),
+  };
+});
+
+vi.mock('@/features/transactions', async () => {
+  const actual = await vi.importActual('@/features/transactions');
+  return {
+    ...actual,
+    useTransactionMutations: vi.fn(),
   };
 });
 
@@ -108,7 +122,43 @@ const mockTransactions: Transaction[] = [
   },
 ];
 
-describe('TransactionsPage', () => {
+const mockDashboardData: DashboardData = {
+  metrics: {
+    totalBalance: 50000,
+    currentIncome: 10000,
+    currentExpense: 2500,
+    netSavings: 7500,
+    savingsRate: 75,
+    incomeChange: {
+      percent: 10,
+      direction: 'increase',
+      isNewPeriod: false,
+    },
+    expenseChange: {
+      percent: 5,
+      direction: 'decrease',
+      isNewPeriod: false,
+    },
+  },
+  categoryExpenses: [
+    {
+      categoryId: 'cat-food',
+      total: 2500,
+      percentage: 100,
+    },
+  ],
+  monthlyHistory: [
+    { month: '2026-05', label: 'May', income: 0, expense: 0 },
+    { month: '2026-06', label: 'Jun', income: 0, expense: 0 },
+    { month: '2026-07', label: 'Jul', income: 0, expense: 0 },
+    { month: '2026-08', label: 'Aug', income: 0, expense: 0 },
+    { month: '2026-09', label: 'Sep', income: 8000, expense: 3000 },
+    { month: '2026-10', label: 'Oct', income: 10000, expense: 2500 },
+  ],
+  recentTransactions: mockTransactions,
+};
+
+describe('DashboardPage', () => {
   const mockCreate = vi.fn();
   const mockUpdate = vi.fn();
   const mockRemove = vi.fn();
@@ -177,30 +227,30 @@ describe('TransactionsPage', () => {
     });
   });
 
-  const renderPage = (initialUrl = '/app/transactions') => {
+  const renderPage = (initialUrl = '/app/dashboard') => {
     return render(
       <MemoryRouter initialEntries={[initialUrl]}>
         <Routes>
-          <Route path="/app/transactions" element={<TransactionsPage />} />
+          <Route path="/app/dashboard" element={<DashboardPage />} />
         </Routes>
       </MemoryRouter>,
     );
   };
 
-  it('renders loading state when transactions are loading', () => {
-    vi.mocked(useTransactions).mockReturnValue({
+  it('renders loading skeleton when dashboard data is loading', () => {
+    vi.mocked(useDashboardData).mockReturnValue({
       status: 'loading',
       retry: vi.fn(),
     });
 
     renderPage();
 
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 
   it('renders error state with retry button when subscription fails', () => {
     const mockRetry = vi.fn();
-    vi.mocked(useTransactions).mockReturnValue({
+    vi.mocked(useDashboardData).mockReturnValue({
       status: 'error',
       error: new AppError('offline', 'Network error'),
       retry: mockRetry,
@@ -216,68 +266,36 @@ describe('TransactionsPage', () => {
     expect(mockRetry).toHaveBeenCalledTimes(1);
   });
 
-  it('renders empty month state when there are no transactions in the month', () => {
-    vi.mocked(useTransactions).mockReturnValue({
+  it('renders dashboard with KPI cards, charts, and recent transactions', () => {
+    vi.mocked(useDashboardData).mockReturnValue({
       status: 'success',
-      data: [],
+      data: mockDashboardData,
       retry: vi.fn(),
     });
 
     renderPage();
 
-    expect(
-      screen.getByText('No transactions for this month'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Start tracking by adding your first expense or income.',
-      ),
-    ).toBeInTheDocument();
-  });
+    expect(screen.getByTestId('dashboard-page')).toBeInTheDocument();
+    expect(screen.getByTestId('dashboard-kpi-grid')).toBeInTheDocument();
+    expect(screen.getByTestId('dashboard-charts')).toBeInTheDocument();
+    expect(screen.getByTestId('recent-transactions-card')).toBeInTheDocument();
 
-  it('renders empty filtered state when transactions exist but filters match none, and resets on click', () => {
-    vi.mocked(useTransactions).mockReturnValue({
-      status: 'success',
-      data: mockTransactions,
-      retry: vi.fn(),
-    });
+    // Check KPI values
+    expect(screen.getByTestId('kpi-total-balance')).toBeInTheDocument();
+    expect(screen.getByTestId('kpi-income')).toBeInTheDocument();
+    expect(screen.getByTestId('kpi-expense')).toBeInTheDocument();
+    expect(screen.getByTestId('kpi-net-savings')).toBeInTheDocument();
 
-    renderPage('/app/transactions?search=UnknownQuery');
-
-    expect(screen.getByText('No matching transactions')).toBeInTheDocument();
-
-    const resetBtn = screen.getByTestId('filter-reset-button');
-    expect(resetBtn).toBeInTheDocument();
-
-    fireEvent.click(resetBtn);
-
-    // After resetting search filter, both transactions should be displayed
+    // Check recent transactions rendered
     expect(screen.getByText('Supermarket dinner')).toBeInTheDocument();
     expect(screen.getByText('Consulting bonus')).toBeInTheDocument();
   });
 
-  it('renders transaction items and monthly summary bar with totals', () => {
-    vi.mocked(useTransactions).mockReturnValue({
-      status: 'success',
-      data: mockTransactions,
-      retry: vi.fn(),
-    });
-
-    renderPage();
-
-    expect(screen.getByTestId('transactions-page')).toBeInTheDocument();
-    expect(screen.getByTestId('transaction-summary-bar')).toBeInTheDocument();
-
-    // Check transactions rendered
-    expect(screen.getByText('Supermarket dinner')).toBeInTheDocument();
-    expect(screen.getByText('Consulting bonus')).toBeInTheDocument();
-  });
-
-  it('opens create transaction dialog via header button and creates a transaction', async () => {
+  it('opens quick add transaction dialog and creates a new transaction', async () => {
     const user = userEvent.setup();
-    vi.mocked(useTransactions).mockReturnValue({
+    vi.mocked(useDashboardData).mockReturnValue({
       status: 'success',
-      data: mockTransactions,
+      data: mockDashboardData,
       retry: vi.fn(),
     });
     mockCreate.mockResolvedValueOnce('new-tx-id');
@@ -287,9 +305,12 @@ describe('TransactionsPage', () => {
     const addBtn = screen.getByTestId('add-transaction-button');
     await user.click(addBtn);
 
-    expect(screen.getByText('New transaction')).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'New transaction' }),
+    ).toBeInTheDocument();
 
-    // Fill amount (minor units are parsed from user input "45.50" -> 4550)
+    // Fill amount (45.50 -> 4550)
     const amountInput = screen.getByTestId('transaction-amount-input');
     await user.type(amountInput, '45.50');
 
@@ -302,9 +323,9 @@ describe('TransactionsPage', () => {
 
     // Fill note
     const noteInput = screen.getByTestId('transaction-note-input');
-    await user.type(noteInput, 'Office lunch');
+    await user.type(noteInput, 'Quick lunch');
 
-    // Submit form
+    // Submit
     const submitBtn = screen.getByTestId('transaction-submit-button');
     await user.click(submitBtn);
 
@@ -315,17 +336,17 @@ describe('TransactionsPage', () => {
           amount: 4550,
           categoryId: 'cat-food',
           accountId: 'acc-main',
-          note: 'Office lunch',
+          note: 'Quick lunch',
         }),
       );
     });
   });
 
-  it('opens create transaction dialog via mobile FAB button', async () => {
+  it('opens create dialog via mobile FAB button', async () => {
     const user = userEvent.setup();
-    vi.mocked(useTransactions).mockReturnValue({
+    vi.mocked(useDashboardData).mockReturnValue({
       status: 'success',
-      data: [],
+      data: mockDashboardData,
       retry: vi.fn(),
     });
 
@@ -334,65 +355,9 @@ describe('TransactionsPage', () => {
     const mobileFab = screen.getByTestId('mobile-add-fab');
     await user.click(mobileFab);
 
-    expect(screen.getByText('New transaction')).toBeInTheDocument();
-  });
-
-  it('opens edit transaction dialog when clicking edit action and submits update', async () => {
-    const user = userEvent.setup();
-    vi.mocked(useTransactions).mockReturnValue({
-      status: 'success',
-      data: mockTransactions,
-      retry: vi.fn(),
-    });
-    mockUpdate.mockResolvedValueOnce(undefined);
-
-    renderPage();
-
-    const actionsTrigger = screen.getByTestId('transaction-actions-tx-1');
-    await user.click(actionsTrigger);
-
-    const editMenuItem = screen.getByTestId('transaction-edit-tx-1');
-    await user.click(editMenuItem);
-
-    expect(screen.getByText('Edit transaction')).toBeInTheDocument();
-
-    // Modify note
-    const noteInput = screen.getByTestId('transaction-note-input');
-    await user.clear(noteInput);
-    await user.type(noteInput, 'Updated dinner note');
-
-    // Submit form
-    const submitBtn = screen.getByTestId('transaction-submit-button');
-    await user.click(submitBtn);
-
-    await waitFor(() => {
-      expect(mockUpdate).toHaveBeenCalledWith(
-        'tx-1',
-        mockTransactions[0],
-        expect.objectContaining({
-          note: 'Updated dinner note',
-        }),
-      );
-    });
-  });
-
-  it('calls delete mutation when clicking delete action', async () => {
-    const user = userEvent.setup();
-    vi.mocked(useTransactions).mockReturnValue({
-      status: 'success',
-      data: mockTransactions,
-      retry: vi.fn(),
-    });
-    mockRemove.mockResolvedValueOnce(undefined);
-
-    renderPage();
-
-    const actionsTrigger = screen.getByTestId('transaction-actions-tx-1');
-    await user.click(actionsTrigger);
-
-    const deleteMenuItem = screen.getByTestId('transaction-delete-tx-1');
-    await user.click(deleteMenuItem);
-
-    expect(mockRemove).toHaveBeenCalledWith(mockTransactions[0]);
+    expect(screen.getByRole('dialog')).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: 'New transaction' }),
+    ).toBeInTheDocument();
   });
 });
