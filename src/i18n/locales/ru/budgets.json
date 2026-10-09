@@ -1,0 +1,98 @@
+{
+  "title": "Бюджеты",
+  "description": "Управление лимитами расходов по категориям и контроль выполнения бюджета",
+  "summary": {
+    "title": "Сводка бюджета за месяц",
+    "totalBudget": "Запланировано",
+    "totalSpent": "Потрачено",
+    "remaining": "Остаток",
+    "overspent": "Перерасход",
+    "progress": "Общий прогресс",
+    "statusNormal_one": "{{count}} в норме",
+    "statusNormal_few": "{{count}} в норме",
+    "statusNormal_many": "{{count}} в норме",
+    "statusNormal_other": "{{count}} в норме",
+    "statusWarning_one": "{{count}} на исходе",
+    "statusWarning_few": "{{count}} на исходе",
+    "statusWarning_many": "{{count}} на исходе",
+    "statusWarning_other": "{{count}} на исходе",
+    "statusExceeded_one": "{{count}} превышен",
+    "statusExceeded_few": "{{count}} превышено",
+    "statusExceeded_many": "{{count}} превышено",
+    "statusExceeded_other": "{{count}} превышено"
+  },
+  "card": {
+    "spentOf": "Потрачено {{spent}} из {{limit}}",
+    "remaining": "Осталось {{amount}}",
+    "overspent": "Превышено на {{amount}}",
+    "statusNormal": "В норме",
+    "statusWarning": "Почти исчерпан (≥80%)",
+    "statusExceeded": "Превышен (>100%)",
+    "viewTransactions": "Смотреть операции"
+  },
+  "actions": {
+    "add": "Задать лимит",
+    "edit": "Изменить лимит",
+    "delete": "Удалить бюджет",
+    "copyFromPrevious": "Скопировать из прошлого месяца",
+    "copyAction": "Скопировать бюджеты"
+  },
+  "unbudgeted": {
+    "title": "Категории без лимита",
+    "description": "Установите лимиты на остальные категории расходов для полного контроля бюджета",
+    "setLimit": "Задать лимит"
+  },
+  "form": {
+    "createTitle": "Новый лимит бюджета",
+    "createDescription": "Укажите максимальную сумму расходов по категории на месяц",
+    "editTitle": "Изменение лимита",
+    "editDescription": "Обновите месячный лимит для категории «{{category}}»",
+    "categoryLabel": "Категория расхода",
+    "categoryPlaceholder": "Выберите категорию",
+    "monthLabel": "Месяц",
+    "limitLabel": "Сумма лимита",
+    "limitHint": "Максимальный запланированный расход по этой категории в месяц"
+  },
+  "copyDialog": {
+    "title": "Копирование бюджетов",
+    "description": "Скопировать все лимиты расходов из {{sourceMonth}} в {{targetMonth}}.",
+    "foundCount_one": "Найден {{count}} бюджет для копирования",
+    "foundCount_few": "Найдено {{count}} бюджета для копирования",
+    "foundCount_many": "Найдено {{count}} бюджетов для копирования",
+    "foundCount_other": "Найдено {{count}} бюджетов для копирования",
+    "overwriteLabel": "Перезаписать существующие лимиты в {{targetMonth}}",
+    "confirmButton": "Скопировать",
+    "noBudgetsInSource": "В {{sourceMonth}} нет настроенных бюджетов для копирования"
+  },
+  "copyBanner": {
+    "message": "В этом месяце еще нет бюджетов. Скопировать {{count}} бюджетов из {{previousMonth}}?",
+    "action": "Скопировать бюджеты"
+  },
+  "confirm": {
+    "deleteTitle": "Удаление бюджета",
+    "deleteDescription": "Вы уверены, что хотите удалить бюджет для категории «{{category}}»? Сами транзакции останутся без изменений.",
+    "deleteConfirm": "Удалить"
+  },
+  "notifications": {
+    "created": "Лимит бюджета успешно установлен",
+    "updated": "Лимит бюджета успешно обновлен",
+    "deleted": "Лимит бюджета удален",
+    "copied_one": "Скопирован {{count}} бюджет",
+    "copied_few": "Скопировано {{count}} бюджета",
+    "copied_many": "Скопировано {{count}} бюджетов",
+    "copied_other": "Скопировано {{count}} бюджетов",
+    "copyNoop": "Нет новых бюджетов для копирования"
+  },
+  "empty": {
+    "title": "Нет бюджетов на этот месяц",
+    "description": "Спланируйте свои траты, задав лимиты по категориям расходов.",
+    "action": "Задать первый бюджет"
+  },
+  "errors": {
+    "saveFailed": "Не удалось сохранить бюджет. Попробуйте снова.",
+    "deleteFailed": "Не удалось удалить бюджет",
+    "copyFailed": "Не удалось скопировать бюджеты из прошлого месяца",
+    "duplicateCategory": "Бюджет для этой категории уже задан в текущем месяце",
+    "onlyExpenseAllowed": "Бюджет можно задавать только для категорий расходов"
+  }
+}

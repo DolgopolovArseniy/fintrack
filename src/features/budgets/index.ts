@@ -29,6 +29,12 @@ export type {
   CopyBudgetsResult,
 } from './repository';
 
+export { useBudgets } from './hooks/useBudgets';
+export { useBudgetMutations } from './hooks/useBudgetMutations';
+export type { UseBudgetMutationsResult } from './hooks/useBudgetMutations';
+export { useBudgetSummary } from './hooks/useBudgetSummary';
+export type { UseBudgetSummaryResult } from './hooks/useBudgetSummary';
+
 export {
   buildBudgetId,
   calculateBudgetStatus,

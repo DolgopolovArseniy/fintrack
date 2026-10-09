@@ -1,0 +1,88 @@
+{
+  "title": "Budgets",
+  "description": "Set category spending limits and monitor your monthly financial goals",
+  "summary": {
+    "title": "Monthly Budget Summary",
+    "totalBudget": "Total Budgeted",
+    "totalSpent": "Total Spent",
+    "remaining": "Remaining",
+    "overspent": "Overspent",
+    "progress": "Overall Progress",
+    "statusNormal_one": "{{count}} on track",
+    "statusNormal_other": "{{count}} on track",
+    "statusWarning_one": "{{count}} near limit",
+    "statusWarning_other": "{{count}} near limit",
+    "statusExceeded_one": "{{count}} exceeded",
+    "statusExceeded_other": "{{count}} exceeded"
+  },
+  "card": {
+    "spentOf": "Spent {{spent}} of {{limit}}",
+    "remaining": "Remaining {{amount}}",
+    "overspent": "Over budget by {{amount}}",
+    "statusNormal": "On track",
+    "statusWarning": "Near limit (≥80%)",
+    "statusExceeded": "Exceeded (>100%)",
+    "viewTransactions": "View transactions"
+  },
+  "actions": {
+    "add": "Set budget",
+    "edit": "Edit limit",
+    "delete": "Delete budget",
+    "copyFromPrevious": "Copy from last month",
+    "copyAction": "Copy budgets"
+  },
+  "unbudgeted": {
+    "title": "Categories without budget",
+    "description": "Set limits for remaining expense categories to get complete budget control",
+    "setLimit": "Set limit"
+  },
+  "form": {
+    "createTitle": "Set category budget",
+    "createDescription": "Define a monthly spending limit for this category",
+    "editTitle": "Edit budget limit",
+    "editDescription": "Update the monthly limit for {{category}}",
+    "categoryLabel": "Expense category",
+    "categoryPlaceholder": "Select category",
+    "monthLabel": "Month",
+    "limitLabel": "Monthly limit",
+    "limitHint": "Maximum planned spending for this category"
+  },
+  "copyDialog": {
+    "title": "Copy budgets from previous month",
+    "description": "Copy all spending limits configured in {{sourceMonth}} to {{targetMonth}}.",
+    "foundCount_one": "Found {{count}} budget to copy",
+    "foundCount_other": "Found {{count}} budgets to copy",
+    "overwriteLabel": "Overwrite existing limits in {{targetMonth}}",
+    "confirmButton": "Copy budgets",
+    "noBudgetsInSource": "No budgets found in {{sourceMonth}} to copy"
+  },
+  "copyBanner": {
+    "message": "No budgets configured for this month. Would you like to copy {{count}} budgets from {{previousMonth}}?",
+    "action": "Copy budgets"
+  },
+  "confirm": {
+    "deleteTitle": "Delete budget",
+    "deleteDescription": "Are you sure you want to remove the budget for \"{{category}}\"? Past transactions will not be affected.",
+    "deleteConfirm": "Delete"
+  },
+  "notifications": {
+    "created": "Budget limit created successfully",
+    "updated": "Budget limit updated successfully",
+    "deleted": "Budget limit removed",
+    "copied_one": "Successfully copied {{count}} budget",
+    "copied_other": "Successfully copied {{count}} budgets",
+    "copyNoop": "No new budgets to copy"
+  },
+  "empty": {
+    "title": "No budgets for this month",
+    "description": "Plan your expenses by setting spending limits for categories.",
+    "action": "Set first budget"
+  },
+  "errors": {
+    "saveFailed": "Failed to save budget limit. Please try again.",
+    "deleteFailed": "Failed to delete budget limit",
+    "copyFailed": "Failed to copy budgets from previous month",
+    "duplicateCategory": "A budget for this category already exists in this month",
+    "onlyExpenseAllowed": "Budgets can only be set for expense categories"
+  }
+}
