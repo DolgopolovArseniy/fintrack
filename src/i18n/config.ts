@@ -14,6 +14,7 @@ import authEn from './locales/en/auth.json';
 import categoriesEn from './locales/en/categories.json';
 import transactionsEn from './locales/en/transactions.json';
 import accountsEn from './locales/en/accounts.json';
+import budgetsEn from './locales/en/budgets.json';
 
 import commonRu from './locales/ru/common.json';
 import navRu from './locales/ru/nav.json';
@@ -26,6 +27,7 @@ import authRu from './locales/ru/auth.json';
 import categoriesRu from './locales/ru/categories.json';
 import transactionsRu from './locales/ru/transactions.json';
 import accountsRu from './locales/ru/accounts.json';
+import budgetsRu from './locales/ru/budgets.json';
 
 export const defaultNS = 'common' as const;
 export const namespaces = [
@@ -40,6 +42,7 @@ export const namespaces = [
   'categories',
   'transactions',
   'accounts',
+  'budgets',
 ] as const;
 
 export const resources = {
@@ -55,6 +58,7 @@ export const resources = {
     categories: categoriesEn,
     transactions: transactionsEn,
     accounts: accountsEn,
+    budgets: budgetsEn,
   },
   ru: {
     common: commonRu,
@@ -68,6 +72,7 @@ export const resources = {
     categories: categoriesRu,
     transactions: transactionsRu,
     accounts: accountsRu,
+    budgets: budgetsRu,
   },
 } as const;
 

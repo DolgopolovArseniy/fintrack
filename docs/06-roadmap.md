@@ -31,7 +31,7 @@
 | 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | done |
 | 8 | F12 | Demo-режим (anonymous auth, сид, конвертация в аккаунт) | F02, F04, F05, F06 | M | todo |
 | 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | done |
-| 10 | F08 | Budgets | F05 | M | todo |
+| 10 | F08 | Budgets | F05 | M | done |
 | 11 | F09 | CSV export | F05 | S | todo |
 | 12 | F10 | CSV import с превью | F07, F09 | L | todo |
 | 13 | F11 | Settings (валюта, язык, тема, удаление аккаунта, экспорт всех данных) | F02 | M | todo |
@@ -109,8 +109,8 @@
 - [x] `recalculateAccountBalance` и кнопка, тесты
 
 ### F08 Budgets
-- [ ] Лимиты, прогресс и состояния, id `month_categoryId`
-- [ ] Связь с тратами месяца, все состояния
+- [x] Лимиты, прогресс и состояния, id `month_categoryId`
+- [x] Связь с тратами месяца, все состояния
 
 ### F09 CSV export
 - [ ] UTF-8 BOM, разделитель, экранирование, CSV-injection, учёт фильтров
