@@ -1,3 +1,25 @@
-export { budgetInputSchema, budgetSchema } from './schemas';
+export {
+  budgetInputSchema,
+  budgetUpdateInputSchema,
+  budgetSchema,
+} from './schemas';
 
-export type { BudgetInput, Budget } from './schemas';
+export type {
+  BudgetInput,
+  BudgetUpdateInput,
+  Budget,
+  BudgetStatus,
+  EnrichedBudget,
+  BudgetSummaryTotals,
+} from './schemas';
+
+export {
+  buildBudgetId,
+  calculateBudgetStatus,
+  calculateBudgetProgress,
+  calculateBudgetRemaining,
+  calculateBudgetOverspent,
+  enrichBudgets,
+  calculateOverallBudgetSummary,
+  getUnbudgetedCategories,
+} from './utils';
