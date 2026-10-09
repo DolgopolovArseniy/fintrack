@@ -13,6 +13,22 @@ export type {
   BudgetSummaryTotals,
 } from './schemas';
 
+export { budgetConverter, budgetsCollectionRef } from './converters';
+
+export {
+  subscribeBudgetsByMonth,
+  createBudget,
+  updateBudget,
+  deleteBudget,
+  copyBudgetsFromMonth,
+} from './repository';
+
+export type {
+  Unsubscribe,
+  CopyBudgetsOptions,
+  CopyBudgetsResult,
+} from './repository';
+
 export {
   buildBudgetId,
   calculateBudgetStatus,
