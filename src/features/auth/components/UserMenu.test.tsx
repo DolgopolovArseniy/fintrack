@@ -29,6 +29,20 @@ const mockUser: AuthUser = {
 describe('UserMenu', () => {
   const signOutMock = vi.fn().mockResolvedValue(undefined);
 
+  function mockAuthState(
+    overrides: Partial<import('../types').AuthContextValue> &
+      Pick<import('../types').AuthContextValue, 'status'>,
+  ) {
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      profileStatus: overrides.status === 'loading' ? 'loading' : 'ready',
+      profile: null,
+      refreshUser: vi.fn(),
+      refreshProfile: vi.fn(),
+      ...overrides,
+    } as import('../types').AuthContextValue);
+  }
+
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useSignOut).mockReturnValue({
@@ -38,9 +52,8 @@ describe('UserMenu', () => {
   });
 
   it('renders nothing when user is not authenticated', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'unauthenticated',
-      refreshUser: vi.fn(),
     });
 
     const { container } = render(
@@ -53,10 +66,9 @@ describe('UserMenu', () => {
   });
 
   it('renders default variant with user initials and name', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: mockUser,
-      refreshUser: vi.fn(),
     });
 
     render(
@@ -71,10 +83,9 @@ describe('UserMenu', () => {
   });
 
   it('renders compact variant with accessible button', () => {
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: mockUser,
-      refreshUser: vi.fn(),
     });
 
     render(
@@ -90,10 +101,9 @@ describe('UserMenu', () => {
 
   it('opens dropdown menu, shows settings link and triggers signOut when clicking sign out', async () => {
     const user = userEvent.setup();
-    vi.mocked(useAuth).mockReturnValue({
+    mockAuthState({
       status: 'authenticated',
       user: mockUser,
-      refreshUser: vi.fn(),
     });
 
     render(

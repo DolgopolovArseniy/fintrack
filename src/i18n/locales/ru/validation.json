@@ -8,5 +8,9 @@
   "tooLong": "Не более {{count}} символов",
   "tooLong_one": "Не более {{count}} символа",
   "tooLong_few": "Не более {{count}} символов",
-  "tooLong_many": "Не более {{count}} символов"
+  "tooLong_many": "Не более {{count}} символов",
+  "currencyUnsupported": "Неподдерживаемая валюта",
+  "amountPositive": "Сумма должна быть больше нуля",
+  "amountTooLarge": "Сумма превышает максимально допустимую",
+  "dateInvalid": "Введите корректную дату"
 }

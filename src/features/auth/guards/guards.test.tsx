@@ -21,14 +21,23 @@ const mockUser: AuthUser = {
 function renderWithAuth(
   initialEntries: string[],
   routes: Parameters<typeof createMemoryRouter>[0],
-  authValue: AuthContextValue,
+  authValue: Partial<AuthContextValue> & Pick<AuthContextValue, 'status'>,
 ) {
+  const fullAuthValue: AuthContextValue = {
+    user: null,
+    profileStatus: authValue.status === 'loading' ? 'loading' : 'ready',
+    profile: null,
+    refreshUser: vi.fn().mockResolvedValue(undefined),
+    refreshProfile: vi.fn().mockResolvedValue(undefined),
+    ...authValue,
+  } as AuthContextValue;
+
   const router = createMemoryRouter(routes, {
     initialEntries,
   });
 
   return render(
-    <AuthContext.Provider value={authValue}>
+    <AuthContext.Provider value={fullAuthValue}>
       <RouterProvider router={router} />
     </AuthContext.Provider>,
   );
@@ -46,6 +55,10 @@ describe('Auth Guards', () => {
       {
         element: <RequireAuth />,
         children: [
+          {
+            path: ROUTES.onboarding,
+            element: <div data-testid="onboarding-page">Onboarding Area</div>,
+          },
           {
             path: ROUTES.dashboard,
             element: <div data-testid="protected-content">Dashboard Area</div>,
@@ -74,6 +87,18 @@ describe('Auth Guards', () => {
       expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
     });
 
+    it('shows loading screen when authenticated but profileStatus is loading', () => {
+      renderWithAuth([ROUTES.dashboard], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'loading',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+    });
+
     it('redirects unauthenticated guest to login with safe returnTo query param', () => {
       renderWithAuth(['/app/transactions?month=2026-09'], routes, {
         status: 'unauthenticated',
@@ -84,10 +109,46 @@ describe('Auth Guards', () => {
       expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
     });
 
-    it('renders protected child routes when authenticated', () => {
+    it('redirects authenticated user to /onboarding when profileStatus is needsOnboarding (AC2)', () => {
       renderWithAuth([ROUTES.dashboard], routes, {
         status: 'authenticated',
         user: mockUser,
+        profileStatus: 'needsOnboarding',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+    });
+
+    it('renders onboarding route when authenticated user needs onboarding', () => {
+      renderWithAuth([ROUTES.onboarding], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'needsOnboarding',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+    });
+
+    it('redirects to dashboard when user with ready profile opens /onboarding (AC3)', () => {
+      renderWithAuth([ROUTES.onboarding], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'ready',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.queryByTestId('onboarding-page')).not.toBeInTheDocument();
+    });
+
+    it('renders protected child routes when authenticated and ready', () => {
+      renderWithAuth([ROUTES.dashboard], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'ready',
         refreshUser: mockRefreshUser,
       });
 
@@ -105,6 +166,10 @@ describe('Auth Guards', () => {
             element: <div data-testid="login-page">Login Form</div>,
           },
         ],
+      },
+      {
+        path: ROUTES.onboarding,
+        element: <div data-testid="onboarding-page">Onboarding</div>,
       },
       {
         path: ROUTES.dashboard,
@@ -135,10 +200,23 @@ describe('Auth Guards', () => {
       expect(screen.getByTestId('login-page')).toBeInTheDocument();
     });
 
+    it('redirects authenticated user to /onboarding if profile is missing', () => {
+      renderWithAuth([ROUTES.login], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'needsOnboarding',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+      expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
+    });
+
     it('redirects authenticated user to dashboard by default', () => {
       renderWithAuth([ROUTES.login], routes, {
         status: 'authenticated',
         user: mockUser,
+        profileStatus: 'ready',
         refreshUser: mockRefreshUser,
       });
 
@@ -153,6 +231,7 @@ describe('Auth Guards', () => {
         {
           status: 'authenticated',
           user: mockUser,
+          profileStatus: 'ready',
           refreshUser: mockRefreshUser,
         },
       );
@@ -167,6 +246,10 @@ describe('Auth Guards', () => {
       {
         path: ROUTES.root,
         element: <RootRedirect />,
+      },
+      {
+        path: ROUTES.onboarding,
+        element: <div data-testid="onboarding-page">Onboarding</div>,
       },
       {
         path: ROUTES.dashboard,
@@ -187,10 +270,22 @@ describe('Auth Guards', () => {
       expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
-    it('redirects authenticated user to dashboard', () => {
+    it('redirects authenticated user needing onboarding to /onboarding', () => {
       renderWithAuth([ROUTES.root], routes, {
         status: 'authenticated',
         user: mockUser,
+        profileStatus: 'needsOnboarding',
+        refreshUser: mockRefreshUser,
+      });
+
+      expect(screen.getByTestId('onboarding-page')).toBeInTheDocument();
+    });
+
+    it('redirects authenticated user to dashboard when profile is ready', () => {
+      renderWithAuth([ROUTES.root], routes, {
+        status: 'authenticated',
+        user: mockUser,
+        profileStatus: 'ready',
         refreshUser: mockRefreshUser,
       });
 

@@ -4,7 +4,7 @@ import { Slot } from 'radix-ui';
 import { cn } from '@/lib/cn';
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -13,7 +13,7 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground shadow-[0_1px_2px_0_rgb(0_0_0/0.1),inset_0_1px_0_0_rgb(255_255_255/0.12)] hover:bg-destructive/95 active:scale-[0.985]',
         outline:
-          'border border-border/80 bg-background shadow-xs hover:bg-muted/60 hover:text-foreground active:scale-[0.985]',
+          'border border-border/60 bg-background shadow-xs hover:bg-muted/60 hover:text-foreground active:scale-[0.985]',
         secondary:
           'border border-border/40 bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 active:scale-[0.985]',
         ghost: 'hover:bg-muted/70 hover:text-foreground active:scale-[0.985]',

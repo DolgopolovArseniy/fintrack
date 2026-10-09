@@ -26,12 +26,12 @@
 | 2 | F01 | Domain core (`money`, `dates`, `currencies`, `errors`, Zod-схемы, `createConverter`, `balanceDeltas`, unit-тесты) | F00 | S | done |
 | 3 | F02 | Auth (email, Google, reset, `AuthProvider`, guard'ы, профиль, выход) | F00 | M | done |
 | 4 | F03 | Firestore rules v1 + rules-тесты + `firestore.indexes.json` (пустой) + деплой правил | F01, F02 | M | done |
-| 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | todo |
-| 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | todo |
-| 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | todo |
+| 5 | F04 | Categories + онбординг (профиль, категории, счёт «Основной»). **Эталонная фича** | F03 | S | done |
+| 6 | F05 | Transactions (форма, список по дням, навигатор месяца, фильтры в URL, edit, delete с undo, баланс через batch) | F04 | L | done |
+| 7 | F06 | Dashboard (KPI, donut, доход и расход по месяцам, последние) | F05 | M | done |
 | 8 | F12 | Demo-режим (anonymous auth, сид, конвертация в аккаунт) | F02, F04, F05, F06 | M | todo |
-| 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | todo |
-| 10 | F08 | Budgets | F05 | M | todo |
+| 9 | F07 | Accounts UI (создание, архивация, пересчёт баланса, выбор счёта) | F05 | M | done |
+| 10 | F08 | Budgets | F05 | M | done |
 | 11 | F09 | CSV export | F05 | S | todo |
 | 12 | F10 | CSV import с превью | F07, F09 | L | todo |
 | 13 | F11 | Settings (валюта, язык, тема, удаление аккаунта, экспорт всех данных) | F02 | M | todo |
@@ -85,19 +85,19 @@
 - [x] Проверка синтаксиса на эмуляторе, правки документа по факту
 
 ### F04 Categories
-- [ ] Онбординг-batch, дефолтные категории и счёт
-- [ ] CRUD и архивация, `CategoryBadge`, пикер иконки и цвета
-- [ ] Образец для остальных фич (структура, тесты, паттерны)
+- [x] Онбординг-batch, дефолтные категории и счёт
+- [x] CRUD и архивация, `CategoryBadge`, пикер иконки и цвета
+- [x] Образец для остальных фич (структура, тесты, паттерны)
 
 ### F05 Transactions
-- [ ] Repository, converters, `balanceDeltas`, batch с балансом
-- [ ] Хуки, форма (`ResponsiveDialog`, `AmountInput`), список по дням
-- [ ] `MonthNavigator`, фильтры в URL, edit, delete с undo
-- [ ] Все 5 состояний, mobile, i18n, тесты (unit, integration, component, e2e 4–5, 11)
+- [x] Repository, converters, `balanceDeltas`, batch с балансом
+- [x] Хуки, форма (`ResponsiveDialog`, `AmountInput`), список по дням
+- [x] `MonthNavigator`, фильтры в URL, edit, delete с undo
+- [x] Все 5 состояний, mobile, i18n, тесты (unit, integration, component, e2e 4–5, 11)
 
 ### F06 Dashboard
-- [ ] KPI, donut, столбцы по месяцам, последние операции
-- [ ] Lazy-загрузка графиков, доступные таблицы, все состояния
+- [x] KPI, donut, столбцы по месяцам, последние операции
+- [x] Lazy-загрузка графиков, доступные таблицы, все состояния
 
 ### F12 Demo
 - [ ] Anonymous auth, детерминированный сид (~100 записей), кнопка на `/login`
@@ -105,12 +105,12 @@
 - [ ] Проверка автоочистки и квоты, документирование рисков
 
 ### F07 Accounts
-- [ ] Страница счетов, создание, архивация, выбор счёта в форме
-- [ ] `recalculateAccountBalance` и кнопка, тесты
+- [x] Страница счетов, создание, архивация, выбор счёта в форме
+- [x] `recalculateAccountBalance` и кнопка, тесты
 
 ### F08 Budgets
-- [ ] Лимиты, прогресс и состояния, id `month_categoryId`
-- [ ] Связь с тратами месяца, все состояния
+- [x] Лимиты, прогресс и состояния, id `month_categoryId`
+- [x] Связь с тратами месяца, все состояния
 
 ### F09 CSV export
 - [ ] UTF-8 BOM, разделитель, экранирование, CSV-injection, учёт фильтров

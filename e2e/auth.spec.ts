@@ -105,10 +105,12 @@ test.describe('F02 — Authentication E2E flows', () => {
     page,
   }) => {
     const user = createUniqueTestUser('reset');
+
+    // 1. Register user
     await registerTestUser(page, user);
     await signOutTestUser(page);
 
-    // 1. Reset password for existing user
+    // 2. Reset password for existing user
     await page.goto('/reset-password');
     await page.getByLabel(/email/i).fill(user.email);
     await page
@@ -119,12 +121,20 @@ test.describe('F02 — Authentication E2E flows', () => {
       page.getByText(/check your email|проверьте почту/i),
     ).toBeVisible();
 
-    // Verify emulator recorded the OOB code
-    const codes = await getAuthEmulatorOobCodes();
-    const userCode = codes.find(
-      (c) => c.email === user.email && c.requestType === 'PASSWORD_RESET',
-    );
-    expect(userCode).toBeDefined();
+    // Verify emulator recorded the OOB code with resilient polling
+    await expect
+      .poll(
+        async () => {
+          const codes = await getAuthEmulatorOobCodes();
+          return codes.some(
+            (c) =>
+              c.email.toLowerCase() === user.email.toLowerCase() &&
+              c.requestType === 'PASSWORD_RESET',
+          );
+        },
+        { timeout: 10000, intervals: [200, 500, 1000] },
+      )
+      .toBe(true);
 
     // 2. Anti-enumeration: non-existent email displays identical success state
     await page.goto('/reset-password');

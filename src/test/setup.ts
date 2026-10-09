@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom/vitest';
 
 if (typeof window !== 'undefined') {
+  (window as unknown as { ResizeObserver: unknown }).ResizeObserver =
+    class ResizeObserver {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: (query: string) => ({

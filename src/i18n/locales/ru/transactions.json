@@ -1,0 +1,59 @@
+{
+  "title": "Операции",
+  "description": "Управление ежедневными расходами и доходами",
+  "actions": {
+    "add": "Добавить операцию",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "undo": "Отменить",
+    "resetFilters": "Сбросить фильтры"
+  },
+  "summary": {
+    "income": "Доходы",
+    "expense": "Расходы",
+    "net": "Итог"
+  },
+  "filters": {
+    "allTypes": "Все типы",
+    "expensesOnly": "Расходы",
+    "incomesOnly": "Доходы",
+    "allCategories": "Все категории",
+    "allAccounts": "Все счета",
+    "searchPlaceholder": "Поиск по заметке...",
+    "activeFiltersCount": "{{count}} активный фильтр",
+    "activeFiltersCount_plural": "{{count}} активных фильтров"
+  },
+  "form": {
+    "createTitle": "Новая операция",
+    "editTitle": "Редактирование операции",
+    "typeLabel": "Тип",
+    "amountLabel": "Сумма",
+    "categoryLabel": "Категория",
+    "accountLabel": "Счёт",
+    "dateLabel": "Дата",
+    "noteLabel": "Заметка (необязательно)",
+    "notePlaceholder": "например, Супермаркет, Кофе с друзьями...",
+    "selectCategory": "Выберите категорию",
+    "selectAccount": "Выберите счёт",
+    "archivedSuffix": "(в архиве)"
+  },
+  "empty": {
+    "monthTitle": "В этом месяце нет операций",
+    "monthDescription": "Начните вести учёт, добавив первый расход или доход.",
+    "filteredTitle": "Ничего не найдено",
+    "filteredDescription": "Попробуйте изменить поисковый запрос или сбросить фильтры."
+  },
+  "notifications": {
+    "created": "Операция добавлена",
+    "updated": "Операция обновлена",
+    "deleted": "Операция удалена",
+    "restored": "Операция восстановлена",
+    "deleteFailed": "Не удалось удалить операцию",
+    "saveFailed": "Не удалось сохранить операцию"
+  },
+  "errors": {
+    "saveFailed": "Не удалось сохранить операцию. Попробуйте еще раз.",
+    "deleteFailed": "Не удалось удалить операцию. Попробуйте еще раз.",
+    "unauthorized": "Пользователь не авторизован"
+  }
+}

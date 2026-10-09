@@ -1,0 +1,70 @@
+{
+  "title": "Accounts",
+  "description": "Manage your wallets, cards, bank accounts and track balances",
+  "showArchived": "Show archived",
+  "system": {
+    "main": "Main account"
+  },
+  "types": {
+    "cash": "Cash",
+    "card": "Card",
+    "bank": "Bank account"
+  },
+  "summary": {
+    "totalBalance": "Total Balance",
+    "activeAccountsCount_one": "{{count}} active account",
+    "activeAccountsCount_other": "{{count}} active accounts",
+    "cashSubtotal": "Cash",
+    "cardSubtotal": "Cards",
+    "bankSubtotal": "Bank accounts"
+  },
+  "card": {
+    "currentBalance": "Current balance",
+    "initialBalance": "Initial",
+    "archivedBadge": "Archived",
+    "recalculating": "Recalculating..."
+  },
+  "actions": {
+    "add": "Add account",
+    "edit": "Edit account",
+    "archive": "Archive account",
+    "unarchive": "Restore account",
+    "recalculate": "Recalculate balance"
+  },
+  "form": {
+    "createTitle": "Create account",
+    "createDescription": "Add a new account to track your finances",
+    "editTitle": "Edit account",
+    "editDescription": "Update account details and initial balance",
+    "nameLabel": "Account name",
+    "namePlaceholder": "e.g. Main card, Cash, Savings",
+    "typeLabel": "Account type",
+    "initialBalanceLabel": "Initial balance",
+    "initialBalanceHint": "Account balance at the start of tracking"
+  },
+  "notifications": {
+    "created": "Account created successfully",
+    "updated": "Account updated successfully",
+    "archived": "Account archived",
+    "unarchived": "Account restored",
+    "recalculateSuccess": "Balance is accurate ({{count}} transactions processed)",
+    "recalculateAdjusted": "Balance adjusted: from {{oldBalance}} to {{newBalance}} ({{count}} transactions processed)"
+  },
+  "confirm": {
+    "archiveTitle": "Archive account",
+    "archiveDescription": "Are you sure you want to archive \"{{name}}\"? It will be hidden from transaction forms, but all past records will remain intact.",
+    "archiveConfirm": "Archive",
+    "lastAccountWarning": "Cannot archive the only active account. You must have at least one active account to record transactions."
+  },
+  "empty": {
+    "title": "No active accounts",
+    "description": "All your accounts are archived or no accounts exist yet.",
+    "action": "Create account"
+  },
+  "errors": {
+    "unauthorized": "You must be signed in to perform this action",
+    "saveFailed": "Failed to save account. Please try again.",
+    "recalculateFailed": "Failed to recalculate account balance",
+    "lastAccountRestriction": "Cannot archive the only active account"
+  }
+}

@@ -35,11 +35,12 @@ export function UserMenu({ variant = 'default', className }: UserMenuProps) {
     return null;
   }
 
-  const { user } = auth;
-  const initials = getInitials(user.displayName, user.email);
+  const { user, profile } = auth;
+  const effectiveDisplayName = profile?.displayName || user.displayName;
+  const initials = getInitials(effectiveDisplayName, user.email);
   const displayName =
-    user.displayName || user.email || t('auth.userMenu.account');
-  const secondaryText = user.displayName && user.email ? user.email : null;
+    effectiveDisplayName || user.email || t('auth.userMenu.account');
+  const secondaryText = effectiveDisplayName && user.email ? user.email : null;
 
   return (
     <DropdownMenu>

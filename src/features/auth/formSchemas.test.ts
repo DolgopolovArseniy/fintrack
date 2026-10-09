@@ -5,6 +5,7 @@ import {
   loginSchema,
   registerSchema,
   resetPasswordSchema,
+  onboardingSchema,
 } from './formSchemas';
 
 describe('formSchemas', () => {
@@ -165,6 +166,54 @@ describe('formSchemas', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0]?.message).toBe('validation.emailInvalid');
+      }
+    });
+  });
+
+  describe('onboardingSchema', () => {
+    it('accepts valid currency and optional displayName', () => {
+      const result = onboardingSchema.safeParse({
+        baseCurrency: 'USD',
+        displayName: 'John Doe',
+      });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.baseCurrency).toBe('USD');
+        expect(result.data.displayName).toBe('John Doe');
+      }
+    });
+
+    it('accepts valid currency without displayName', () => {
+      const result = onboardingSchema.safeParse({
+        baseCurrency: 'EUR',
+      });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.baseCurrency).toBe('EUR');
+        expect(result.data.displayName).toBeUndefined();
+      }
+    });
+
+    it('rejects unsupported currency', () => {
+      const result = onboardingSchema.safeParse({
+        baseCurrency: 'INVALID',
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0]?.message).toBe(
+          'validation.currencyUnsupported',
+        );
+      }
+    });
+
+    it('rejects displayName exceeding DISPLAY_NAME_MAX_LENGTH', () => {
+      const result = onboardingSchema.safeParse({
+        baseCurrency: 'USD',
+        displayName: 'a'.repeat(DISPLAY_NAME_MAX_LENGTH + 1),
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0]?.message).toBe('validation.tooLong');
       }
     });
   });

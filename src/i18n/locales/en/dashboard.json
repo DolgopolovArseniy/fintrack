@@ -1,6 +1,7 @@
 {
+  "title": "Dashboard",
   "welcome": "Welcome to FinTrack",
-  "description": "Manage your personal finances efficiently",
+  "description": "Financial overview and key metrics",
   "overview": "Financial Overview",
   "totalBalance": "Total Net Worth",
   "monthlyIncome": "Monthly Inflow",
@@ -8,7 +9,46 @@
   "savingsRate": "Savings Rate",
   "recentActivity": "Recent Operations",
   "quickActions": "Quick Actions",
-  "addTransaction": "New Transaction",
+  "addTransaction": "New transaction",
   "viewAll": "View all",
-  "vsLastMonth": "vs last month"
+  "vsLastMonth": "vs last month",
+  "kpi": {
+    "totalBalance": "Total Balance",
+    "totalBalanceHint_zero": "No active accounts",
+    "totalBalanceHint_one": "{{count}} active account",
+    "totalBalanceHint_other": "{{count}} active accounts",
+    "totalBalanceHint": "{{count}} active account",
+    "monthlyIncome": "Monthly Income",
+    "monthlyExpenses": "Monthly Expenses",
+    "netSavings": "Net Savings",
+    "savingsRate": "Savings rate: {{rate}}%",
+    "vsLastMonth": "vs last month",
+    "newPeriod": "New period",
+    "noChange": "No change"
+  },
+  "charts": {
+    "expensesByCategory": "Expenses by Category",
+    "expensesByCategoryDesc": "Top 5 categories and others for the selected month",
+    "incomeVsExpense": "Income & Expense Trend",
+    "incomeVsExpenseDesc": "6-month financial trajectory",
+    "totalExpense": "Total expenses",
+    "otherCategory": "Other",
+    "emptyExpenses": "No expenses recorded this month",
+    "emptyHistory": "Not enough data to display trend",
+    "table": {
+      "category": "Category",
+      "amount": "Amount",
+      "share": "Share",
+      "month": "Month",
+      "income": "Income",
+      "expense": "Expense",
+      "net": "Net"
+    }
+  },
+  "recentTransactions": {
+    "title": "Recent Transactions",
+    "viewAll": "View all transactions",
+    "empty": "No transactions for this month yet",
+    "addFirst": "Add first transaction"
+  }
 }

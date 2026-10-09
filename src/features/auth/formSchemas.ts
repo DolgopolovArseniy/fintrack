@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { currencySchema } from '@/lib/schemas';
 import { DISPLAY_NAME_MAX_LENGTH } from '@/lib/limits';
 
 export const PASSWORD_MIN_LENGTH = 8;
@@ -39,6 +40,16 @@ export const resetPasswordSchema = z.object({
     .email({ error: 'validation.emailInvalid' }),
 });
 
+export const onboardingSchema = z.object({
+  baseCurrency: currencySchema,
+  displayName: z
+    .string()
+    .trim()
+    .max(DISPLAY_NAME_MAX_LENGTH, { error: 'validation.tooLong' })
+    .optional(),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type OnboardingFormInput = z.infer<typeof onboardingSchema>;
