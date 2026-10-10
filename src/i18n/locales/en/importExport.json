@@ -1,0 +1,81 @@
+{
+  "title": "Import & Export",
+  "description": "Export your financial history or import statements from CSV files",
+  "tabs": {
+    "export": "Export",
+    "import": "Import"
+  },
+  "export": {
+    "cardTitle": "Export transactions to CSV",
+    "cardDescription": "Configure filters, date range, and delimiter format for your spreadsheet application",
+    "presets": {
+      "label": "Date range",
+      "currentMonth": "Current month",
+      "prevMonth": "Previous month",
+      "last3Months": "Last 3 months",
+      "last6Months": "Last 6 months",
+      "thisYear": "This year",
+      "allTime": "All time",
+      "custom": "Custom period"
+    },
+    "customDates": {
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "filters": {
+      "typeLabel": "Transaction type",
+      "categoryLabel": "Category",
+      "accountLabel": "Account",
+      "allTypes": "All types",
+      "expensesOnly": "Expenses only",
+      "incomeOnly": "Income only",
+      "allCategories": "All categories",
+      "allAccounts": "All accounts"
+    },
+    "format": {
+      "delimiterLabel": "CSV Delimiter",
+      "comma": "Comma (,) — Standard / Google Sheets",
+      "semicolon": "Semicolon (;) — Excel (Europe / CIS)",
+      "includeHeaders": "Include column headers"
+    },
+    "summary": {
+      "found": "Found {{count}} transaction",
+      "found_other": "Found {{count}} transactions",
+      "readyToExport": "Ready to export"
+    },
+    "actions": {
+      "download": "Export CSV",
+      "downloading": "Generating file...",
+      "quickExport": "Export to CSV"
+    },
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "account": "Account",
+      "amount": "Amount",
+      "currency": "Currency",
+      "note": "Note",
+      "tags": "Tags",
+      "expenseType": "Expense",
+      "incomeType": "Income"
+    },
+    "notifications": {
+      "success": "Exported {{count}} transaction successfully",
+      "success_other": "Exported {{count}} transactions successfully"
+    }
+  },
+  "importPromo": {
+    "title": "CSV Statement Import",
+    "badge": "Coming in F10",
+    "description": "Upload bank statements, map columns with live preview, detect duplicates, and import hundreds of operations in seconds."
+  },
+  "errors": {
+    "invalidDateRange": "Start date must be before or equal to end date",
+    "fetchFailed": "Failed to load transactions for export",
+    "downloadFailed": "Failed to download CSV file"
+  },
+  "empty": {
+    "noTransactions": "No transactions found for the selected period and filters."
+  }
+}

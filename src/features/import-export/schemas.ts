@@ -19,11 +19,15 @@ export const csvDelimiterSchema = z.enum([',', ';']);
 
 export type CsvDelimiter = z.infer<typeof csvDelimiterSchema>;
 
+export const exportTransactionTypeSchema = z.enum(['all', 'expense', 'income']);
+
+export type ExportTransactionType = z.infer<typeof exportTransactionTypeSchema>;
+
 export const exportConfigSchema = z.object({
   preset: exportScopePresetSchema,
   startDate: isoDateSchema.optional(),
   endDate: isoDateSchema.optional(),
-  type: z.enum(['all', 'expense', 'income']).default('all'),
+  type: exportTransactionTypeSchema.default('all'),
   categoryId: z.string().default('all'),
   accountId: z.string().default('all'),
   delimiter: csvDelimiterSchema.default(','),

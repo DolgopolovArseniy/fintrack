@@ -1,0 +1,85 @@
+{
+  "title": "Импорт и экспорт",
+  "description": "Экспорт истории операций и импорт банковских выписок в формате CSV",
+  "tabs": {
+    "export": "Экспорт",
+    "import": "Импорт"
+  },
+  "export": {
+    "cardTitle": "Экспорт операций в CSV",
+    "cardDescription": "Настройте период, фильтры и формат разделителя для вашей табличной программы",
+    "presets": {
+      "label": "Период",
+      "currentMonth": "Текущий месяц",
+      "prevMonth": "Прошлый месяц",
+      "last3Months": "Последние 3 месяца",
+      "last6Months": "Последние 6 месяцев",
+      "thisYear": "Текущий год",
+      "allTime": "За всё время",
+      "custom": "Произвольный период"
+    },
+    "customDates": {
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания"
+    },
+    "filters": {
+      "typeLabel": "Тип операции",
+      "categoryLabel": "Категория",
+      "accountLabel": "Счёт",
+      "allTypes": "Все типы",
+      "expensesOnly": "Только расходы",
+      "incomeOnly": "Только доходы",
+      "allCategories": "Все категории",
+      "allAccounts": "Все счета"
+    },
+    "format": {
+      "delimiterLabel": "Разделитель колонок CSV",
+      "comma": "Запятая (,) — Международный / Google Sheets",
+      "semicolon": "Точка с запятой (;) — Excel (РФ / Европа)",
+      "includeHeaders": "Включать строку заголовков"
+    },
+    "summary": {
+      "found_one": "Найдена {{count}} операция",
+      "found_few": "Найдено {{count}} операции",
+      "found_many": "Найдено {{count}} операций",
+      "found_other": "Найдено {{count}} операций",
+      "readyToExport": "Готово к экспорту"
+    },
+    "actions": {
+      "download": "Экспорт в CSV",
+      "downloading": "Формирование файла...",
+      "quickExport": "Экспорт в CSV"
+    },
+    "columns": {
+      "date": "Дата",
+      "type": "Тип",
+      "category": "Категория",
+      "account": "Счёт",
+      "amount": "Сумма",
+      "currency": "Валюта",
+      "note": "Заметка",
+      "tags": "Теги",
+      "expenseType": "Расход",
+      "incomeType": "Доход"
+    },
+    "notifications": {
+      "success_one": "Успешно экспортирована {{count}} операция",
+      "success_few": "Успешно экспортировано {{count}} операции",
+      "success_many": "Успешно экспортировано {{count}} операций",
+      "success_other": "Успешно экспортировано {{count}} операций"
+    }
+  },
+  "importPromo": {
+    "title": "Импорт выписок из CSV",
+    "badge": "Скоро в F10",
+    "description": "Загрузка банковских выписок, сопоставление колонок с превью, поиск дубликатов и пакетная запись сотен операций за пару секунд."
+  },
+  "errors": {
+    "invalidDateRange": "Дата начала не может быть позже даты окончания",
+    "fetchFailed": "Не удалось загрузить операции для экспорта",
+    "downloadFailed": "Не удалось скачать файл CSV"
+  },
+  "empty": {
+    "noTransactions": "Нет операций за выбранный период и фильтры."
+  }
+}
