@@ -1,4 +1,3 @@
-import type { TFunction } from 'i18next';
 import { describe, expect, it } from 'vitest';
 import type { Account } from '@/features/accounts';
 import type { Category } from '@/features/categories';
@@ -7,10 +6,14 @@ import {
   buildTransactionCsvColumns,
   transformTransactionsToCsv,
   type ExportRow,
+  type ExportTranslateFunction,
 } from './exportService';
 
 describe('exportService', () => {
-  const mockT = ((key: string, options?: { defaultValue?: string }) => {
+  const mockT: ExportTranslateFunction = (
+    key: string,
+    options?: Record<string, unknown>,
+  ) => {
     const translations: Record<string, string> = {
       'importExport.export.columns.date': 'Date',
       'importExport.export.columns.type': 'Type',
@@ -25,8 +28,11 @@ describe('exportService', () => {
       'categories.system.groceries': 'Groceries',
       'accounts.system.main': 'Main account',
     };
-    return translations[key] ?? options?.defaultValue ?? key;
-  }) as unknown as TFunction;
+    return (
+      translations[key] ??
+      (typeof options?.defaultValue === 'string' ? options.defaultValue : key)
+    );
+  };
 
   const mockCategories: Category[] = [
     {

@@ -1,10 +1,14 @@
-import type { TFunction } from 'i18next';
 import { getAccountDisplayName, type Account } from '@/features/accounts';
 import { getCategoryDisplayName, type Category } from '@/features/categories';
 import type { Transaction } from '@/features/transactions';
 import type { CurrencyCode } from '@/lib/currencies';
 import { generateCsv, type CsvColumn, type CsvExportOptions } from '@/lib/csv';
 import { fromMinorUnits } from '@/lib/money';
+
+export type ExportTranslateFunction = (
+  key: string,
+  options?: Record<string, unknown>,
+) => string;
 
 export interface ExportRow {
   date: string;
@@ -22,33 +26,33 @@ export interface ExportTransformParams {
   categories: readonly Category[];
   accounts: readonly Account[];
   baseCurrency: CurrencyCode;
-  t: TFunction;
+  t: ExportTranslateFunction;
   options?: CsvExportOptions;
 }
 
 function resolveCategoryName(
   categoryId: string,
   categoriesMap: Map<string, Category>,
-  t: TFunction,
+  t: ExportTranslateFunction,
 ): string {
   const category = categoriesMap.get(categoryId);
   if (!category) {
     return '[Deleted / Unknown]';
   }
-  const name = getCategoryDisplayName(category, (k, o) => t(k as never, o));
+  const name = getCategoryDisplayName(category, (k, o) => t(k, o));
   return category.archived ? `${name} (archived)` : name;
 }
 
 function resolveAccountName(
   accountId: string,
   accountsMap: Map<string, Account>,
-  t: TFunction,
+  t: ExportTranslateFunction,
 ): string {
   const account = accountsMap.get(accountId);
   if (!account) {
     return '[Deleted / Unknown]';
   }
-  const name = getAccountDisplayName(account, (k, o) => t(k as never, o));
+  const name = getAccountDisplayName(account, (k, o) => t(k, o));
   return account.archived ? `${name} (archived)` : name;
 }
 
@@ -57,7 +61,7 @@ function resolveAccountName(
  * Headers are localized using the provided i18next translation function.
  */
 export function buildTransactionCsvColumns(
-  t: TFunction,
+  t: ExportTranslateFunction,
 ): CsvColumn<ExportRow>[] {
   return [
     {
