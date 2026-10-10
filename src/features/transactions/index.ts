@@ -6,6 +6,7 @@ export { transactionConverter, transactionsCollectionRef } from './converters';
 export {
   subscribeTransactionsByMonth,
   subscribeTransactionsByDateRange,
+  getTransactionsByDateRange,
   createTransaction,
   updateTransaction,
   deleteTransaction,
