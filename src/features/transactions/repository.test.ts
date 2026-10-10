@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   createTransaction,
+  getTransactionsByDateRange,
   subscribeTransactionsByDateRange,
   subscribeTransactionsByMonth,
   updateTransaction,
@@ -143,6 +144,24 @@ describe('transactions repository unit tests', () => {
         { message?: string } | undefined;
       expect(reportedError?.message).toContain('Invalid date range');
       expect(typeof unsubscribe).toBe('function');
+    });
+
+    it('rejects getTransactionsByDateRange with invalid startDate', async () => {
+      await expect(
+        getTransactionsByDateRange(uid, 'not-a-date', '2026-05-31'),
+      ).rejects.toThrow('Invalid startDate');
+    });
+
+    it('rejects getTransactionsByDateRange with invalid endDate', async () => {
+      await expect(
+        getTransactionsByDateRange(uid, '2026-05-01', 'not-a-date'),
+      ).rejects.toThrow('Invalid endDate');
+    });
+
+    it('rejects getTransactionsByDateRange when startDate > endDate', async () => {
+      await expect(
+        getTransactionsByDateRange(uid, '2026-06-01', '2026-05-01'),
+      ).rejects.toThrow('Invalid date range');
     });
   });
 });
