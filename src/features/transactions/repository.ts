@@ -1,6 +1,7 @@
 import {
   deleteField,
   doc,
+  getDocs,
   increment,
   onSnapshot,
   orderBy,
@@ -119,6 +120,57 @@ export function subscribeTransactionsByDateRange(
   } catch (error) {
     onError(toAppError(error));
     return () => {};
+  }
+}
+
+/**
+ * Fetches transactions within an arbitrary ISO date range [startDate, endDate] inclusive
+ * as a one-time snapshot without maintaining a real-time listener.
+ * Results are ordered chronologically descending (date descending, then createdAt descending).
+ * Corrupt documents are skipped with a warning via parseSnapshotDocs.
+ */
+export async function getTransactionsByDateRange(
+  uid: string,
+  startDate: IsoDate,
+  endDate: IsoDate,
+): Promise<Transaction[]> {
+  try {
+    if (!ISO_DATE_PATTERN.test(startDate)) {
+      throw new Error(
+        `Invalid startDate: expected YYYY-MM-DD, got "${startDate}"`,
+      );
+    }
+    if (!ISO_DATE_PATTERN.test(endDate)) {
+      throw new Error(`Invalid endDate: expected YYYY-MM-DD, got "${endDate}"`);
+    }
+    if (compareIsoDates(startDate, endDate) > 0) {
+      throw new Error(
+        `Invalid date range: startDate "${startDate}" must be <= endDate "${endDate}"`,
+      );
+    }
+
+    const colRef = transactionsCol(uid);
+    const q = query(
+      colRef,
+      where('date', '>=', startDate),
+      where('date', '<=', endDate),
+      orderBy('date', 'desc'),
+    );
+    const snapshot = await getDocs(q);
+    const transactions = parseSnapshotDocs(snapshot, transactionSchema);
+
+    // Secondary sort within same date by creation time descending
+    transactions.sort((a, b) => {
+      const dateComp = compareIsoDates(b.date, a.date);
+      if (dateComp !== 0) {
+        return dateComp;
+      }
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
+
+    return transactions;
+  } catch (error) {
+    throw toAppError(error);
   }
 }
 

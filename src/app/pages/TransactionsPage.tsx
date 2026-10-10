@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useAccounts } from '@/features/accounts';
 import { useAuth } from '@/features/auth';
 import { useCategories } from '@/features/categories';
+import { ExportQuickButton } from '@/features/import-export';
 import {
   TransactionFilters,
   TransactionForm,
@@ -56,6 +57,11 @@ export function TransactionsPage() {
   const { groups, totalIncome, totalExpense, net, filteredCount } =
     useGroupedTransactions(transactions, filters);
 
+  const filteredTransactions = React.useMemo(
+    () => groups.flatMap((g) => g.transactions),
+    [groups],
+  );
+
   const handleCreate = async (values: TransactionInput) => {
     await create(values);
     setIsCreateOpen(false);
@@ -80,6 +86,10 @@ export function TransactionsPage() {
         actions={
           <div className="flex flex-wrap items-center gap-3">
             <MonthNavigator value={filters.month} onChange={setMonth} />
+            <ExportQuickButton
+              transactions={filteredTransactions}
+              filenameScope={filters.month}
+            />
             <Button
               onClick={() => setIsCreateOpen(true)}
               data-testid="add-transaction-button"
