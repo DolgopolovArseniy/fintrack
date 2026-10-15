@@ -35,3 +35,24 @@ export const exportConfigSchema = z.object({
 });
 
 export type ExportConfig = z.infer<typeof exportConfigSchema>;
+
+export const importFieldSchema = z.enum([
+  'date',
+  'type',
+  'amount',
+  'category',
+  'account',
+  'note',
+  'tags',
+]);
+
+export const columnMappingSchema = z.record(
+  importFieldSchema,
+  z.number().int().min(0).nullable(),
+);
+
+export const importNameOverrideSchema = z.object({
+  sourceName: z.string().min(1).max(40),
+  categoryId: z.string().min(1).max(64).optional(),
+  accountId: z.string().min(1).max(64).optional(),
+});

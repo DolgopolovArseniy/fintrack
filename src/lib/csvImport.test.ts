@@ -170,9 +170,10 @@ describe('csvImport domain module', () => {
       expect(parseImportTags('food, lunch', ';')).toEqual(['food', 'lunch']);
     });
 
-    it('caps the result at TAGS_MAX_COUNT', () => {
+    it('returns the full list without silent truncation', () => {
       const raw = Array.from({ length: 15 }, (_, i) => `t${i}`).join(',');
-      expect(parseImportTags(raw, ',')).toHaveLength(10);
+      const tags = parseImportTags(raw, ',');
+      expect(tags).toHaveLength(15);
     });
   });
 

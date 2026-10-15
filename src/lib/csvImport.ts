@@ -2,7 +2,6 @@ import Papa from 'papaparse';
 import type { CsvDelimiter } from './csv';
 import { isValidIsoDate } from './dates';
 import { AppError } from './errors';
-import { TAGS_MAX_COUNT } from './limits';
 import { parseMoneyInput } from './money';
 
 export const IMPORTABLE_FIELDS = [
@@ -160,7 +159,8 @@ export function parseImportType(raw: string): 'expense' | 'income' | null {
 
 /**
  * Splits on canonical comma (export joins tags with ', ' regardless of
- * the column delimiter); caps at TAGS_MAX_COUNT.
+ * the column delimiter). Never truncates: tag overflow is a row error
+ * handled by the import service, not a silent trim.
  */
 export function parseImportTags(
   raw: string,
@@ -174,8 +174,7 @@ export function parseImportTags(
   return value
     .split(',')
     .map((tag) => normalizeImportCell(tag))
-    .filter((tag) => tag.length > 0)
-    .slice(0, TAGS_MAX_COUNT);
+    .filter((tag) => tag.length > 0);
 }
 
 /** Maps EN+RU headers to fields; first occurrence wins, the rest stay null. */

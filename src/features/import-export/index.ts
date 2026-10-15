@@ -7,6 +7,17 @@ export {
   type ExportTranslateFunction,
 } from './services/exportService';
 export {
+  mapRowsToInputs,
+  markDuplicates,
+  buildImportReport,
+} from './services/importService';
+export type {
+  ValidatedImportRow,
+  ImportRowStatus,
+  ImportReportData,
+  NameResolution,
+} from './services/importService';
+export {
   useExportTransactions,
   resolvePresetDateRange,
   getPresetFilenameScope,
