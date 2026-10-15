@@ -65,6 +65,101 @@
       "success_other": "Exported {{count}} transactions successfully"
     }
   },
+  "import": {
+    "steps": {
+      "upload": "Upload",
+      "mapping": "Columns",
+      "preview": "Preview",
+      "result": "Result"
+    },
+    "upload": {
+      "title": "Import transactions from CSV",
+      "description": "Upload an F09 export or a bank statement. Nothing is written before you confirm.",
+      "chooseFile": "Choose file",
+      "dropHint": "or drag and drop a .csv file here",
+      "templateButton": "Download CSV template"
+    },
+    "mapping": {
+      "title": "Map columns",
+      "description": "Match each file column to a transaction field once for the whole file.",
+      "delimiterLabel": "Column delimiter",
+      "auto": "Auto",
+      "columnName": "Column {{letter}}",
+      "fieldLabels": {
+        "date": "Date",
+        "type": "Type",
+        "amount": "Amount",
+        "category": "Category",
+        "account": "Account",
+        "note": "Note",
+        "tags": "Tags",
+        "ignore": "Ignore"
+      },
+      "unmappedNames": "Unrecognized names",
+      "unmappedHint": "Assign an existing category or account to each name. Rows with an unassigned name stay excluded.",
+      "defaultAccount": "Default account",
+      "defaultExpenseCategory": "Default expense category",
+      "defaultIncomeCategory": "Default income category",
+      "signModeHint": "No Type column mapped: expense and income are derived from the amount sign.",
+      "continueAction": "Continue to preview",
+      "backAction": "Choose another file"
+    },
+    "preview": {
+      "title": "Review rows",
+      "counters": "{{valid}} valid · {{errors}} errors · {{duplicates}} duplicates",
+      "filters": {
+        "all": "All",
+        "errors": "Errors",
+        "duplicates": "Duplicates"
+      },
+      "skipDuplicates": "Exclude duplicates",
+      "importAction": "Import {{count}}",
+      "importConfirmTitle": "Import {{count}} transactions?",
+      "importConfirmDescription": "This writes new transactions and updates account balances. Bulk import cannot be undone.",
+      "showMore": "Show more",
+      "importing": "Importing {{done}} of {{total}}…",
+      "emptyValid": "No valid rows to import",
+      "emptyValidDescription": "Fix the column mapping or choose another file.",
+      "rangeTooWide": "Date range exceeds one year: only duplicates within the file were checked.",
+      "includeRow": "Include row {{row}}"
+    },
+    "report": {
+      "title": "Import complete",
+      "toast": "Imported {{count}}",
+      "imported": "Imported: {{count}}",
+      "skippedErrors": "Skipped with errors: {{count}}",
+      "skippedDuplicates": "Skipped duplicates: {{count}}",
+      "skippedManual": "Excluded manually: {{count}}",
+      "failedChunks": "Failed chunks: {{count}}",
+      "affectedAccounts": "Affected accounts",
+      "retryRemaining": "Retry remaining",
+      "importAnother": "Import another file",
+      "viewTransactions": "View transactions"
+    },
+    "rowErrors": {
+      "dateInvalid": "Invalid date",
+      "amountInvalid": "Invalid amount",
+      "amountTooLarge": "Amount exceeds the maximum",
+      "typeInvalid": "Unknown transaction type",
+      "categoryTypeMismatch": "Category type does not match the transaction type",
+      "unknownCategory": "Unknown category",
+      "unknownAccount": "Unknown account",
+      "noteTooLong": "Note exceeds 200 characters",
+      "tooManyTags": "More than 10 tags"
+    },
+    "rowWarnings": {
+      "duplicateFile": "Duplicate within the file",
+      "duplicateDatabase": "Duplicate of an existing transaction"
+    },
+    "errors": {
+      "fileTooLarge": "File is too large (max 2000 rows, about 2 MB)",
+      "parseFailed": "Could not parse the CSV file",
+      "mappingRequired": "Map the Date and Amount columns to continue",
+      "chunkFailed": "Some chunks failed to write",
+      "offlineBlocked": "You are offline. Reconnect to write the import.",
+      "duplicatesFetchFailed": "Could not check duplicates against existing transactions"
+    }
+  },
   "importPromo": {
     "title": "CSV Statement Import",
     "badge": "Coming in F10",
