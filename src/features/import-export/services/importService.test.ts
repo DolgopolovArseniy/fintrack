@@ -408,8 +408,8 @@ describe('importService', () => {
       ];
       expect(
         buildImportReport(rows, [
-          { written: 400, status: 'ok' },
-          { written: 0, status: 'failed' },
+          { chunkIndex: 0, written: 400, status: 'ok' },
+          { chunkIndex: 1, written: 0, status: 'failed' },
         ]),
       ).toEqual({
         totalRows: 4,

@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { createAccount, subscribeAccounts } from '@/features/accounts';
+import { AppError } from '@/lib/errors';
+import { signedAmount } from '@/lib/money';
+import { buildTransactionInput } from '@/test/factories';
 import {
   createTransaction,
+  createTransactionsBatch,
   deleteTransaction,
+  getTransactionsByDateRange,
   restoreTransaction,
   subscribeTransactionsByDateRange,
   subscribeTransactionsByMonth,
@@ -312,5 +317,108 @@ describe.skipIf(!isEmulatorRunning)(
       const ids = rangeResult.map((t) => t.id);
       expect(ids.indexOf(txInside2Id)).toBeLessThan(ids.indexOf(txInside1Id));
     });
+  },
+);
+
+describe.skipIf(!isEmulatorRunning)(
+  'csv import batch integration (emulator)',
+  () => {
+    const uid = `integration-user-import-${Date.now()}`;
+
+    it(
+      'writes 450 rows in two chunks and syncs two account balances',
+      { timeout: 120000 },
+      async () => {
+        const accountAId = await createAccount(uid, {
+          type: 'card',
+          name: 'Import Account A',
+          initialBalance: 50000,
+          balance: 50000,
+          archived: false,
+        });
+        const accountBId = await createAccount(uid, {
+          type: 'cash',
+          name: 'Import Account B',
+          initialBalance: 100000,
+          balance: 100000,
+          archived: false,
+        });
+        await waitForAccountBalance(uid, accountAId, 50000);
+        await waitForAccountBalance(uid, accountBId, 100000);
+
+        const inputs = Array.from({ length: 450 }, (_, i) =>
+          buildTransactionInput({
+            type: i % 2 === 0 ? 'expense' : 'income',
+            amount: 100 + i,
+            accountId: i % 2 === 0 ? accountAId : accountBId,
+            categoryId: `cat-${i % 5}`,
+            date: `2026-09-${String((i % 28) + 1).padStart(2, '0')}`,
+            note: undefined,
+            tags: undefined,
+          }),
+        );
+        const expectedDeltaA = inputs
+          .filter((input) => input.accountId === accountAId)
+          .reduce(
+            (sum, input) => sum + signedAmount(input.type, input.amount),
+            0,
+          );
+        const expectedDeltaB = inputs
+          .filter((input) => input.accountId === accountBId)
+          .reduce(
+            (sum, input) => sum + signedAmount(input.type, input.amount),
+            0,
+          );
+
+        const progress: [number, number][] = [];
+        const results = await createTransactionsBatch(
+          uid,
+          inputs,
+          (done, total) => {
+            progress.push([done, total]);
+          },
+        );
+
+        expect(results).toEqual([
+          { chunkIndex: 0, written: 400, status: 'ok' },
+          { chunkIndex: 1, written: 50, status: 'ok' },
+        ]);
+        expect(progress).toEqual([
+          [400, 450],
+          [450, 450],
+        ]);
+
+        await waitForAccountBalance(uid, accountAId, 50000 + expectedDeltaA);
+        await waitForAccountBalance(uid, accountBId, 100000 + expectedDeltaB);
+
+        const stored = await getTransactionsByDateRange(
+          uid,
+          '2026-09-01',
+          '2026-09-30',
+        );
+        expect(stored).toHaveLength(450);
+      },
+    );
+
+    it(
+      'rejects a broken input before writing anything',
+      { timeout: 60000 },
+      async () => {
+        const invalidUid = `integration-user-import-invalid-${Date.now()}`;
+        const error = await createTransactionsBatch(invalidUid, [
+          buildTransactionInput({ date: '2026-09-15' }),
+          buildTransactionInput({ amount: 0, date: '2026-09-15' }),
+        ]).catch((e: unknown) => e);
+        expect(error).toBeInstanceOf(AppError);
+        expect((error as AppError).code).toBe('validation');
+
+        const stored = await getTransactionsByDateRange(
+          invalidUid,
+          '2026-09-01',
+          '2026-09-30',
+        );
+        expect(stored).toHaveLength(0);
+      },
+    );
   },
 );

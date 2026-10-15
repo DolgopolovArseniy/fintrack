@@ -3,6 +3,7 @@ import { getAccountDisplayName } from '@/features/accounts';
 import type { Category } from '@/features/categories';
 import { getCategoryDisplayName } from '@/features/categories';
 import type { TransactionInput } from '@/features/transactions';
+import type { ChunkWriteResult } from '@/features/transactions';
 import { transactionInputSchema } from '@/features/transactions';
 import {
   buildImportDedupKey,
@@ -33,12 +34,6 @@ export interface NameResolution {
   defaultAccountId: string;
   defaultExpenseCategoryId: string;
   defaultIncomeCategoryId: string;
-}
-
-/** Written-status subset of a chunk result; mirrors ChunkWriteResult (T3). */
-export interface ImportChunkResult {
-  written: number;
-  status: 'ok' | 'failed';
 }
 
 export interface ImportReportData {
@@ -159,7 +154,7 @@ export function markDuplicates(
 
 export function buildImportReport(
   rows: readonly ValidatedImportRow[],
-  chunkResults: readonly ImportChunkResult[],
+  chunkResults: readonly ChunkWriteResult[],
 ): ImportReportData {
   const affectedAccounts = [
     ...new Set(
