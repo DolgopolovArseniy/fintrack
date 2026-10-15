@@ -85,6 +85,11 @@ export function ImportPreviewTable({
             type="button"
             variant={filter === option ? 'default' : 'outline'}
             size="sm"
+            className={
+              filter === option
+                ? 'border-primary border shadow-none'
+                : 'border-border/60 shadow-none'
+            }
             onClick={() => {
               setFilter(option);
               setVisibleCount(PAGE_SIZE);
@@ -112,7 +117,7 @@ export function ImportPreviewTable({
         />
       ) : (
         <>
-          <div className="overflow-x-auto rounded-lg border">
+          <div className="border-border/60 overflow-x-auto rounded-lg border">
             <table className="w-full text-sm">
               <tbody>
                 {visible.map((row) => (

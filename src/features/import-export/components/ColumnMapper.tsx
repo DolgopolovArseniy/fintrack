@@ -118,6 +118,11 @@ export function ColumnMapper({ importer }: ColumnMapperProps) {
               type="button"
               variant={importer.delimiter === option ? 'default' : 'outline'}
               size="sm"
+              className={
+                importer.delimiter === option
+                  ? 'border-primary border shadow-none'
+                  : 'border-border/60 shadow-none'
+              }
               onClick={() => importer.setDelimiter(option)}
             >
               {option === 'auto' ? t('import.mapping.auto') : option}

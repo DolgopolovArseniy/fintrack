@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/common/ErrorState';
 import { LoadingSkeleton } from '@/components/common/LoadingSkeleton';
 import { buildTransactionCsvColumns } from '../services/exportService';
+import type { ExportTranslateFunction } from '../services/exportService';
+import { buildImportTemplateRows } from '../services/importTemplate';
 import { downloadCsvBlob, generateCsv } from '@/lib/csv';
 import { useTranslation } from '@/lib/i18n';
 import type { UseCsvImportResult } from '../hooks/useCsvImport';
@@ -41,37 +43,15 @@ export function FileDropzone({ importer }: FileDropzoneProps) {
 
   const downloadTemplate = React.useCallback(() => {
     const delimiter = i18n.language === 'ru' ? ';' : ',';
-    const columns = buildTransactionCsvColumns((key, options) => {
+    const translate: ExportTranslateFunction = (key, options) => {
       const defaultValue =
         typeof options?.defaultValue === 'string' ? options.defaultValue : key;
       return t(key, { defaultValue });
+    };
+    const columns = buildTransactionCsvColumns(translate);
+    const content = generateCsv(buildImportTemplateRows(translate), columns, {
+      delimiter,
     });
-    const content = generateCsv(
-      [
-        {
-          date: '2026-09-15',
-          type: 'Expense',
-          category: 'Groceries',
-          account: 'Main Card',
-          amount: 125.5,
-          currency: 'USD',
-          note: 'Weekly shopping',
-          tags: 'food, weekly',
-        },
-        {
-          date: '2026-09-16',
-          type: 'Income',
-          category: 'Salary',
-          account: 'Main Card',
-          amount: 3000,
-          currency: 'USD',
-          note: '',
-          tags: '',
-        },
-      ],
-      columns,
-      { delimiter },
-    );
     downloadCsvBlob(content, 'fintrack-import-template.csv');
   }, [i18n.language, t]);
 
