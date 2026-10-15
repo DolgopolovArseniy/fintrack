@@ -105,26 +105,33 @@ export function ImportPreviewTable({
         )}
       </div>
 
-      {importer.includedCount === 0 ? (
+      {rows.length === 0 ? (
         <EmptyState
           title={t('import.preview.emptyValid')}
           description={t('import.preview.emptyValidDescription')}
         />
       ) : (
-        <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full text-sm">
-            <tbody>
-              {visible.map((row) => (
-                <PreviewRow
-                  key={row.rowNumber}
-                  row={row}
-                  importer={importer}
-                  currency={currency}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className="overflow-x-auto rounded-lg border">
+            <table className="w-full text-sm">
+              <tbody>
+                {visible.map((row) => (
+                  <PreviewRow
+                    key={row.rowNumber}
+                    row={row}
+                    importer={importer}
+                    currency={currency}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {filtered.length === 0 && (
+            <p className="text-muted-foreground text-sm">
+              {t('import.preview.noFilterMatch')}
+            </p>
+          )}
+        </>
       )}
 
       {filtered.length > visible.length && (

@@ -74,7 +74,7 @@
     },
     "upload": {
       "title": "Import transactions from CSV",
-      "description": "Upload an F09 export or a bank statement. Nothing is written before you confirm.",
+      "description": "Upload a bank statement or a previously exported CSV file. Nothing is written before you confirm.",
       "chooseFile": "Choose file",
       "dropHint": "or drag and drop a .csv file here",
       "templateButton": "Download CSV template"
@@ -117,6 +117,7 @@
       "importConfirmTitle": "Import {{count}} transactions?",
       "importConfirmDescription": "This writes new transactions and updates account balances. Bulk import cannot be undone.",
       "showMore": "Show more",
+      "noFilterMatch": "No rows match this filter",
       "importing": "Importing {{done}} of {{total}}…",
       "emptyValid": "No valid rows to import",
       "emptyValidDescription": "Fix the column mapping or choose another file.",

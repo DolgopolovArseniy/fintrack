@@ -171,4 +171,50 @@ describe('ImportPreviewTable', () => {
 
     expect(importer.startImport).toHaveBeenCalledTimes(1);
   });
+
+  it('keeps error rows visible when nothing is importable', () => {
+    const allErrors = previewImporter();
+    allErrors.rows = allErrors.rows.map((row) => ({
+      ...row,
+      status: 'error' as const,
+      input: null,
+      errors: ['import.rowErrors.dateInvalid'],
+      duplicateOf: null,
+      excluded: true,
+    }));
+    allErrors.includedCount = 0;
+    render(<ImportPreviewTable importer={allErrors} currency="USD" />);
+
+    expect(screen.getByTestId('import-row-1')).toBeInTheDocument();
+    expect(screen.getAllByText('Invalid date')).toHaveLength(3);
+    expect(
+      screen.queryByText('No valid rows to import'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('import-start-button')).toBeDisabled();
+  });
+
+  it('shows the empty state only when the file has no rows', () => {
+    const empty = previewImporter();
+    empty.rows = [];
+    empty.includedCount = 0;
+    render(<ImportPreviewTable importer={empty} currency="USD" />);
+
+    expect(screen.getByText('No valid rows to import')).toBeInTheDocument();
+    expect(screen.queryByTestId('import-row-1')).not.toBeInTheDocument();
+  });
+
+  it('notes an empty filter result instead of hiding the table', async () => {
+    const user = userEvent.setup();
+    const noDuplicates = previewImporter();
+    noDuplicates.rows = noDuplicates.rows.filter(
+      (row) => row.status !== 'duplicate',
+    );
+    render(<ImportPreviewTable importer={noDuplicates} currency="USD" />);
+
+    await user.click(screen.getByRole('button', { name: 'Duplicates' }));
+
+    expect(screen.getByText('No rows match this filter')).toBeInTheDocument();
+    expect(screen.queryByTestId('import-row-1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('import-counters')).toBeInTheDocument();
+  });
 });
