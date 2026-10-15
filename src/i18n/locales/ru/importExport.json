@@ -69,6 +69,105 @@
       "success_other": "Успешно экспортировано {{count}} операций"
     }
   },
+  "import": {
+    "steps": {
+      "upload": "Загрузка",
+      "mapping": "Колонки",
+      "preview": "Проверка",
+      "result": "Результат"
+    },
+    "upload": {
+      "title": "Импорт операций из CSV",
+      "description": "Загрузите банковскую выписку или ранее выгруженный CSV-файл. До подтверждения ничего не записывается.",
+      "chooseFile": "Выбрать файл",
+      "dropHint": "или перетащите .csv-файл сюда",
+      "templateButton": "Скачать шаблон CSV"
+    },
+    "mapping": {
+      "title": "Сопоставление колонок",
+      "description": "Один раз сопоставьте каждую колонку файла с полем операции.",
+      "delimiterLabel": "Разделитель колонок",
+      "auto": "Авто",
+      "columnName": "Колонка {{letter}}",
+      "fieldLabels": {
+        "date": "Дата",
+        "type": "Тип",
+        "amount": "Сумма",
+        "currency": "Валюта",
+        "category": "Категория",
+        "account": "Счёт",
+        "note": "Заметка",
+        "tags": "Теги",
+        "ignore": "Пропустить"
+      },
+      "unmappedNames": "Нераспознанные имена",
+      "unmappedHint": "Укажите существующую категорию или счёт для каждого имени. Строки без выбора останутся исключёнными.",
+      "defaultAccount": "Счёт по умолчанию",
+      "defaultExpenseCategory": "Категория расходов по умолчанию",
+      "defaultIncomeCategory": "Категория доходов по умолчанию",
+      "signModeHint": "Колонка типа не сопоставлена: расход и доход определяются по знаку суммы.",
+      "continueAction": "Продолжить к проверке",
+      "backAction": "Выбрать другой файл"
+    },
+    "preview": {
+      "title": "Проверка строк",
+      "counters": "Годно: {{valid}} · Ошибки: {{errors}} · Дубликаты: {{duplicates}}",
+      "filters": {
+        "all": "Все",
+        "errors": "Ошибки",
+        "duplicates": "Дубликаты"
+      },
+      "skipDuplicates": "Исключить дубликаты",
+      "importAction": "Импортировать: {{count}}",
+      "importConfirmTitle": "Импортировать {{count}}?",
+      "importConfirmDescription": "Будут записаны новые операции и обновлены балансы счетов. Массовый импорт нельзя отменить.",
+      "showMore": "Показать ещё",
+      "noFilterMatch": "Нет строк под этот фильтр",
+      "backToMapping": "Назад к колонкам",
+      "importing": "Импорт: {{done}} из {{total}}…",
+      "emptyValid": "Нет годных строк для импорта",
+      "emptyValidDescription": "Исправьте сопоставление колонок или выберите другой файл.",
+      "rangeTooWide": "Диапазон дат больше года: проверены только дубликаты внутри файла.",
+      "includeRow": "Включить строку {{row}}"
+    },
+    "report": {
+      "title": "Импорт завершён",
+      "toast": "Импортировано: {{count}}",
+      "imported": "Импортировано: {{count}}",
+      "skippedErrors": "Пропущено с ошибками: {{count}}",
+      "skippedDuplicates": "Пропущено дубликатов: {{count}}",
+      "skippedManual": "Исключено вручную: {{count}}",
+      "failedChunks": "Незаписанных чанков: {{count}}",
+      "affectedAccounts": "Затронутые счета",
+      "retryRemaining": "Повторить оставшееся",
+      "importAnother": "Импортировать ещё файл",
+      "viewTransactions": "Смотреть операции"
+    },
+    "rowErrors": {
+      "dateInvalid": "Некорректная дата",
+      "amountInvalid": "Некорректная сумма",
+      "amountTooLarge": "Сумма превышает максимум",
+      "currencyMismatch": "Валюта отличается от базовой",
+      "typeInvalid": "Неизвестный тип операции",
+      "categoryTypeMismatch": "Тип категории не совпадает с типом операции",
+      "unknownCategory": "Неизвестная категория",
+      "unknownAccount": "Неизвестный счёт",
+      "noteTooLong": "Заметка длиннее 200 символов",
+      "tooManyTags": "Тегов больше 10"
+    },
+    "rowWarnings": {
+      "duplicateFile": "Дубликат внутри файла",
+      "duplicateDatabase": "Дубликат существующей операции"
+    },
+    "errors": {
+      "fileTooLarge": "Файл слишком большой (максимум 2000 строк, около 2 МБ)",
+      "parseFailed": "Не удалось разобрать CSV-файл",
+      "mappingRequired": "Сопоставьте колонки даты и суммы, чтобы продолжить",
+      "chunkFailed": "Часть чанков не записалась",
+      "offlineBlocked": "Нет сети. Подключитесь, чтобы записать импорт.",
+      "duplicatesFetchFailed": "Не удалось сверить дубликаты с существующими операциями"
+    }
+  },
   "importPromo": {
     "title": "Импорт выписок из CSV",
     "badge": "Скоро в F10",

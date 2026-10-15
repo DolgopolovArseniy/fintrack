@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  columnMappingSchema,
   csvDelimiterSchema,
   exportConfigSchema,
   exportScopePresetSchema,
   EXPORT_SCOPE_PRESETS,
+  importFieldSchema,
+  importNameOverrideSchema,
 } from './schemas';
 
 describe('import-export schemas', () => {
@@ -86,6 +89,107 @@ describe('import-export schemas', () => {
           preset: 'currentMonth',
           type: 'transfer',
         }),
+      ).toThrow();
+    });
+  });
+
+  describe('importFieldSchema', () => {
+    it('accepts all eight importable fields', () => {
+      for (const field of [
+        'date',
+        'type',
+        'amount',
+        'currency',
+        'category',
+        'account',
+        'note',
+        'tags',
+      ] as const) {
+        expect(importFieldSchema.parse(field)).toBe(field);
+      }
+    });
+
+    it('rejects unknown fields', () => {
+      expect(() => importFieldSchema.parse('exchange')).toThrow();
+      expect(() => importFieldSchema.parse('')).toThrow();
+    });
+  });
+
+  describe('columnMappingSchema', () => {
+    it('accepts index-or-null maps', () => {
+      expect(
+        columnMappingSchema.parse({
+          date: 0,
+          type: 1,
+          amount: 4,
+          currency: 5,
+          category: 2,
+          account: 3,
+          note: null,
+          tags: null,
+        }),
+      ).toEqual({
+        date: 0,
+        type: 1,
+        amount: 4,
+        currency: 5,
+        category: 2,
+        account: 3,
+        note: null,
+        tags: null,
+      });
+    });
+
+    it('rejects negative and non-integer indexes', () => {
+      expect(() =>
+        columnMappingSchema.parse({
+          date: -1,
+          type: null,
+          amount: null,
+          currency: null,
+          category: null,
+          account: null,
+          note: null,
+          tags: null,
+        }),
+      ).toThrow();
+      expect(() =>
+        columnMappingSchema.parse({
+          date: 1.5,
+          type: null,
+          amount: null,
+          currency: null,
+          category: null,
+          account: null,
+          note: null,
+          tags: null,
+        }),
+      ).toThrow();
+    });
+  });
+
+  describe('importNameOverrideSchema', () => {
+    it('accepts category-only and account-only overrides', () => {
+      expect(
+        importNameOverrideSchema.parse({
+          sourceName: 'Кофейни',
+          categoryId: 'cat-cafe',
+        }),
+      ).toEqual({ sourceName: 'Кофейни', categoryId: 'cat-cafe' });
+      expect(
+        importNameOverrideSchema.parse({
+          sourceName: 'Sber',
+          accountId: 'acc-sber',
+        }),
+      ).toEqual({ sourceName: 'Sber', accountId: 'acc-sber' });
+    });
+
+    it('rejects empty and overlong source names', () => {
+      expect(() =>
+        importNameOverrideSchema.parse({ sourceName: '' }),
+      ).toThrow();
+      expect(() =>
+        importNameOverrideSchema.parse({ sourceName: 'x'.repeat(41) }),
       ).toThrow();
     });
   });

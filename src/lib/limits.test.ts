@@ -4,6 +4,8 @@ import {
   IMPORT_CHUNK_SIZE,
   MAX_AMOUNT,
   MAX_BALANCE,
+  MAX_IMPORT_FILE_SIZE,
+  MAX_IMPORT_ROWS,
   MIN_AMOUNT,
   NAME_MAX_LENGTH,
   NOTE_MAX_LENGTH,
@@ -17,6 +19,8 @@ describe('limits', () => {
     expect(MAX_AMOUNT).toBe(100_000_000_000);
     expect(MAX_BALANCE).toBe(1_000_000_000_000);
     expect(IMPORT_CHUNK_SIZE).toBe(400);
+    expect(MAX_IMPORT_ROWS).toBe(2000);
+    expect(MAX_IMPORT_FILE_SIZE).toBe(2_000_000);
   });
 
   it('defines exact expected string length and count limits', () => {
@@ -38,6 +42,8 @@ describe('limits', () => {
       DISPLAY_NAME_MAX_LENGTH,
       TAGS_MAX_COUNT,
       IMPORT_CHUNK_SIZE,
+      MAX_IMPORT_ROWS,
+      MAX_IMPORT_FILE_SIZE,
     ];
 
     for (const val of limits) {

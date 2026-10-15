@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
+import { AppError } from '@/lib/errors';
+import { buildTransactionInput } from '@/test/factories';
 import {
+  chunkImportInputs,
   createTransaction,
+  createTransactionsBatch,
   getTransactionsByDateRange,
   subscribeTransactionsByDateRange,
   subscribeTransactionsByMonth,
@@ -162,6 +166,46 @@ describe('transactions repository unit tests', () => {
       await expect(
         getTransactionsByDateRange(uid, '2026-06-01', '2026-05-01'),
       ).rejects.toThrow('Invalid date range');
+    });
+  });
+
+  describe('chunkImportInputs', () => {
+    const input = () => buildTransactionInput();
+
+    it('returns no chunks for empty input', () => {
+      expect(chunkImportInputs([])).toEqual([]);
+    });
+
+    it('keeps up to IMPORT_CHUNK_SIZE rows in a single chunk', () => {
+      const inputs = Array.from({ length: 400 }, input);
+      const chunks = chunkImportInputs(inputs);
+      expect(chunks).toHaveLength(1);
+      expect(chunks[0]).toHaveLength(400);
+    });
+
+    it('splits 401 rows into 400 + 1', () => {
+      const inputs = Array.from({ length: 401 }, input);
+      const chunks = chunkImportInputs(inputs);
+      expect(chunks.map((chunk) => chunk.length)).toEqual([400, 1]);
+    });
+  });
+
+  describe('createTransactionsBatch input validation', () => {
+    it('resolves an empty batch without writes or progress calls', async () => {
+      const onProgress = vi.fn();
+      await expect(
+        createTransactionsBatch(uid, [], onProgress),
+      ).resolves.toEqual([]);
+      expect(onProgress).not.toHaveBeenCalled();
+    });
+
+    it('rejects a broken input with a validation error before any write', async () => {
+      const error = await createTransactionsBatch(uid, [
+        buildTransactionInput(),
+        buildTransactionInput({ amount: 0 }),
+      ]).catch((e: unknown) => e);
+      expect(error).toBeInstanceOf(AppError);
+      expect((error as AppError).code).toBe('validation');
     });
   });
 });

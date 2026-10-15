@@ -7,6 +7,17 @@ export {
   type ExportTranslateFunction,
 } from './services/exportService';
 export {
+  mapRowsToInputs,
+  markDuplicates,
+  buildImportReport,
+} from './services/importService';
+export type {
+  ValidatedImportRow,
+  ImportRowStatus,
+  ImportReportData,
+  NameResolution,
+} from './services/importService';
+export {
   useExportTransactions,
   resolvePresetDateRange,
   getPresetFilenameScope,
@@ -20,5 +31,13 @@ export type { ExportCardProps } from './components/ExportCard';
 export { ExportQuickButton } from './components/ExportQuickButton';
 export type { ExportQuickButtonProps } from './components/ExportQuickButton';
 
-export { ImportPlaceholderCard } from './components/ImportPlaceholderCard';
-export type { ImportPlaceholderCardProps } from './components/ImportPlaceholderCard';
+export { ImportCard } from './components/ImportCard';
+export type { ImportCardProps } from './components/ImportCard';
+
+export { useCsvImport } from './hooks/useCsvImport';
+export type {
+  ImportStep,
+  UseCsvImportResult,
+  DelimiterSelection,
+  ImportDefaults,
+} from './hooks/useCsvImport';
