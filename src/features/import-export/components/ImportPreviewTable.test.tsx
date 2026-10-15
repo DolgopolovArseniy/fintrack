@@ -217,4 +217,16 @@ describe('ImportPreviewTable', () => {
     expect(screen.queryByTestId('import-row-1')).not.toBeInTheDocument();
     expect(screen.getByTestId('import-counters')).toBeInTheDocument();
   });
+
+  it('navigates back to mapping and cancels the import', async () => {
+    const user = userEvent.setup();
+    const importer = previewImporter();
+    render(<ImportPreviewTable importer={importer} currency="USD" />);
+
+    await user.click(screen.getByRole('button', { name: /back to columns/i }));
+    expect(importer.goToMapping).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByRole('button', { name: /^cancel$/i }));
+    expect(importer.reset).toHaveBeenCalledTimes(1);
+  });
 });

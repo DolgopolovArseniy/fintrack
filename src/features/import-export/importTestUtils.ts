@@ -29,6 +29,7 @@ export function createFakeImporter(
     globalError: null,
     loadFile: vi.fn(),
     goToPreview: vi.fn(() => true),
+    goToMapping: vi.fn(),
     setRowExcluded: vi.fn(),
     excludeAllByStatus: vi.fn(),
     startImport: vi.fn(),

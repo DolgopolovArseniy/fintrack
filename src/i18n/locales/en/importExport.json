@@ -118,6 +118,7 @@
       "importConfirmDescription": "This writes new transactions and updates account balances. Bulk import cannot be undone.",
       "showMore": "Show more",
       "noFilterMatch": "No rows match this filter",
+      "backToMapping": "Back to columns",
       "importing": "Importing {{done}} of {{total}}…",
       "emptyValid": "No valid rows to import",
       "emptyValidDescription": "Fix the column mapping or choose another file.",

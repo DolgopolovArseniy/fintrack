@@ -58,6 +58,7 @@ export interface UseCsvImportResult {
   globalError: AppError | null;
   loadFile: (file: File) => Promise<void>;
   goToPreview: () => boolean;
+  goToMapping: () => void;
   setRowExcluded: (rowNumber: number, excluded: boolean) => void;
   excludeAllByStatus: (status: 'error' | 'duplicate') => void;
   startImport: () => Promise<void>;
@@ -380,6 +381,11 @@ export function useCsvImport(): UseCsvImportResult {
     return true;
   }, [mapping, fail]);
 
+  const goToMapping = React.useCallback(() => {
+    setGlobalError(null);
+    setStep('mapping');
+  }, []);
+
   // Single range query for database duplicate check (ADR-010).
   React.useEffect(() => {
     if (step !== 'preview' || !user?.uid) {
@@ -418,7 +424,9 @@ export function useCsvImport(): UseCsvImportResult {
     (status: 'error' | 'duplicate') => {
       setExcludedOverrides((prev) => {
         const next = { ...prev };
-        for (const row of baseRows) {
+        // NOTE: iterate duplicate-marked rows, not baseRows (which never
+        // carries the 'duplicate' status).
+        for (const row of rows) {
           if (row.status === status) {
             next[row.rowNumber] = true;
           }
@@ -426,7 +434,7 @@ export function useCsvImport(): UseCsvImportResult {
         return next;
       });
     },
-    [baseRows],
+    [rows],
   );
 
   const setNameOverride = React.useCallback(
@@ -612,6 +620,7 @@ export function useCsvImport(): UseCsvImportResult {
     globalError,
     loadFile,
     goToPreview,
+    goToMapping,
     setRowExcluded,
     excludeAllByStatus,
     startImport,

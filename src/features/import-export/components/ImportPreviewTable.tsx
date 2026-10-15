@@ -150,20 +150,37 @@ export function ImportPreviewTable({
       )}
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        {!importer.isOnline && (
-          <p role="alert" className="text-destructive text-sm">
-            {t('import.errors.offlineBlocked')}
-          </p>
-        )}
-        <Button
-          type="button"
-          disabled={importer.includedCount === 0 || !importer.isOnline}
-          onClick={handleImportClick}
-          data-testid="import-start-button"
-          className="w-full sm:w-auto"
-        >
-          {t('import.preview.importAction', { count: importer.includedCount })}
-        </Button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={importer.goToMapping}
+            className="border-border/60 shadow-none"
+          >
+            {t('import.preview.backToMapping')}
+          </Button>
+          <Button type="button" variant="ghost" onClick={importer.reset}>
+            {t('common.actions.cancel')}
+          </Button>
+        </div>
+        <div className="flex flex-col gap-2 sm:items-end">
+          {!importer.isOnline && (
+            <p role="alert" className="text-destructive text-sm">
+              {t('import.errors.offlineBlocked')}
+            </p>
+          )}
+          <Button
+            type="button"
+            disabled={importer.includedCount === 0 || !importer.isOnline}
+            onClick={handleImportClick}
+            data-testid="import-start-button"
+            className="w-full sm:w-auto"
+          >
+            {t('import.preview.importAction', {
+              count: importer.includedCount,
+            })}
+          </Button>
+        </div>
       </div>
 
       <ConfirmDialog
