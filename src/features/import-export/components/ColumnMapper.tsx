@@ -157,7 +157,11 @@ export function ColumnMapper({ importer }: ColumnMapperProps) {
                     {t('import.mapping.fieldLabels.ignore')}
                   </SelectItem>
                   {IMPORTABLE_FIELDS.map((field) => (
-                    <SelectItem key={field} value={field}>
+                    <SelectItem
+                      key={field}
+                      value={field}
+                      data-testid={`column-option-${field}`}
+                    >
                       {t(`import.mapping.fieldLabels.${field}`)}
                     </SelectItem>
                   ))}
@@ -233,7 +237,11 @@ function NameOverrideBlock({ importer }: ColumnMapperProps) {
             </SelectTrigger>
             <SelectContent>
               {importer.categories.map((cat: Category) => (
-                <SelectItem key={cat.id} value={cat.id}>
+                <SelectItem
+                  key={cat.id}
+                  value={cat.id}
+                  data-testid={`override-category-option-${cat.id}`}
+                >
                   {getCategoryDisplayName(cat, translate)}
                 </SelectItem>
               ))}

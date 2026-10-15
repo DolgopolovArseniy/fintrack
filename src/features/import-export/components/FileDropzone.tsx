@@ -131,31 +131,24 @@ export function FileDropzone({ importer }: FileDropzoneProps) {
         <p className="text-muted-foreground mt-4 text-sm">
           {t('import.upload.dropHint')}
         </p>
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-4"
-          onClick={(event) => {
-            event.stopPropagation();
-            openPicker();
-          }}
-        >
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".csv,text/csv"
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden="true"
+        data-testid="import-file-input"
+        onChange={(event) => {
+          handleFiles(event.target.files);
+          event.target.value = '';
+        }}
+      />
+      <div className="flex flex-wrap gap-2">
+        <Button type="button" variant="outline" onClick={openPicker}>
           {t('import.upload.chooseFile')}
         </Button>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".csv,text/csv"
-          className="sr-only"
-          tabIndex={-1}
-          aria-hidden="true"
-          onChange={(event) => {
-            handleFiles(event.target.files);
-            event.target.value = '';
-          }}
-        />
-      </div>
-      <div className="flex justify-start">
         <Button type="button" variant="ghost" onClick={downloadTemplate}>
           {t('import.upload.templateButton')}
         </Button>

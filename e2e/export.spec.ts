@@ -70,8 +70,7 @@ test.describe('F09 — CSV Export E2E flows', () => {
 
     // 5. Test tab switching
     await page.getByTestId('tab-import').click();
-    await expect(page.getByTestId('import-placeholder-card')).toBeVisible();
-    await expect(page.getByTestId('import-badge')).toBeVisible();
+    await expect(page.getByTestId('import-card')).toBeVisible();
 
     await page.getByTestId('tab-export').click();
     await expect(page.getByTestId('export-card')).toBeVisible();

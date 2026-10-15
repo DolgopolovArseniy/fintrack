@@ -1,0 +1,5 @@
+Date,Type,Category,Account,Amount,Currency,Note,Tags
+2026-09-15,Expense,Food & Groceries,Main account,125.50,USD,Weekly shop,"food, weekly"
+2026-09-16,Income,Salary,Main account,3000,USD,September pay,
+31.02.2026,Expense,Food & Groceries,Main account,10,USD,Broken date,
+2026-09-15,Expense,Food & Groceries,Main account,125.50,USD,Weekly shop,"food, weekly"

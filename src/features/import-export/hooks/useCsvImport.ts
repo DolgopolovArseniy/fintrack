@@ -163,6 +163,11 @@ export function useCsvImport(): UseCsvImportResult {
     };
   }, []);
 
+  const stepRef = React.useRef(step);
+  React.useEffect(() => {
+    stepRef.current = step;
+  });
+
   const fail = React.useCallback((message: string) => {
     setGlobalError(new AppError('validation', message));
   }, []);
@@ -388,7 +393,7 @@ export function useCsvImport(): UseCsvImportResult {
     const maxDate = validDates[validDates.length - 1] ?? '';
     getTransactionsByDateRange(user.uid, minDate, maxDate)
       .then((txs) => {
-        if (isActive && mountedRef.current) {
+        if (isActive && mountedRef.current && stepRef.current === 'preview') {
           setExisting(txs);
         }
       })
@@ -459,6 +464,7 @@ export function useCsvImport(): UseCsvImportResult {
       return;
     }
     setIsImporting(true);
+    setStep('importing');
     setProgress({ done: 0, total: inputs.length });
     try {
       const results = await createTransactionsBatch(

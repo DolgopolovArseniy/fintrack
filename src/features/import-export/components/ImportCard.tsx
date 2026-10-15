@@ -84,6 +84,7 @@ export function ImportCard({ className }: ImportCardProps) {
         {importer.step === 'result' && <ImportReport importer={importer} />}
         {importer.globalError &&
           importer.step !== 'mapping' &&
+          importer.step !== 'upload' &&
           importer.globalError.message !== 'import.errors.mappingRequired' && (
             <div className="mt-4">
               <ErrorState

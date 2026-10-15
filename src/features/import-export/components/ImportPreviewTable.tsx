@@ -20,6 +20,12 @@ type RowFilter = 'all' | 'error' | 'duplicate';
 
 const PAGE_SIZE = 200;
 
+const FILTER_LABEL_KEYS: Record<RowFilter, string> = {
+  all: 'all',
+  error: 'errors',
+  duplicate: 'duplicates',
+};
+
 export function ImportPreviewTable({
   importer,
   currency,
@@ -84,7 +90,7 @@ export function ImportPreviewTable({
               setVisibleCount(PAGE_SIZE);
             }}
           >
-            {t(`import.preview.filters.${option}`, option)}
+            {t(`import.preview.filters.${FILTER_LABEL_KEYS[option]}`, option)}
           </Button>
         ))}
         {duplicateCount > 0 && (
