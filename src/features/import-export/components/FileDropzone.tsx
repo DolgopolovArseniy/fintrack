@@ -7,11 +7,13 @@ import { buildTransactionCsvColumns } from '../services/exportService';
 import type { ExportTranslateFunction } from '../services/exportService';
 import { buildImportTemplateRows } from '../services/importTemplate';
 import { downloadCsvBlob, generateCsv } from '@/lib/csv';
+import type { CurrencyCode } from '@/lib/currencies';
 import { useTranslation } from '@/lib/i18n';
 import type { UseCsvImportResult } from '../hooks/useCsvImport';
 
 export interface FileDropzoneProps {
   importer: UseCsvImportResult;
+  currency: CurrencyCode;
 }
 
 function isCsvFile(file: File): boolean {
@@ -22,7 +24,7 @@ function isCsvFile(file: File): boolean {
   );
 }
 
-export function FileDropzone({ importer }: FileDropzoneProps) {
+export function FileDropzone({ importer, currency }: FileDropzoneProps) {
   const { t, i18n } = useTranslation();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -49,11 +51,15 @@ export function FileDropzone({ importer }: FileDropzoneProps) {
       return t(key, { defaultValue });
     };
     const columns = buildTransactionCsvColumns(translate);
-    const content = generateCsv(buildImportTemplateRows(translate), columns, {
-      delimiter,
-    });
+    const content = generateCsv(
+      buildImportTemplateRows(translate, currency),
+      columns,
+      {
+        delimiter,
+      },
+    );
     downloadCsvBlob(content, 'fintrack-import-template.csv');
-  }, [i18n.language, t]);
+  }, [i18n.language, t, currency]);
 
   if (importer.isParsing) {
     return <LoadingSkeleton variant="list" count={3} />;

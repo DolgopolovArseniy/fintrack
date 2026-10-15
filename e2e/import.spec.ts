@@ -39,12 +39,16 @@ test.describe('F10 — CSV Import E2E flows', () => {
     await page.getByTestId('import-file-input').setInputFiles(fixturePath);
     await expect(page.getByTestId('column-map-0')).toBeVisible();
 
-    // 4. Preview: 2 valid, 1 error (31.02.2026), 1 file duplicate
+    // 4. Preview: 2 valid, 2 errors (bad date, EUR currency), 1 file duplicate
     await page.getByRole('button', { name: /continue to preview/i }).click();
     await expect(page.getByTestId('import-counters')).toContainText(
-      '2 valid · 1 errors · 1 duplicates',
+      '2 valid · 2 errors · 1 duplicates',
     );
     await expect(page.getByTestId('import-row-3')).toHaveAttribute(
+      'data-status',
+      'error',
+    );
+    await expect(page.getByTestId('import-row-5')).toHaveAttribute(
       'data-status',
       'error',
     );
@@ -79,7 +83,7 @@ test.describe('F10 — CSV Import E2E flows', () => {
     await page.getByTestId('import-file-input').setInputFiles(fixturePath);
     await page.getByRole('button', { name: /continue to preview/i }).click();
     await expect(page.getByTestId('import-counters')).toContainText(
-      '0 valid · 1 errors · 3 duplicates',
+      '0 valid · 2 errors · 3 duplicates',
     );
     await expect(page.getByTestId('import-start-button')).toBeDisabled();
   });

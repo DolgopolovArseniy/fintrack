@@ -78,6 +78,7 @@ describe('ImportPreviewTable', () => {
         date: 0,
         type: null,
         amount: 1,
+        currency: null,
         category: null,
         account: null,
         note: null,

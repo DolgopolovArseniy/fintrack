@@ -12,6 +12,7 @@ export function createFakeImporter(
       date: null,
       type: null,
       amount: null,
+      currency: null,
       category: null,
       account: null,
       note: null,

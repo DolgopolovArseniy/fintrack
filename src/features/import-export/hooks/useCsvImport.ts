@@ -13,6 +13,7 @@ import {
 } from '@/features/transactions';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import type { CsvDelimiter } from '@/lib/csv';
+import { DEFAULT_CURRENCY } from '@/lib/currencies';
 import {
   autoMapColumns,
   parseCsvText,
@@ -85,6 +86,7 @@ const EMPTY_MAPPING: ColumnMapping = {
   date: null,
   type: null,
   amount: null,
+  currency: null,
   category: null,
   account: null,
   note: null,
@@ -110,7 +112,7 @@ function entityNameCandidates(
 
 export function useCsvImport(): UseCsvImportResult {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { isOnline } = useOnlineStatus();
   const categoriesResult = useCategories();
   const accountsResult = useAccounts();
@@ -254,9 +256,10 @@ export function useCsvImport(): UseCsvImportResult {
             effectiveResolution,
             categories,
             accounts,
+            profile?.baseCurrency ?? DEFAULT_CURRENCY,
           )
         : [],
-    [table, mapping, effectiveResolution, categories, accounts],
+    [table, mapping, effectiveResolution, categories, accounts, profile],
   );
 
   const validDates = React.useMemo(() => {

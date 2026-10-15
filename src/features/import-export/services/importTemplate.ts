@@ -1,4 +1,5 @@
 import type { ExportTranslateFunction } from './exportService';
+import type { CurrencyCode } from '@/lib/currencies';
 
 export interface ImportTemplateRow {
   date: string;
@@ -18,6 +19,7 @@ export interface ImportTemplateRow {
  */
 export function buildImportTemplateRows(
   t: ExportTranslateFunction,
+  currency: CurrencyCode,
 ): ImportTemplateRow[] {
   return [
     {
@@ -28,7 +30,7 @@ export function buildImportTemplateRows(
       category: t('categories.system.food', { defaultValue: 'Food' }),
       account: t('accounts.system.main', { defaultValue: 'Main account' }),
       amount: 125.5,
-      currency: 'USD',
+      currency,
       note: 'Weekly shopping',
       tags: 'food, weekly',
     },
@@ -40,7 +42,7 @@ export function buildImportTemplateRows(
       category: t('categories.system.salary', { defaultValue: 'Salary' }),
       account: t('accounts.system.main', { defaultValue: 'Main account' }),
       amount: 3000,
-      currency: 'USD',
+      currency,
       note: '',
       tags: '',
     },

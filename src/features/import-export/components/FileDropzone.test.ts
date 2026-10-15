@@ -23,8 +23,9 @@ describe('import template round-trip', () => {
     'template rows resolve against default entities in %s locale',
     (lang) => {
       const t = translateFor(lang);
+      const base = 'UAH';
       const csv = generateCsv(
-        buildImportTemplateRows(t),
+        buildImportTemplateRows(t, base),
         buildTransactionCsvColumns(t),
         { delimiter: lang === 'ru' ? ';' : ',' },
       );
@@ -33,6 +34,7 @@ describe('import template round-trip', () => {
 
       expect(mapping.date).not.toBeNull();
       expect(mapping.amount).not.toBeNull();
+      expect(mapping.currency).not.toBeNull();
 
       const categories = [
         buildCategory({
@@ -96,11 +98,25 @@ describe('import template round-trip', () => {
         resolution,
         categories,
         accounts,
+        base,
       );
       expect(rows).toHaveLength(2);
       for (const row of rows) {
         expect(row.status).toBe('valid');
         expect(row.errors).toEqual([]);
+      }
+
+      const mismatched = mapRowsToInputs(
+        table,
+        mapping,
+        resolution,
+        categories,
+        accounts,
+        'USD',
+      );
+      for (const row of mismatched) {
+        expect(row.status).toBe('error');
+        expect(row.errors).toEqual(['import.rowErrors.currencyMismatch']);
       }
     },
   );

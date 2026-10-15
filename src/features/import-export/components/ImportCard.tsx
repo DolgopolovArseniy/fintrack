@@ -65,7 +65,9 @@ export function ImportCard({ className }: ImportCardProps) {
       </CardHeader>
 
       <CardContent>
-        {importer.step === 'upload' && <FileDropzone importer={importer} />}
+        {importer.step === 'upload' && (
+          <FileDropzone importer={importer} currency={currency} />
+        )}
         {importer.step === 'mapping' && <ColumnMapper importer={importer} />}
         {importer.step === 'preview' && (
           <ImportPreviewTable importer={importer} currency={currency} />

@@ -40,6 +40,7 @@ export const importFieldSchema = z.enum([
   'date',
   'type',
   'amount',
+  'currency',
   'category',
   'account',
   'note',

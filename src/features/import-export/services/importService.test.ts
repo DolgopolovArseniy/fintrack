@@ -71,6 +71,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows).toHaveLength(1);
       expect(rows[0]).toMatchObject({
@@ -101,6 +102,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]?.input).toEqual({
         type: 'expense',
@@ -122,6 +124,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]?.status).toBe('valid');
       expect(rows[0]?.input).toMatchObject({
@@ -140,6 +143,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]?.input).toMatchObject({ categoryId: 'cat-archived' });
     });
@@ -160,6 +164,7 @@ describe('importService', () => {
         withOverride,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]?.input).toMatchObject({
         categoryId: 'cat-food',
@@ -182,6 +187,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]?.input).toMatchObject({ type: 'expense', amount: 50000 });
       expect(rows[1]?.input).toMatchObject({ type: 'income', amount: 3000000 });
@@ -201,6 +207,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows.map((row) => row.status)).toEqual([
         'valid',
@@ -237,6 +244,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]).toMatchObject({
         status: 'error',
@@ -249,6 +257,31 @@ describe('importService', () => {
       expect(rows[2]).toMatchObject({
         status: 'error',
         errors: ['import.rowErrors.unknownAccount'],
+      });
+    });
+
+    it('rejects rows whose currency differs from the base currency', () => {
+      const table = tableOf(
+        'Date,Type,Category,Account,Amount,Currency\n' +
+          '2026-09-15,Expense,Groceries,Main Card,10,USD\n' +
+          '2026-09-16,Expense,Groceries,Main Card,10,EUR\n' +
+          '2026-09-17,Expense,Groceries,Main Card,10,\n',
+      );
+      const rows = mapRowsToInputs(
+        table,
+        mappingOf(table),
+        resolution,
+        categories,
+        accounts,
+        'USD',
+      );
+      expect(rows.map((row) => row.status)).toEqual([
+        'valid',
+        'error',
+        'valid',
+      ]);
+      expect(rows[1]).toMatchObject({
+        errors: ['import.rowErrors.currencyMismatch'],
       });
     });
 
@@ -285,6 +318,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
       expect(rows[0]).toMatchObject({
         status: 'error',
@@ -311,6 +345,7 @@ describe('importService', () => {
         resolution,
         categories,
         accounts,
+        'USD',
       );
 
     it('flags repeats within the file and keeps the first copy', () => {

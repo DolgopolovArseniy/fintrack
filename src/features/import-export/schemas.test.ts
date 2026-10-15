@@ -94,11 +94,12 @@ describe('import-export schemas', () => {
   });
 
   describe('importFieldSchema', () => {
-    it('accepts all seven importable fields', () => {
+    it('accepts all eight importable fields', () => {
       for (const field of [
         'date',
         'type',
         'amount',
+        'currency',
         'category',
         'account',
         'note',
@@ -108,8 +109,8 @@ describe('import-export schemas', () => {
       }
     });
 
-    it('rejects currency and unknown fields', () => {
-      expect(() => importFieldSchema.parse('currency')).toThrow();
+    it('rejects unknown fields', () => {
+      expect(() => importFieldSchema.parse('exchange')).toThrow();
       expect(() => importFieldSchema.parse('')).toThrow();
     });
   });
@@ -121,6 +122,7 @@ describe('import-export schemas', () => {
           date: 0,
           type: 1,
           amount: 4,
+          currency: 5,
           category: 2,
           account: 3,
           note: null,
@@ -130,6 +132,7 @@ describe('import-export schemas', () => {
         date: 0,
         type: 1,
         amount: 4,
+        currency: 5,
         category: 2,
         account: 3,
         note: null,
@@ -143,6 +146,7 @@ describe('import-export schemas', () => {
           date: -1,
           type: null,
           amount: null,
+          currency: null,
           category: null,
           account: null,
           note: null,
@@ -154,6 +158,7 @@ describe('import-export schemas', () => {
           date: 1.5,
           type: null,
           amount: null,
+          currency: null,
           category: null,
           account: null,
           note: null,

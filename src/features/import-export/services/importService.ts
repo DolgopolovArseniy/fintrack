@@ -15,6 +15,7 @@ import {
   type ColumnMapping,
   type ParsedCsvTable,
 } from '@/lib/csvImport';
+import type { CurrencyCode } from '@/lib/currencies';
 import { MAX_AMOUNT, NOTE_MAX_LENGTH, TAGS_MAX_COUNT } from '@/lib/limits';
 
 export type ImportRowStatus = 'valid' | 'error' | 'duplicate';
@@ -51,6 +52,7 @@ type NameResolutionResult = { id: string } | { errorKey: string };
 interface RowMappingContext {
   mapping: ColumnMapping;
   delimiter: ParsedCsvTable['delimiter'];
+  baseCurrency: CurrencyCode;
   categoriesById: Map<string, Category>;
   accountsById: Map<string, Account>;
   categoryByName: Map<string, Category>;
@@ -73,10 +75,12 @@ export function mapRowsToInputs(
   resolution: NameResolution,
   categories: readonly Category[],
   accounts: readonly Account[],
+  baseCurrency: CurrencyCode,
 ): ValidatedImportRow[] {
   const ctx: RowMappingContext = {
     mapping,
     delimiter: table.delimiter,
+    baseCurrency,
     categoriesById: new Map(categories.map((c) => [c.id, c])),
     accountsById: new Map(accounts.map((a) => [a.id, a])),
     categoryByName: buildNameLookup(categories, getCategoryDisplayName),
@@ -236,6 +240,14 @@ function mapSingleRow(
   if (tags.length > TAGS_MAX_COUNT) {
     errors.push('import.rowErrors.tooManyTags');
   }
+  if (
+    !isSupportedRowCurrency(
+      readCell(row, ctx.mapping.currency),
+      ctx.baseCurrency,
+    )
+  ) {
+    errors.push('import.rowErrors.currencyMismatch');
+  }
   if (errors.length > 0 || 'errorKey' in category || 'errorKey' in account) {
     return failed(errors);
   }
@@ -268,6 +280,15 @@ function readCell(row: string[], index: number | null): string {
     return '';
   }
   return normalizeImportCell(row[index] ?? '');
+}
+
+/** Empty cell means the base currency; anything else must match it exactly. */
+function isSupportedRowCurrency(
+  raw: string,
+  baseCurrency: CurrencyCode,
+): boolean {
+  const code = normalizeImportCell(raw).toUpperCase();
+  return code.length === 0 || code === baseCurrency.toUpperCase();
 }
 
 /** Mapped Type column wins; unmapped column falls back to amount sign. */
