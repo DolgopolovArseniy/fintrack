@@ -18,7 +18,8 @@ import {
   transactionDoc,
   transactionsCol,
 } from '@/lib/firestore/paths';
-import { balanceDeltas } from '@/lib/balance';
+import { balanceDeltas, mergeDeltas } from '@/lib/balance';
+import { IMPORT_CHUNK_SIZE } from '@/lib/limits';
 import {
   compareIsoDates,
   isValidYearMonth,
@@ -45,6 +46,13 @@ export interface TransactionUpdateInput {
   tags?: string[];
 }
 
+export interface ChunkWriteResult {
+  chunkIndex: number;
+  written: number;
+  status: 'ok' | 'failed';
+  error?: AppError;
+}
+
 /**
  * In-memory map preserving original creation timestamps for restored transactions (Undo action).
  * Firestore rules require serverTimestamp() on document creation, but the client preserves
@@ -53,6 +61,30 @@ export interface TransactionUpdateInput {
 const restoredCreatedAtMap = new Map<string, Date>();
 
 const ISO_DATE_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+/** Serializes a validated input to a Firestore doc: no nulls, trimmed note. */
+function toTransactionDocData(
+  validated: TransactionInput,
+): Record<string, unknown> {
+  const data: Record<string, unknown> = {
+    type: validated.type,
+    amount: validated.amount,
+    accountId: validated.accountId,
+    categoryId: validated.categoryId,
+    date: validated.date,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  };
+
+  if (validated.note && validated.note.trim().length > 0) {
+    data.note = validated.note.trim();
+  }
+  if (validated.tags && validated.tags.length > 0) {
+    data.tags = validated.tags;
+  }
+
+  return data;
+}
 
 /**
  * Subscribes to the user's transactions within an arbitrary ISO date range [startDate, endDate] inclusive.
@@ -210,22 +242,7 @@ export async function createTransaction(
     const newDocRef = doc(transactionsCol(uid));
     const deltas = balanceDeltas(null, validated);
 
-    const data: Record<string, unknown> = {
-      type: validated.type,
-      amount: validated.amount,
-      accountId: validated.accountId,
-      categoryId: validated.categoryId,
-      date: validated.date,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-
-    if (validated.note && validated.note.trim().length > 0) {
-      data.note = validated.note.trim();
-    }
-    if (validated.tags && validated.tags.length > 0) {
-      data.tags = validated.tags;
-    }
+    const data = toTransactionDocData(validated);
 
     const batch = writeBatch(db);
     batch.set(newDocRef, data);
@@ -372,22 +389,7 @@ export async function restoreTransaction(
       restoredCreatedAtMap.set(tx.id, tx.createdAt);
     }
 
-    const data: Record<string, unknown> = {
-      type: tx.type,
-      amount: tx.amount,
-      accountId: tx.accountId,
-      categoryId: tx.categoryId,
-      date: tx.date,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-
-    if (tx.note && tx.note.trim().length > 0) {
-      data.note = tx.note.trim();
-    }
-    if (tx.tags && tx.tags.length > 0) {
-      data.tags = tx.tags;
-    }
+    const data = toTransactionDocData(tx);
 
     batch.set(txRef, data);
 
@@ -403,4 +405,68 @@ export async function restoreTransaction(
   } catch (error) {
     throw toAppError(error);
   }
+}
+
+/** Splits inputs into IMPORT_CHUNK_SIZE pieces. Pure. */
+export function chunkImportInputs(
+  inputs: readonly TransactionInput[],
+): TransactionInput[][] {
+  const chunks: TransactionInput[][] = [];
+  for (let i = 0; i < inputs.length; i += IMPORT_CHUNK_SIZE) {
+    chunks.push(inputs.slice(i, i + IMPORT_CHUNK_SIZE));
+  }
+  return chunks;
+}
+
+/**
+ * Writes validated inputs in IMPORT_CHUNK_SIZE writeBatches with aggregated
+ * balance increments per chunk. Every input is schema-validated before the
+ * first write, so a broken input rejects the whole call with zero writes.
+ * Each chunk is atomic; per-chunk outcomes are returned for the import report.
+ */
+export async function createTransactionsBatch(
+  uid: string,
+  inputs: readonly TransactionInput[],
+  onProgress?: (done: number, total: number) => void,
+): Promise<ChunkWriteResult[]> {
+  let validated: TransactionInput[];
+  try {
+    validated = inputs.map((input) => transactionInputSchema.parse(input));
+  } catch (error) {
+    throw toAppError(error);
+  }
+
+  const results: ChunkWriteResult[] = [];
+  let done = 0;
+  for (const [chunkIndex, chunk] of chunkImportInputs(validated).entries()) {
+    try {
+      const batch = writeBatch(db);
+      for (const item of chunk) {
+        batch.set(doc(transactionsCol(uid)), toTransactionDocData(item));
+      }
+
+      const merged = mergeDeltas(
+        chunk.map((item) => balanceDeltas(null, item)),
+      );
+      for (const [accountId, delta] of merged) {
+        batch.update(accountDoc(uid, accountId), {
+          balance: increment(delta),
+          updatedAt: serverTimestamp(),
+        });
+      }
+
+      await batch.commit();
+      done += chunk.length;
+      results.push({ chunkIndex, written: chunk.length, status: 'ok' });
+    } catch (error) {
+      results.push({
+        chunkIndex,
+        written: 0,
+        status: 'failed',
+        error: toAppError(error),
+      });
+    }
+    onProgress?.(done, validated.length);
+  }
+  return results;
 }

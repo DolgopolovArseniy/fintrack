@@ -8,11 +8,17 @@ export {
   subscribeTransactionsByDateRange,
   getTransactionsByDateRange,
   createTransaction,
+  createTransactionsBatch,
+  chunkImportInputs,
   updateTransaction,
   deleteTransaction,
   restoreTransaction,
 } from './repository';
-export type { TransactionUpdateInput, Unsubscribe } from './repository';
+export type {
+  TransactionUpdateInput,
+  ChunkWriteResult,
+  Unsubscribe,
+} from './repository';
 
 export { useTransactions } from './hooks/useTransactions';
 export {

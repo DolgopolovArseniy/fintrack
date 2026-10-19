@@ -14,3 +14,5 @@ export const SYSTEM_KEY_MAX_LENGTH = 30;
 export const DISPLAY_NAME_MAX_LENGTH = 60;
 export const TAGS_MAX_COUNT = 10;
 export const IMPORT_CHUNK_SIZE = 400; // transactions per batch
+export const MAX_IMPORT_ROWS = 2000; // data rows per CSV import file
+export const MAX_IMPORT_FILE_SIZE = 2_000_000; // ~2 MB per CSV import file

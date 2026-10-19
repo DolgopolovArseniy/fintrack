@@ -1,6 +1,6 @@
 import { PageHeader } from '@/components/common/PageHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ExportCard, ImportPlaceholderCard } from '@/features/import-export';
+import { ExportCard, ImportCard } from '@/features/import-export';
 import { useTranslation } from '@/lib/i18n';
 
 export function ImportExportPage() {
@@ -28,7 +28,7 @@ export function ImportExportPage() {
         </TabsContent>
 
         <TabsContent value="import" className="outline-none">
-          <ImportPlaceholderCard />
+          <ImportCard />
         </TabsContent>
       </Tabs>
     </div>

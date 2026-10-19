@@ -82,18 +82,13 @@ describe('ImportExportPage', () => {
     expect(screen.getByTestId('export-card')).toBeInTheDocument();
   });
 
-  it('switches to Import tab and displays ImportPlaceholderCard with teaser badge', async () => {
+  it('switches to Import tab and displays ImportCard upload step', async () => {
     const user = userEvent.setup();
     render(<ImportExportPage />);
 
     const importTab = screen.getByTestId('tab-import');
     await user.click(importTab);
 
-    expect(
-      await screen.findByTestId('import-placeholder-card'),
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('import-badge')).toHaveTextContent(
-      /coming in f10|скоро в f10/i,
-    );
+    expect(await screen.findByTestId('import-card')).toBeInTheDocument();
   });
 });
