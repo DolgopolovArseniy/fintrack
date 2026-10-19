@@ -164,38 +164,45 @@ export function AppLayout({ children }: AppLayoutProps) {
   );
 
   return (
-    <div className="bg-background text-foreground selection:bg-primary/20 flex min-h-screen flex-col">
+    <div className="bg-background text-foreground selection:bg-primary/20 flex h-dvh max-h-dvh flex-col overflow-hidden">
       {/* Network offline notification */}
-      <OfflineBanner />
+      <div className="shrink-0">
+        <OfflineBanner />
+      </div>
 
       {/* Email verification alert for unverified password accounts */}
-      <EmailVerificationBanner />
+      <div className="shrink-0">
+        <EmailVerificationBanner />
+      </div>
 
-      <div className="flex flex-1">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         {/* Desktop Sidebar (>= 1024px) */}
-        <aside className="border-border/80 bg-sidebar hidden w-64 shrink-0 flex-col border-r lg:flex">
-          <div className="flex h-14 items-center justify-between px-3.5">
+        <aside className="border-border/80 bg-sidebar hidden h-full min-h-0 w-64 shrink-0 flex-col border-r lg:flex">
+          <div className="flex h-14 shrink-0 items-center justify-between px-3.5">
             <BrandLogo size="md" />
             <div className="flex shrink-0 items-center gap-1">
               <LanguageToggle />
               <ThemeToggle />
             </div>
           </div>
-          <Separator className="bg-border/60" />
-          <nav aria-label={t('nav.main')} className="flex-1 space-y-0.5 p-2">
+          <Separator className="bg-border/60 shrink-0" />
+          <nav
+            aria-label={t('nav.main')}
+            className="min-h-0 flex-1 space-y-0.5 overflow-y-auto p-2"
+          >
             {navItems.map((item) => (
               <SidebarNavLink key={item.id} item={item} />
             ))}
           </nav>
-          <div className="border-border/60 border-t p-2">
+          <div className="border-border/60 shrink-0 border-t p-2">
             <UserMenu />
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col">
           {/* Mobile Header (< 1024px) */}
-          <header className="border-border/80 bg-background/80 flex h-14 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
+          <header className="border-border/80 bg-background/80 flex h-14 shrink-0 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
             <BrandLogo size="sm" />
             <div className="flex shrink-0 items-center gap-1">
               <LanguageToggle />
@@ -205,7 +212,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           </header>
 
           {/* Content Body with reserved bottom padding on mobile */}
-          <main className="flex-1 p-4 pb-24 sm:p-6 lg:p-8 lg:pb-8">
+          <main className="min-h-0 flex-1 overflow-y-auto p-4 pb-24 sm:p-6 lg:p-8 lg:pb-8">
             <ErrorBoundary>
               <React.Suspense fallback={<RouteLoadingSkeleton />}>
                 {children ?? <Outlet />}

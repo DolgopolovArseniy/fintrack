@@ -54,7 +54,7 @@ export function DataManagementSection({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-3 rounded-lg border p-4">
+        <div className="border-border/60 bg-muted/20 dark:bg-muted/10 space-y-3 rounded-lg border p-4">
           <div className="space-y-1">
             <h4 className="text-foreground text-sm font-medium">
               {t('settings.data.exportJsonTitle', {
@@ -107,7 +107,7 @@ export function DataManagementSection({
           </div>
         </div>
 
-        <div className="border-border/60 flex items-center justify-between rounded-lg border p-4">
+        <div className="border-border/60 bg-muted/20 dark:bg-muted/10 flex items-center justify-between rounded-lg border p-4">
           <div className="flex items-center gap-3">
             <FileSpreadsheet
               className="text-muted-foreground size-5 shrink-0"
