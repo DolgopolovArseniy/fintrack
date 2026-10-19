@@ -11,6 +11,10 @@ import {
   sendVerificationEmail,
   reloadCurrentUser,
   signOutUser,
+  getCurrentAuthUser,
+  reauthenticateWithPassword,
+  reauthenticateWithGoogle,
+  deleteCurrentUserAccount,
   type FirebaseUserLike,
 } from './authService';
 
@@ -24,6 +28,10 @@ const {
   mockReload,
   mockSignOut,
   mockOnAuthStateChanged,
+  mockEmailAuthProviderCredential,
+  mockReauthenticateWithCredential,
+  mockReauthenticateWithPopup,
+  mockDeleteUser,
   mockCurrentUser,
 } = vi.hoisted(() => ({
   mockCreateUserWithEmailAndPassword: vi.fn(),
@@ -35,11 +43,18 @@ const {
   mockReload: vi.fn(),
   mockSignOut: vi.fn(),
   mockOnAuthStateChanged: vi.fn(),
+  mockEmailAuthProviderCredential: vi.fn(),
+  mockReauthenticateWithCredential: vi.fn(),
+  mockReauthenticateWithPopup: vi.fn(),
+  mockDeleteUser: vi.fn(),
   mockCurrentUser: { current: null as FirebaseUserLike | null },
 }));
 
 vi.mock('firebase/auth', () => ({
   GoogleAuthProvider: class MockGoogleAuthProvider {},
+  EmailAuthProvider: {
+    credential: mockEmailAuthProviderCredential,
+  },
   createUserWithEmailAndPassword: mockCreateUserWithEmailAndPassword,
   signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
   signInWithPopup: mockSignInWithPopup,
@@ -49,6 +64,9 @@ vi.mock('firebase/auth', () => ({
   reload: mockReload,
   signOut: mockSignOut,
   onAuthStateChanged: mockOnAuthStateChanged,
+  reauthenticateWithCredential: mockReauthenticateWithCredential,
+  reauthenticateWithPopup: mockReauthenticateWithPopup,
+  deleteUser: mockDeleteUser,
 }));
 
 vi.mock('@/lib/firebase', () => ({
@@ -520,6 +538,203 @@ describe('authService', () => {
       mockSignOut.mockRejectedValueOnce({ code: 'auth/internal-error' });
 
       await expect(signOutUser()).rejects.toThrow(AppError);
+    });
+  });
+
+  describe('getCurrentAuthUser', () => {
+    it('returns null if currentUser is null', () => {
+      mockCurrentUser.current = null;
+      expect(getCurrentAuthUser()).toBeNull();
+    });
+
+    it('returns mapped AuthUser if currentUser exists', () => {
+      mockCurrentUser.current = {
+        uid: 'user-current',
+        email: 'current@example.com',
+        displayName: 'Current User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'password' }],
+      };
+
+      expect(getCurrentAuthUser()).toEqual({
+        uid: 'user-current',
+        email: 'current@example.com',
+        displayName: 'Current User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerIds: ['password'],
+      });
+    });
+  });
+
+  describe('reauthenticateWithPassword', () => {
+    it('throws unauthenticated AppError if currentUser is null', async () => {
+      mockCurrentUser.current = null;
+
+      await expect(reauthenticateWithPassword('mypassword')).rejects.toThrow(
+        AppError,
+      );
+      expect(mockReauthenticateWithCredential).not.toHaveBeenCalled();
+    });
+
+    it('throws unauthenticated AppError if currentUser has no email', async () => {
+      mockCurrentUser.current = {
+        uid: 'user-no-email',
+        email: null,
+        displayName: 'No Email',
+        photoURL: null,
+        emailVerified: false,
+        isAnonymous: true,
+        providerData: [],
+      };
+
+      await expect(reauthenticateWithPassword('mypassword')).rejects.toThrow(
+        AppError,
+      );
+      expect(mockReauthenticateWithCredential).not.toHaveBeenCalled();
+    });
+
+    it('creates credential and calls reauthenticateWithCredential', async () => {
+      const fakeUser: FirebaseUserLike = {
+        uid: 'user-pwd-reauth',
+        email: 'reauth@example.com',
+        displayName: 'Reauth User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'password' }],
+      };
+      mockCurrentUser.current = fakeUser;
+
+      const mockCredential = { providerId: 'password' };
+      mockEmailAuthProviderCredential.mockReturnValueOnce(mockCredential);
+      mockReauthenticateWithCredential.mockResolvedValueOnce(undefined);
+
+      await expect(
+        reauthenticateWithPassword('correct-pass'),
+      ).resolves.toBeUndefined();
+
+      expect(mockEmailAuthProviderCredential).toHaveBeenCalledWith(
+        'reauth@example.com',
+        'correct-pass',
+      );
+      expect(mockReauthenticateWithCredential).toHaveBeenCalledWith(
+        fakeUser,
+        mockCredential,
+      );
+    });
+
+    it('wraps and throws AppError if reauthentication fails', async () => {
+      mockCurrentUser.current = {
+        uid: 'user-pwd-reauth',
+        email: 'reauth@example.com',
+        displayName: 'Reauth User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'password' }],
+      };
+
+      mockEmailAuthProviderCredential.mockReturnValueOnce({});
+      mockReauthenticateWithCredential.mockRejectedValueOnce({
+        code: 'auth/wrong-password',
+      });
+
+      await expect(reauthenticateWithPassword('wrong-pass')).rejects.toThrow(
+        AppError,
+      );
+    });
+  });
+
+  describe('reauthenticateWithGoogle', () => {
+    it('throws unauthenticated AppError if currentUser is null', async () => {
+      mockCurrentUser.current = null;
+
+      await expect(reauthenticateWithGoogle()).rejects.toThrow(AppError);
+      expect(mockReauthenticateWithPopup).not.toHaveBeenCalled();
+    });
+
+    it('calls reauthenticateWithPopup with GoogleAuthProvider', async () => {
+      const fakeUser: FirebaseUserLike = {
+        uid: 'user-google-reauth',
+        email: 'reauth-google@example.com',
+        displayName: 'Google Reauth User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'google.com' }],
+      };
+      mockCurrentUser.current = fakeUser;
+      mockReauthenticateWithPopup.mockResolvedValueOnce(undefined);
+
+      await expect(reauthenticateWithGoogle()).resolves.toBeUndefined();
+      expect(mockReauthenticateWithPopup).toHaveBeenCalledWith(
+        fakeUser,
+        expect.anything(),
+      );
+    });
+
+    it('wraps and throws AppError if popup fails or is closed', async () => {
+      mockCurrentUser.current = {
+        uid: 'user-google-reauth',
+        email: 'reauth-google@example.com',
+        displayName: 'Google Reauth User',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'google.com' }],
+      };
+      mockReauthenticateWithPopup.mockRejectedValueOnce({
+        code: 'auth/popup-closed-by-user',
+      });
+
+      await expect(reauthenticateWithGoogle()).rejects.toThrow(AppError);
+    });
+  });
+
+  describe('deleteCurrentUserAccount', () => {
+    it('throws unauthenticated AppError if currentUser is null', async () => {
+      mockCurrentUser.current = null;
+
+      await expect(deleteCurrentUserAccount()).rejects.toThrow(AppError);
+      expect(mockDeleteUser).not.toHaveBeenCalled();
+    });
+
+    it('calls deleteUser with currentUser', async () => {
+      const fakeUser: FirebaseUserLike = {
+        uid: 'user-delete-me',
+        email: 'delete@example.com',
+        displayName: 'Delete Me',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [{ providerId: 'password' }],
+      };
+      mockCurrentUser.current = fakeUser;
+      mockDeleteUser.mockResolvedValueOnce(undefined);
+
+      await expect(deleteCurrentUserAccount()).resolves.toBeUndefined();
+      expect(mockDeleteUser).toHaveBeenCalledWith(fakeUser);
+    });
+
+    it('wraps and throws AppError if deleteUser fails', async () => {
+      mockCurrentUser.current = {
+        uid: 'user-delete-me',
+        email: 'delete@example.com',
+        displayName: 'Delete Me',
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        providerData: [],
+      };
+      mockDeleteUser.mockRejectedValueOnce({
+        code: 'auth/requires-recent-login',
+      });
+
+      await expect(deleteCurrentUserAccount()).rejects.toThrow(AppError);
     });
   });
 });

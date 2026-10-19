@@ -18,6 +18,16 @@ export { executeOnboardingBatch, checkProfileExists } from './onboarding';
 export type { OnboardingInput } from './onboarding';
 
 export {
+  reauthenticateWithPassword,
+  reauthenticateWithGoogle,
+  deleteCurrentUserAccount,
+  getCurrentAuthUser,
+} from './authService';
+
+export { getUserProfile, subscribeUserProfile } from './repository';
+export { userProfileConverter } from './converters';
+
+export {
   localeSchema,
   themeSchema,
   schemaVersionSchema,

@@ -1,7 +1,11 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
+  EmailAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
+  reauthenticateWithPopup,
   reload,
   sendEmailVerification,
   sendPasswordResetEmail,
@@ -181,6 +185,77 @@ export async function reloadCurrentUser(): Promise<AuthUser | null> {
 export async function signOutUser(): Promise<void> {
   try {
     await signOut(auth);
+  } catch (error) {
+    throw toAppError(error);
+  }
+}
+
+/**
+ * Returns current authenticated user mapped to AuthUser, or null if unauthenticated.
+ */
+export function getCurrentAuthUser(): AuthUser | null {
+  return auth.currentUser ? toAuthUser(auth.currentUser) : null;
+}
+
+/**
+ * Re-authenticates the current user using email and password.
+ * Throws AppError on failure (e.g. wrong password).
+ */
+export async function reauthenticateWithPassword(
+  password: string,
+): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser || !currentUser.email) {
+    throw new AppError(
+      'unauthenticated',
+      'No authenticated user to re-authenticate',
+    );
+  }
+
+  try {
+    const credential = EmailAuthProvider.credential(
+      currentUser.email,
+      password,
+    );
+    await reauthenticateWithCredential(currentUser, credential);
+  } catch (error) {
+    throw toAppError(error);
+  }
+}
+
+/**
+ * Re-authenticates the current user using Google popup.
+ * Throws AppError on failure or cancellation.
+ */
+export async function reauthenticateWithGoogle(): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    throw new AppError(
+      'unauthenticated',
+      'No authenticated user to re-authenticate',
+    );
+  }
+
+  try {
+    const provider = new GoogleAuthProvider();
+    await reauthenticateWithPopup(currentUser, provider);
+  } catch (error) {
+    throw toAppError(error);
+  }
+}
+
+/**
+ * Permanently deletes the current Firebase Auth user record.
+ * Throws AppError if re-authentication is expired.
+ */
+export async function deleteCurrentUserAccount(): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    throw new AppError('unauthenticated', 'No authenticated user to delete');
+  }
+
+  try {
+    await deleteUser(currentUser);
   } catch (error) {
     throw toAppError(error);
   }
