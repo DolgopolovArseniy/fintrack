@@ -125,6 +125,10 @@ export function DataManagementSection({
           <Button variant="ghost" size="sm" asChild>
             <Link
               to={ROUTES.importExport}
+              aria-label={t('settings.data.csvLink', {
+                defaultValue:
+                  'Looking for CSV format? Visit Import & Export transactions page',
+              })}
               className="inline-flex items-center gap-1 text-xs"
             >
               <ArrowRight className="size-4" />
