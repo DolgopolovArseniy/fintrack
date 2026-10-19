@@ -44,20 +44,20 @@ describe('PreferencesSection', () => {
   it('renders title, description, and selector labels', () => {
     render(<PreferencesSection />);
 
-    expect(screen.getByText('Preferences')).toBeInTheDocument();
+    expect(screen.getByText(/Preferences/i)).toBeInTheDocument();
     expect(
-      screen.getByText('Configure display currency, app language, and theme'),
+      screen.getByText(/Customize your display currency, language, and theme/i),
     ).toBeInTheDocument();
-    expect(screen.getByText('Base Currency')).toBeInTheDocument();
-    expect(screen.getByText('Interface Language')).toBeInTheDocument();
-    expect(screen.getByText('Theme')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Base currency/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Language/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Theme/i)).toBeInTheDocument();
   });
 
   it('opens CurrencyChangeDialog when selecting a different currency', async () => {
     const user = userEvent.setup();
     render(<PreferencesSection />);
 
-    const currencyTrigger = screen.getByLabelText('Base Currency');
+    const currencyTrigger = screen.getByLabelText(/Base currency/i);
     expect(currencyTrigger).toBeInTheDocument();
     await user.click(currencyTrigger);
 
@@ -85,7 +85,7 @@ describe('PreferencesSection', () => {
     const user = userEvent.setup();
     render(<PreferencesSection />);
 
-    const langTrigger = screen.getByLabelText('Interface Language');
+    const langTrigger = screen.getByLabelText(/Language/i);
     await user.click(langTrigger);
 
     const ruOption = await screen.findByRole('option', { name: 'Русский' });
@@ -100,7 +100,7 @@ describe('PreferencesSection', () => {
     const user = userEvent.setup();
     render(<PreferencesSection />);
 
-    const themeTrigger = screen.getByLabelText('Theme');
+    const themeTrigger = screen.getByLabelText(/Theme/i);
     await user.click(themeTrigger);
 
     const darkOption = await screen.findByRole('option', { name: 'Dark' });
@@ -123,8 +123,8 @@ describe('PreferencesSection', () => {
 
     render(<PreferencesSection />);
 
-    expect(screen.getByLabelText('Base Currency')).toBeDisabled();
-    expect(screen.getByLabelText('Interface Language')).toBeDisabled();
-    expect(screen.getByLabelText('Theme')).toBeDisabled();
+    expect(screen.getByLabelText(/Base currency/i)).toBeDisabled();
+    expect(screen.getByLabelText(/Language/i)).toBeDisabled();
+    expect(screen.getByLabelText(/Theme/i)).toBeDisabled();
   });
 });

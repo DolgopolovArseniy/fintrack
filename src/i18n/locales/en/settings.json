@@ -1,0 +1,85 @@
+{
+  "title": "Settings",
+  "description": "Manage your profile, application preferences, data export and account",
+  "profile": {
+    "title": "Profile",
+    "description": "Personal information and account credentials",
+    "emailLabel": "Email address",
+    "verifiedBadge": "Verified",
+    "unverifiedBadge": "Unverified",
+    "displayNameLabel": "Display Name",
+    "displayNamePlaceholder": "Enter your name",
+    "saveButton": "Save changes",
+    "saving": "Saving...",
+    "successToast": "Profile updated successfully"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Customize your display currency, language, and theme",
+    "currencyLabel": "Base currency",
+    "currencyHelp": "Currency used across all account balances and transaction totals",
+    "languageLabel": "Language",
+    "themeLabel": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "currencyChangeDialog": {
+      "title": "Change base currency?",
+      "warning": "Changing your base currency only updates the currency symbol displayed across your accounts and reports. Historical transaction amounts will NOT be converted using exchange rates.",
+      "confirmButton": "I understand, change currency",
+      "cancelButton": "Cancel"
+    },
+    "currencyUpdatedToast": "Base currency updated to {{currency}}",
+    "languageUpdatedToast": "Language changed to English",
+    "themeUpdatedToast": "Theme updated"
+  },
+  "data": {
+    "title": "Data Management",
+    "description": "Export your financial history or transfer data",
+    "exportJsonTitle": "Full Data Export (JSON)",
+    "exportJsonDescription": "Download a comprehensive backup of your profile, accounts, categories, budgets, and all transactions in JSON format.",
+    "exportJsonButton": "Export All Data (JSON)",
+    "exporting": "Generating export...",
+    "exportSuccessToast": "Data export downloaded successfully",
+    "exportFailed": "Failed to export data. Please try again.",
+    "csvLink": "Looking for CSV format? Visit Import & Export transactions page"
+  },
+  "dangerZone": {
+    "title": "Danger Zone",
+    "description": "Irreversible account and data actions",
+    "deleteAccountTitle": "Delete Account & Data",
+    "deleteAccountDescription": "Permanently remove your account, profile, all accounts, categories, budgets, and financial transactions. This action cannot be undone.",
+    "deleteAccountButton": "Delete Account",
+    "dialog": {
+      "title": "Delete account and all data",
+      "warning": "This action is permanent and completely irreversible. All your transactions, accounts, categories, and budgets will be permanently deleted.",
+      "confirmationPrompt": "To confirm deletion, please type DELETE below:",
+      "expectedPhrase": "DELETE",
+      "passwordLabel": "Enter your password to confirm:",
+      "passwordPlaceholder": "Current account password",
+      "googlePrompt": "Confirm deletion by signing in with your Google account:",
+      "googleButton": "Re-authenticate with Google",
+      "confirmButton": "Permanently Delete Everything",
+      "deleting": "Deleting data: {{phase}}...",
+      "cancelButton": "Cancel"
+    },
+    "phases": {
+      "reauth": "Verifying credentials",
+      "transactions": "Deleting transactions",
+      "budgets": "Deleting budgets",
+      "accounts": "Deleting accounts",
+      "categories": "Deleting categories",
+      "profile": "Deleting profile",
+      "auth": "Removing account"
+    },
+    "wrongPassword": "The password you entered is incorrect",
+    "popupClosed": "Authentication was cancelled. Account was not deleted.",
+    "phraseMismatch": "Please type the exact confirmation word",
+    "deletionFailed": "Failed to complete account deletion. Please try again.",
+    "successToast": "Your account and data have been successfully deleted"
+  },
+  "errors": {
+    "saveFailed": "Failed to save settings. Please check your connection.",
+    "offlineNotice": "This action requires an active internet connection."
+  }
+}

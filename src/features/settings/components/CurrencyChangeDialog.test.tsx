@@ -17,7 +17,7 @@ describe('CurrencyChangeDialog', () => {
 
     expect(screen.getByText('Change base currency?')).toBeInTheDocument();
     expect(
-      screen.getByText(/Changing the base currency only updates/i),
+      screen.getByText(/Changing.*base currency only updates/i),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Cancel/i })).toBeInTheDocument();
     expect(
